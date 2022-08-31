@@ -1,19 +1,21 @@
-import React, { forwardRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { MdDeleteForever } from "react-icons/md";
 
-import { BntArea, Btn, Title, Container, LocaionSearchModal } from "./HomeCommonStyle";
+import { BntArea, Btn, Title, Container } from "./HomeCommonStyle";
+import { LocaionSearchModal } from "./LocationSearchModal";
 
 // 1. 유효성검증
 // 2. 버튼 만들고 누를때마다 input 하나더 생성
 // 3. 친구 주소 늘어날때 스크롤바 없애기 등 css 관련된거
 // 4. 중간 장소 도출 시 어떻게 xy자표 구해서 어떻게 나눌 것인가? => 하나의 주소로 만들어야됨
 
-const HomeOrderSecond = forwardRef((props, ref) => {
-  const { handleSubmit, register, setValue, reset } = useForm();
+const HomeOrderSecond = (props, ref) => {
+  const { handleSubmit, register, setValue, getValues, reset } = useForm();
   const [cnt, setCnt] = useState([0]);
   const [toggle, setToggle] = useState(false);
+  const [target, setTarget] = useState(null);
 
   const registerOpt = { required: "주소를 입력해주세요" };
 
@@ -21,15 +23,30 @@ const HomeOrderSecond = forwardRef((props, ref) => {
     const deleteArr = cnt.filter((e) => e !== id);
     setCnt(deleteArr);
   };
-  console.log("first");
+
+  const goBack = (e) => {
+    e.preventDefault();
+    reset();
+    setCnt([0]);
+    props.setPage(0);
+  };
+
+  const modalOpen = (e) => {
+    const name = e.target.name;
+    if (getValues(name) === "") {
+      setTarget(name);
+      setToggle(true);
+    }
+  };
+
   return (
     <Container className="fcc">
-      {/* <LocaionSearchModal toggle={toggle} /> */}
+      <LocaionSearchModal toggle={toggle} setToggle={setToggle} target={target} setValue={setValue} />
       <FormArea
         className="fcc"
         onSubmit={handleSubmit((data) => {
           console.log(data);
-          ref.current.slickNext();
+          props.setPage(2);
         })}
       >
         <Title>{props.type ? "장소 추천 받기" : "중간 장소 도출"}</Title>
@@ -45,16 +62,9 @@ const HomeOrderSecond = forwardRef((props, ref) => {
             return (
               <div key={`location${id}`}>
                 <p>
-                  {i}.{miniTitle}
+                  {i}. {miniTitle}
                 </p>
-                <input
-                  {...register(`location${id}`, registerOpt)}
-                  readOnly
-                  placeholder={placehloder}
-                  onFocus={() => {
-                    setToggle(!toggle);
-                  }}
-                />
+                <input {...register(`location${id}`, registerOpt)} readOnly placeholder={placehloder} onFocus={modalOpen} />
                 {id > 0 ? (
                   <DeleteBtn data-input-id={id} onClick={() => deleteInput(id)}>
                     <MdDeleteForever />
@@ -78,21 +88,12 @@ const HomeOrderSecond = forwardRef((props, ref) => {
 
         <BntArea>
           <CustomBtn>다음</CustomBtn>
-          <CustomBtn
-            onClick={(e) => {
-              e.preventDefault();
-              reset();
-              setCnt([0]);
-              ref.current.slickPrev();
-            }}
-          >
-            뒤로가기
-          </CustomBtn>
+          <CustomBtn onClick={goBack}>뒤로가기</CustomBtn>
         </BntArea>
       </FormArea>
     </Container>
   );
-});
+};
 
 const FormArea = styled.form`
   flex-flow: column;

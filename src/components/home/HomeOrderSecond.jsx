@@ -21,6 +21,7 @@ const HomeOrderSecond = forwardRef((props, ref) => {
     const deleteArr = cnt.filter((e) => e !== id);
     setCnt(deleteArr);
   };
+  console.log("first");
   return (
     <Container className="fcc">
       {/* <LocaionSearchModal toggle={toggle} /> */}

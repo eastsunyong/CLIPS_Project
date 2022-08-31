@@ -3,9 +3,7 @@ import styled from "styled-components";
 
 import { Container, Title, BntArea, Btn } from "./HomeCommonStyle";
 
-const HomeOrderFirst = forwardRef((props, ref) => {
-  console.log("first");
-
+const HomeOrderFirst = (props) => {
   return (
     <Container className="fcc">
       <Title className="fcc">약속 장소 받기</Title>
@@ -13,7 +11,7 @@ const HomeOrderFirst = forwardRef((props, ref) => {
         <CustomBtn
           onClick={() => {
             props.setType(true);
-            ref.current.slickNext();
+            props.setPage(1);
           }}
         >
           장소 추천
@@ -21,7 +19,7 @@ const HomeOrderFirst = forwardRef((props, ref) => {
         <CustomBtn
           onClick={() => {
             props.setType(false);
-            ref.current.slickNext();
+            props.setPage(1);
           }}
         >
           중간 장소
@@ -29,7 +27,7 @@ const HomeOrderFirst = forwardRef((props, ref) => {
       </BntArea>
     </Container>
   );
-});
+};
 
 const CustomBtn = styled(Btn)`
   width: 14rem;

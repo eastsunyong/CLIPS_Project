@@ -3,6 +3,7 @@ import React from "react";
 import Router from "shared/Router";
 import Layout from "components/common/mobileLayout/Layout";
 import Main from "components/common/mobileLayout/Main";
+import Footer from "components/common/mobileLayout/Footer";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Main>
         <Router />
       </Main>
+      <Footer />
     </Layout>
   );
 }

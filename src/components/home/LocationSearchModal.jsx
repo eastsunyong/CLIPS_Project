@@ -4,15 +4,24 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useForm } from "react-hook-form";
 
 import Modal from "components/common/Modal";
+import { searchAddress } from "apis/localAPI";
 
 export const LocaionSearchModal = (props) => {
   const { handleSubmit, register, reset } = useForm();
   const registerOpt = {
     required: "검색어를 입력해주세요",
   };
+
+  const submitCallback = async (data) => {
+    const answer = await searchAddress(data.search);
+    if (answer.result) {
+      props.setValue(props.target, data.search);
+    }
+  };
+
   return (
     <Modal toggle={props.toggle}>
-      <SearchArea className="fcc" onSubmit={handleSubmit((data) => console.log(data))}>
+      <SearchArea className="fcc" onSubmit={handleSubmit(submitCallback)}>
         <BackBtn
           className="fcc"
           onClick={() => {

@@ -5,7 +5,8 @@ import styled from "styled-components";
 export const Container = styled.div`
   position: relative;
   flex-flow: column;
-  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
   padding: 0 2rem 2rem 2rem;
 `;
 

@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+
+import Router from "shared/Router";
+import Layout from "components/mobileLayout/Layout";
+import Main from "components/mobileLayout/Main";
+import Footer from "components/mobileLayout/Footer";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Main>
+        <Router />
+      </Main>
+      <Footer />
+    </Layout>
   );
 }
 

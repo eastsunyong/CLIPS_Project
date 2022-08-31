@@ -1,5 +1,3 @@
-import Modal from "components/common/Modal";
-import { useState } from "react";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -34,12 +32,3 @@ export const Btn = styled.button`
     color: rgb(255, 204, 204);
   }
 `;
-
-export const LocaionSearchModal = (props) => {
-  const [toggle, setToggle] = useState(false);
-  return (
-    <Modal toggle={toggle}>
-      <div></div>
-    </Modal>
-  );
-};

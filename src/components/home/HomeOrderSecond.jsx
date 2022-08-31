@@ -8,18 +8,29 @@ import { useForm } from "react-hook-form";
 // 4. 중간 장소 도출 시 어떻게 xy자표 구해서 어떻게 나눌 것인가? => 하나의 주소로 만들어야됨
 
 const HomeOrderSecond = forwardRef((props, ref) => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
+
+  const myOpt = { required: "주소를 입력해주세요" };
   return (
     <Container className="fcc">
       <Title>{props.type ? "장소 추천 받기" : "중간 장소 도출"}</Title>
       <LocationInputArea
         onSubmit={handleSubmit((data) => {
+          console.log(data);
           ref.current.slickNext();
         })}
       >
         <p>{props.type ? "도시" : "내 주소"}</p>
-        <input placeholder={props.type ? "추천 받을 도시" : "주소"} {...register("city")} />
+        <input
+          {...register("my", myOpt)}
+          readOnly
+          placeholder={props.type ? "추천 받을 도시" : "주소"}
+          onFocus={() => {
+            console.log("first");
+          }}
+        />
         <div className="fcc">
+          <Btn>다음</Btn>
           <Btn
             onClick={(e) => {
               e.preventDefault();
@@ -28,7 +39,6 @@ const HomeOrderSecond = forwardRef((props, ref) => {
           >
             뒤로가기
           </Btn>
-          <Btn>다음</Btn>
         </div>
       </LocationInputArea>
     </Container>
@@ -79,5 +89,22 @@ const Btn = styled.button`
     color: rgb(255, 204, 204);
   }
 `;
+
+{
+  // {props.type ? null : (
+  //         <div style={{ overflow: "auto", height: "30rem" }}>
+  //           <p>친구 주소</p>
+  //           <input placeholder="추천 받을 도시" {...register("반복문쓰세요!!!")} />
+  //           <p>친구 주소</p>
+  //           <input placeholder="추천 받을 도시" {...register("반복문쓰세요!!!")} />
+  //           <p>친구 주소</p>
+  //           <input placeholder="추천 받을 도시" {...register("반복문쓰세요!!!")} />
+  //           <p>친구 주소</p>
+  //           <input placeholder="추천 받을 도시" {...register("반복문쓰세요!!!")} />
+  //           <p>친구 주소</p>
+  //           <input placeholder="추천 받을 도시" {...register("반복문쓰세요!!!")} />
+  //         </div>
+  //       )}
+}
 
 export default HomeOrderSecond;

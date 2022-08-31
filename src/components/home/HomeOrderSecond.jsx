@@ -12,7 +12,7 @@ import { LocaionSearchModal } from "./LocationSearchModal";
 // 4. 중간 장소 도출 시 어떻게 xy자표 구해서 어떻게 나눌 것인가? => 하나의 주소로 만들어야됨
 
 const HomeOrderSecond = (props, ref) => {
-  const { handleSubmit, register, setValue, getValues, reset } = useForm();
+  const { handleSubmit, register, setValue, reset } = useForm();
   const [cnt, setCnt] = useState([0]);
   const [toggle, setToggle] = useState(false);
   const [target, setTarget] = useState(null);
@@ -33,10 +33,8 @@ const HomeOrderSecond = (props, ref) => {
 
   const modalOpen = (e) => {
     const name = e.target.name;
-    if (getValues(name) === "") {
-      setTarget(name);
-      setToggle(true);
-    }
+    setTarget(name);
+    setToggle(true);
   };
 
   return (
@@ -64,7 +62,7 @@ const HomeOrderSecond = (props, ref) => {
                 <p>
                   {i}. {miniTitle}
                 </p>
-                <input {...register(`location${id}`, registerOpt)} readOnly placeholder={placehloder} onFocus={modalOpen} />
+                <input {...register(`location${id}`, registerOpt)} readOnly placeholder={placehloder} onClick={modalOpen} />
                 {id > 0 ? (
                   <DeleteBtn data-input-id={id} onClick={() => deleteInput(id)}>
                     <MdDeleteForever />

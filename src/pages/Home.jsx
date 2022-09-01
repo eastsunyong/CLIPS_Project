@@ -5,15 +5,18 @@ import "slick-carousel/slick/slick-theme.css";
 
 import HomeOrderFirst from "components/home/HomeOrderFirst";
 import HomeOrderSecond from "components/home/HomeOrderSecond";
+import HomeOrderThird from "components/home/HomeOrderThird";
 
 const Home = () => {
   const [page, setPage] = useState(0);
   const [type, setType] = useState(true);
-
+  // 차후 전역 상태관리 라이브러리 정해지면 컴포넌트 자체 상태에서 변경예정
+  const [selected, setSelected] = useState(null);
   return (
     <Slider page={page}>
       <HomeOrderFirst setPage={setPage} setType={setType} />
-      <HomeOrderSecond setPage={setPage} type={type} />
+      <HomeOrderSecond setPage={setPage} setSelected={setSelected} type={type} />
+      <HomeOrderThird selected={selected} />
     </Slider>
   );
 };

@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import Modal from "components/common/Modal";
 import { addressTransfer, searchAddress } from "apis/localAPI";
 
-export const LocaionSearchModal = (props) => {
-  const { handleSubmit, register, reset, getValues } = useForm();
+const LocaionSearchModal = (props) => {
+  const { handleSubmit, register, reset } = useForm();
   const [list, setList] = useState([]);
 
   // depth2 없어도 되는 지역
@@ -118,6 +118,8 @@ export const LocaionSearchModal = (props) => {
     </Modal>
   );
 };
+
+export default LocaionSearchModal;
 
 const SearchArea = styled.form`
   position: sticky;

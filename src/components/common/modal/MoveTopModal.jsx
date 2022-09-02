@@ -12,7 +12,7 @@ const Modal = (props) => {
 const Container = styled.div`
   position: absolute;
   top: 0;
-  left: ${(props) => (props.toggle ? "0%" : "100%")};
+  top: ${(props) => (props.toggle ? "0%" : "100%")};
   z-index: ${(props) => (props.toggle ? 1 : 0)};
   height: 100%;
   width: 100%;

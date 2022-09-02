@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { MdDeleteForever } from "react-icons/md";
 
 import { BntArea, Btn, Title, Container } from "./HomeCommonStyle";
 import LocaionSearchModal from "./LocationSearchModal";
-import { useEffect } from "react";
-import { addressTransfer, coordTransfer } from "apis/localAPI";
+import { localAPI } from "apis";
 
 const HomeOrderSecond = (props) => {
   const { handleSubmit, register, setValue, reset, unregister } = useForm();
@@ -52,13 +51,13 @@ const HomeOrderSecond = (props) => {
       let length = 0;
       for (let address of data.location) {
         if (address) {
-          const answer = await coordTransfer(address);
+          const answer = await localAPI.coordTransfer(address);
           x += answer.x;
           y += answer.y;
           length++;
         }
       }
-      const middleAddress = await addressTransfer(x / length, y / length);
+      const middleAddress = await localAPI.addressTransfer(x / length, y / length);
       resultLocation = middleAddress.docs[0].address.address_name;
     }
     props.setSelected(resultLocation);

@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { IoIosArrowBack } from "react-icons/io";
 import { useForm } from "react-hook-form";
 
-import Modal from "components/common/Modal";
-import { addressTransfer, searchAddress } from "apis/localAPI";
+import { Modal } from "components/common";
+import { localAPI } from "apis";
 
 const LocaionSearchModal = (props) => {
   const { handleSubmit, register, reset } = useForm();
@@ -43,7 +43,7 @@ const LocaionSearchModal = (props) => {
   // 검색
   const getAddressList = async (data) => {
     setList([]);
-    const answer = await searchAddress(data.search);
+    const answer = await localAPI.searchAddress(data.search);
     if (answer.result) setAddressList(answer.docs);
   };
 
@@ -66,7 +66,7 @@ const LocaionSearchModal = (props) => {
     setList([]);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const answer = await addressTransfer(position.coords.longitude, position.coords.latitude);
+        const answer = await localAPI.addressTransfer(position.coords.longitude, position.coords.latitude);
         if (answer.result) setAddressList(answer.docs);
       },
       () => {},

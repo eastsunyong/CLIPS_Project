@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
-import HomeOrderFirst from "components/home/HomeOrderFirst";
-import HomeOrderSecond from "components/home/HomeOrderSecond";
-import HomeOrderThird from "components/home/HomeOrderThird";
+import { HomeOrderFirst, HomeOrderSecond, HomeOrderThird } from "components/home";
 
 const Home = () => {
   const [page, setPage] = useState(0);

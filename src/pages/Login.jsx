@@ -11,7 +11,7 @@ const Login = () => {
 
 
   const LogInHandler = async (data) => {
-    await axios.post('/api/auth/signup ', data)
+    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
   }
 
 
@@ -24,7 +24,7 @@ const Login = () => {
   } = useForm({ mode: "onChange" });
 
   const onSubmit = (data) => {
-    LogInHandler(data)
+    // LogInHandler(data)
     const Qwe = getValues("nickname")
     console.log(data);
     console.log(Qwe);

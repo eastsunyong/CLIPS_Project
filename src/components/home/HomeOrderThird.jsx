@@ -5,12 +5,13 @@ import { useForm } from "react-hook-form";
 
 import { Container } from "./HomeCommonStyle";
 import LocationSearchModal from "./LocationSearchModal";
-import { coordTransfer } from "apis/localAPI";
+import { localAPI } from "apis";
 
 const { kakao } = window;
 const HomeOrderThird = (props) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
   const [coord, setCoord] = useState({
     x: null,
     y: null,
@@ -35,7 +36,7 @@ const HomeOrderThird = (props) => {
 
   // 주소받으면 좌표 세팅해주는 함수
   const changeCoord = async (address) => {
-    const answer = await coordTransfer(address);
+    const answer = await localAPI.coordTransfer(address);
     setCoord({ x: answer.x, y: answer.y });
   };
 
@@ -56,11 +57,17 @@ const HomeOrderThird = (props) => {
       const marker = new kakao.maps.Marker({
         position: moveLatLon,
       });
-      marker.setMap(null);
-      marker.setMap(map);
+      setMarkers([marker, ...markers]);
       map.panTo(moveLatLon);
     }
   }, [coord]);
+
+  useEffect(() => {
+    markers.forEach((marker, i) => {
+      if (i === 0) marker.setMap(map);
+      else marker.setMap(null);
+    });
+  }, [markers]);
 
   // 모달 오픈 => 2페이지와 동일한 것으로 합칠 예정
   const modalOpen = (e) => {

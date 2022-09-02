@@ -94,7 +94,7 @@ const SignUp = () => {
 
         console.log(formData)
 
-        await axios.post('/api/auth/signup', formData)
+        await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', formData)
     }
 
     //사진 미리보기

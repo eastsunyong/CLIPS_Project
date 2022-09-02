@@ -14,7 +14,6 @@ const Container = styled.main`
   &::-webkit-scrollbar {
     display: none;
   }
-  padding: 2rem;
 `;
 
 export default Main;

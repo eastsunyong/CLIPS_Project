@@ -24,7 +24,7 @@ const Login = () => {
   } = useForm({ mode: "onChange" });
 
   const onSubmit = (data) => {
-    LogInHandler(data)
+    // LogInHandler(data)
     const Qwe = getValues("nickname")
     console.log(data);
     console.log(Qwe);

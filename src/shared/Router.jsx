@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Login } from "pages";
-import SignUp from "pages/SignUp";
+import { Home, Login, SignUp } from "pages";
 
 const Router = () => {
   return (

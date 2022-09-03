@@ -10,6 +10,11 @@ const SignUp = () => {
     //이미지 저장하는 곳
     const fileInput = useRef(null);
 
+    //이메일 정규식 맞는지 확인
+    const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
+
+                   
+
     const {
         getValues,
         register,
@@ -24,52 +29,46 @@ const SignUp = () => {
     const onInvalid = (data) => console.log(data, "onInvalid");
 
     //이메일 체크 함수
-    const onEmailCheck = (data, ev) => {
-        const emailed = getValues("email")
-        console.log(emailed)
-        
-        if (emailed === '') {
+    const onEmailCheck = (data) => {
+        const email = getValues("email")
+        if (email === '' || regPass.test(email) === false) {
             setError(
                 "email",
-                { message: "이메일은 필수 입력입니다" },
+                { message: "다시 확인해주세요" },
                 { shouldFocus: true }
                 );
-            }else {
-            emailCheckHandler(emailed)
+            } else {
+            emailCheckHandler(email);
         }
     }
 
     //이메일 체크 핸들러
-    const emailCheckHandler = async (emailed) => {
-        await axios.post('/api/auth/nickname', emailed)
-        console.log(emailed)
+    const emailCheckHandler = async (email) => {
+        await axios.post('/api/auth/nickname', {email})
+        console.log(email)
     }
 
     //닉네임 체크 함수
     const onNickCheck = (data) => {
-        const nick = getValues("nickname")
-        if (nick === '') {
+        const nickname = getValues("nickname")
+        if (nickname === '' || nickname.length > 8) {
             setError(
                 "nickname",
-                { message: "닉네임은 필수 입력입니다" },
+                { message: "다시 확인해주세요" },
                 { shouldFocus: true }
                 );
             }else {
-                NicknameCheckHandler(nick)
+                NicknameCheckHandler(nickname)
         }
     }
 
     //닉네임 체크 핸들러
-    const NicknameCheckHandler = async (nick) => {
-        await axios.post('/api/auth/email', nick)
+    const NicknameCheckHandler = async (nickname) => {
+        await axios.post('/api/auth/email', {nickname})
     }
 
     //회원가입 함수
     const onSubmit = (data) => {
-        // const nick = getValues("nickname")
-        // const password = getValues("password")
-        // const confirmpassword = getValues("confirmpassword")
-        // const phone = getValues("phone")
         SignUpHandler(data)
     }
 
@@ -92,12 +91,10 @@ const SignUp = () => {
         formData.append('confirm', data.confirmpassword)
         formData.append('phone', data.phone)
 
-        console.log(formData)
-
         await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', formData)
     }
 
-    //사진 미리보기
+    //사진 미리보기   원리 사진을 미리 사이트에서 
     const selectImg = (e) => {
         const reader = new FileReader();
         const theFile = fileInput.current.files[0];
@@ -136,7 +133,7 @@ const SignUp = () => {
                     </div>
                     <input
                         {...register("email", {
-                            required: "닉네임은 필수 입력입니다", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                            required: "이메일은 필수 입력입니다", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
                             pattern: {
                                 value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/, message: "이메일이 형식에 맞지 않습니다.",
                             }
@@ -152,10 +149,10 @@ const SignUp = () => {
                         {errors.name && <p style={{ color: "red" }}>{errors.name.message}</p>}
                     </div>
                     <input
-                        {...register("name", { required: "이름 입력은 필수 입력입니다", minLength: { value: 2, message: "최소 2글자 이상 적어주세요" },
-                        maxLength: { value: 7, message: "최대 7글자 입니다" }  })}
+                        {...register("name", { required: "이름 입력은 필수 입력입니다", minLength: { value: 1, message: "최소 1글자 이상 적어주세요" },
+                        maxLength: { value: 20, message: "최대 20글자 입니다" }  })}
                         placeholder="이름"
-                        maxLength="7"
+                        maxLength="21"
                     />
                 </div>
                 <div style={{ flexDirection: "column", display: "flex" }}    >
@@ -164,8 +161,9 @@ const SignUp = () => {
                         {errors.nickname && <p style={{ color: "red" }}>{errors.nickname.message}</p>}
                     </div>
                     <input
-                        {...register("nickname", { required: "닉네임은 필수 입력입니다", maxLength: { value: 9, message: "8자 이하로 정해주세요" } })}
+                        {...register("nickname", { required: "닉네임은 필수 입력입니다", maxLength: { value: 8, message: "8자 이하로 정해주세요" } })}
                         placeholder="닉네임"
+                        maxLength="9"
                     />
                 </div>
                 <Btndiv>
@@ -179,9 +177,9 @@ const SignUp = () => {
                     <input
                         {...register("password", {
                             required: "비밀번호는 필수 입력입니다", minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요.", },
-                            maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요.", }, pattern: { value: /^(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, message: "특수문자와 숫자를 포함해주세요" }
-                        })}
-                        placeholder="비밀번호 (특수문자, 숫자 포함)"
+                            maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요.", }, pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: "특수문자와 숫자를 포함해주세요" }
+                        })}                                                                                
+                        placeholder="비밀번호 (특수문자, 숫자 포함)" 
                         type="password"
                     />
                 </div>
@@ -195,7 +193,7 @@ const SignUp = () => {
                             required: "비밀번호는 확인은 필수입니다",
                             minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요."},
                             maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요." },
-                            pattern: { value: /^(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, message: "특수문자와 숫자를 포함해주세요" },
+                            pattern: { value:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: "특수문자와 숫자를 포함해주세요" },
                         })}
                         placeholder="비밀번호 (특수문자, 숫자 포함)"
                         type="password"
@@ -208,11 +206,12 @@ const SignUp = () => {
                     </div>
                     <input
                         {...register("phone", {
-                            required: "전화번호는 필수 입력입니다",
-                            pattern: { value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/, message: "휴대전화가 아닙니다" },
+                            required: "전화번호는 필수 입력입니다",  minLength: { value: 10, message: "휴대번호는 최소 10자리입니다"},
+                            maxLength: { value: 11, message: "휴대번호는 최대 11자리입니다" },
+                            pattern: { value: /^01[0-1, 7][0-9]{7,8}$/, message: "휴대전화가 아닙니다" },
                         })}
 
-                        placeholder="전화번호"
+                        placeholder="숫자로만 입력해주세요"
                     />
                     <button >실행임</button>
                 </div>

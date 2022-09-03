@@ -12,7 +12,7 @@ const Home = () => {
     <Slider page={page}>
       <HomeOrderFirst setPage={setPage} setType={setType} />
       <HomeOrderSecond setPage={setPage} setSelected={setSelected} type={type} />
-      <HomeOrderThird selected={selected} />
+      {/* <HomeOrderThird selected={selected} /> */}
     </Slider>
   );
 };

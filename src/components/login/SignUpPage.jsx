@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const SignUp = () => {
+const SignUpPage = (props) => {
     //이미지 미리보기 저장하는  곳
     const [attachment, setAttachment] = useState();
     //이미지 저장하는 곳
@@ -117,12 +117,18 @@ const SignUp = () => {
                 }
                     alt="업로드할 이미지" />
                 <form encType="multipart/form-data">
-                    <input
+                <ChoiceImg>
+                <label htmlFor="이미지">
+                        <h4>사진 선택하기</h4>
+                    <input style={{display:"none"}}
+                        id="이미지"
                         type="file"
                         name="image"
                         ref={fileInput}
                         onChange={selectImg}
                     />
+                    </label>
+                </ChoiceImg>
                 </form>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -214,6 +220,9 @@ const SignUp = () => {
                         placeholder="숫자로만 입력해주세요"
                     />
                     <button >실행임</button>
+                    <button type="button" onClick={()=> {
+                        props.setPage(1)
+                          }} >뒤로 가기</button>
                 </div>
             </form>
 
@@ -228,6 +237,29 @@ const UserImage = styled.img`
     height: 25rem;
     border-radius: 50%;
     margin-bottom: 2rem;
+`
+
+const ChoiceImg = styled.div`
+    width: 130px;
+    height: 30px;
+    border: 1px solid #0099FF;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+
+    
+
+    h4 {
+        cursor: pointer;
+        font-size: 1.3rem;
+    }
+
+    :hover{
+        background-color: #0099FF;
+        color: white;
+    }
 `
 
 const Container = styled.div`
@@ -273,4 +305,4 @@ const Btndiv = styled.div`
 `
 
 
-export default SignUp;
+export default SignUpPage;

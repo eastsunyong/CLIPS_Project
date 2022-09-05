@@ -1,4 +1,4 @@
 import GlobalStyle from "./GlobalStyle";
-import Modal from "./Modal";
+import { MoveLeftModal, MoveTopModal } from "./modal";
 
-export { GlobalStyle, Modal };
+export { GlobalStyle, MoveLeftModal, MoveTopModal };

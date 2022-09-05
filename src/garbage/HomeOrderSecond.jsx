@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { MdDeleteForever } from "react-icons/md";
 
 import { BntArea, Btn, Title, Container } from "./HomeCommonStyle";
-import LocaionSearchModal from "./LocationSearchModal";
+import LocaionSearchModal from "../components/home/LocationSearchModal";
 import { localAPI } from "apis";
 
 const HomeOrderSecond = (props) => {

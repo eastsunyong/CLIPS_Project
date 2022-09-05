@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
+import { useForm } from "react-hook-form";
 
 import { OpacityModal } from "components/common/modal";
-import { ModalTop, BackBtn, BottomBtn, ModalMain } from "./common";
 import { localAPI } from "apis";
 
 const LocaionSearchModal = (props) => {
@@ -63,6 +62,7 @@ const LocaionSearchModal = (props) => {
 
   // 내위치 리스트에 저장
   const getMyLocation = (e) => {
+    e.preventDefault();
     setList([]);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -81,77 +81,98 @@ const LocaionSearchModal = (props) => {
 
   return (
     <OpacityModal toggle={props.toggle}>
-      <ModalTop className="fcc">
-        <BackBtn onClick={modalClose}>
+      <SearchArea className="fcc" onSubmit={handleSubmit(getAddressList)}>
+        <BackBtn className="fcc" onClick={modalClose}>
           <IoIosArrowBack />
         </BackBtn>
-        <p>주소 검색</p>
-      </ModalTop>
-      <LSMMain className="fcc" onSubmit={handleSubmit(getAddressList)}>
-        <input {...register("search", registerOpt)} type="search" placeholder="시/군/구로 검색" autoComplete="off" />
-        <ListArea>
-          {list.map((address, i) => {
-            return (
-              <LocationDiv
-                key={address.addressName + i}
-                className="fcc"
-                onClick={() => {
-                  selectLocation(address.addressName);
-                }}
-              >
-                <p>{address.addressName}</p>
-                <p>{address.addressCity}</p>
-              </LocationDiv>
-            );
-          })}
-        </ListArea>
-        {list.length === 0 ? <GeoBtn type="button" value="내 위치 찾기" onClick={getMyLocation} /> : null}
-      </LSMMain>
+        <input {...register("search", registerOpt)} type="search" placeholder="주소를 입력해주세요" autoComplete="off" />
+        <SearchBtn>검색</SearchBtn>
+      </SearchArea>
+      <SearchResultArea>
+        {list.length === 0 ? (
+          <p className="fcc">
+            <CallMyLocationBtn onClick={getMyLocation}>내위치 불러오기</CallMyLocationBtn>
+          </p>
+        ) : null}
+
+        {list.map((address, i) => {
+          const recommenedArea = props.target === "city" ? address.addressCity : address.addressName;
+          const anotherArea = props.target === "city" ? address.addressName : address.addressCity;
+          return (
+            <div
+              key={address.addressCity + i}
+              className="fcc"
+              onClick={() => {
+                selectLocation(recommenedArea);
+              }}
+            >
+              <p>
+                {props.target === "city" ? "추천 지역 : " : ""}
+                {recommenedArea}
+              </p>
+              <p>{anotherArea}</p>
+            </div>
+          );
+        })}
+      </SearchResultArea>
     </OpacityModal>
   );
 };
 
 export default LocaionSearchModal;
 
-const LSMMain = styled(ModalMain)`
-  position: relative;
-  input {
-    border-radius: ${(props) => props.theme.size.s};
+const SearchArea = styled.form`
+  position: sticky;
+  top: 0;
+  background: white;
+  box-shadow: 0 0.3rem 0.3rem -0.3rem;
+  padding: 1rem;
+  & > * {
+    height: 5rem;
   }
-  input[type="search"] {
-    position: sticky;
-    top: 0;
-    margin: calc(${(props) => props.theme.size.m} / 2);
-    border: 0.1rem solid gray;
+  input {
+    margin: 0 2rem;
+    padding: 1rem;
+    flex: 1;
+    font-size: 2rem;
   }
 `;
 
-const ListArea = styled.div`
-  width: 100%;
-  max-height: 80%;
-  overflow: auto;
+const BackBtn = styled.div`
+  cursor: pointer;
+  width: 5rem;
+  font-size: 4rem;
+`;
+
+const SearchBtn = styled.button`
+  width: 10rem;
+  border-radius: 2.5rem;
+`;
+
+const SearchResultArea = styled.div`
+  flex-flow: column;
+  & > * {
+    width: 100%;
+  }
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const LocationDiv = styled.div`
-  cursor: pointer;
-  align-items: flex-start !important;
-  flex-flow: column;
-  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.1);
-  padding: ${(props) => props.theme.fontSize.s};
-  font-size: ${(props) => props.theme.fontSize.s};
+  div {
+    cursor: pointer;
+    align-items: flex-start !important;
+    flex-flow: column;
+    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    font-size: 2rem;
+  }
   p:last-child {
-    margin-top: calc(${(props) => props.theme.size.s} / 2);
-    font-size: calc(${(props) => props.theme.fontSize.s} / 1.2);
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
     color: gray;
   }
 `;
 
-const GeoBtn = styled(BottomBtn)`
-  border-radius: ${(props) => props.theme.size.s};
-  background: ${(props) => props.theme.themeColor};
-  color: white;
-  font-weight: bold;
+const CallMyLocationBtn = styled.button`
+  width: 100%;
+  margin: 1rem 3rem;
 `;

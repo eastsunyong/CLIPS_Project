@@ -1,4 +1,5 @@
 import MoveLeftModal from "./MoveLeftModal";
 import MoveTopModal from "./MoveTopModal";
+import OpacityModal from "./OpacityModal";
 
-export { MoveLeftModal, MoveTopModal };
+export { MoveLeftModal, MoveTopModal, OpacityModal };

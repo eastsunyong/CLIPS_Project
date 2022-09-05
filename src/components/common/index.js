@@ -1,4 +1,4 @@
-import GlobalStyle from "./GlobalStyle";
+import Btn from "./Btn";
 import { MoveLeftModal, MoveTopModal } from "./modal";
 
-export { GlobalStyle, MoveLeftModal, MoveTopModal };
+export { MoveLeftModal, MoveTopModal, Btn };

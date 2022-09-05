@@ -10,15 +10,15 @@ const Layout = (props) => {
   useEffect(() => {
     setScreenSize();
   });
-  return <Container>{props.children}</Container>;
+  return <Section>{props.children}</Section>;
 };
 
 export default Layout;
 
-const Container = styled.div`
+const Section = styled.div`
   // 모바일 화면에서 주소창 및 하단 nav바를 제외한 높이를 1vh라고하고 * 100vh
   height: calc(var(--vh, 1vh) * 100);
-  max-width: 640px;
+  max-width: 375px;
 
   margin: 0 auto;
 

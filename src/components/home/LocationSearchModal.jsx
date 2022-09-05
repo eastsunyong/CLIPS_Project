@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IoIosArrowBack } from "react-icons/io";
 import { useForm } from "react-hook-form";
 
-import { Modal } from "components/common";
+import { MoveLeftModal } from "components/common";
 import { localAPI } from "apis";
 
 const LocaionSearchModal = (props) => {
@@ -80,7 +80,7 @@ const LocaionSearchModal = (props) => {
   };
 
   return (
-    <Modal toggle={props.toggle}>
+    <MoveLeftModal toggle={props.toggle}>
       <SearchArea className="fcc" onSubmit={handleSubmit(getAddressList)}>
         <BackBtn className="fcc" onClick={modalClose}>
           <IoIosArrowBack />
@@ -115,7 +115,7 @@ const LocaionSearchModal = (props) => {
           );
         })}
       </SearchResultArea>
-    </Modal>
+    </MoveLeftModal>
   );
 };
 

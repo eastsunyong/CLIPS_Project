@@ -1,4 +1,4 @@
+import Map from "./Map";
 import Btn from "./Btn";
-import { MoveLeftModal, MoveTopModal } from "./modal";
 
-export { MoveLeftModal, MoveTopModal, Btn };
+export { Map, Btn };

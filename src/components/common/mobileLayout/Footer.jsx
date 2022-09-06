@@ -1,53 +1,55 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { MapIcon, MyIcon } from "assets/icons";
+import { MapIcon, MyIcon, CalendarIcon } from "assets/icons";
 
 const Footer = () => {
   const nav = useNavigate();
+  const pathname = useLocation().pathname;
+  const icons = [
+    { path: "/", component: <MapIcon /> },
+    { path: "/list", component: <CalendarIcon /> },
+    { path: "/login", component: <MyIcon /> },
+  ];
   return (
-    <FooterNav>
-      <div onClick={() => nav("/")}>
-        <MapIcon />
-        <p>장소 검색</p>
-      </div>
-      <div onClick={() => nav("/login")}>
-        <MyIcon />
-        <p>약속 목록</p>
-      </div>
-    </FooterNav>
+    <Section>
+      {icons.map((icon) => {
+        return (
+          <FooterNav
+            key={icon.path}
+            selected={icon.path === pathname}
+            className="fcc"
+            onClick={() => {
+              if (pathname !== icon.path) nav(icon.path);
+            }}
+          >
+            {icon.component}
+          </FooterNav>
+        );
+      })}
+    </Section>
   );
 };
 
-const FooterNav = styled.footer`
+const Section = styled.footer`
   display: flex;
   align-items: center;
   justify-content: space-around;
   z-index: 10;
 
   min-height: 8rem;
-  padding: 0 2rem;
-
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
-  div {
-    cursor: pointer;
-    width: 5rem;
+`;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-flow: column;
-
-    font-size: 4rem;
-    & > :nth-child(1) {
-      width: 3rem;
-      height: 3rem;
-    }
-    & > :nth-child(2) {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-    }
+const FooterNav = styled.div`
+  cursor: pointer;
+  width: ${(props) => props.theme.size.l};
+  height: 100%;
+  fill: ${(props) => (props.selected ? props.theme.themeColor : props.theme.iconsColor.disable)};
+  & > :nth-child(1) {
+    width: ${(props) => props.theme.size.m};
+    height: ${(props) => props.theme.size.m};
   }
 `;
 

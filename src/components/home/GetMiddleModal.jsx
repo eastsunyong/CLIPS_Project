@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
@@ -57,7 +57,7 @@ const GetMiddleModal = (props) => {
     }
     const middleAddress = await localAPI.addressTransfer(x / length, y / length);
     resultLocation = middleAddress.docs[0].address.address_name;
-    props.setValue(props.target, resultLocation);
+    props.setAddress(resultLocation);
     reset();
     setIdList([1, 2]);
     unregister(`location`);
@@ -109,7 +109,7 @@ const GetMiddleModal = (props) => {
   );
 };
 
-export default GetMiddleModal;
+export default memo(GetMiddleModal);
 
 const InputArea = styled.div`
   width: 100%;

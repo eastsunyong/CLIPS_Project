@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
@@ -50,7 +50,12 @@ const LocaionSearchModal = (props) => {
 
   // 리스트중 지역 선택
   const selectLocation = (address) => {
-    props.setValue(props.target, address);
+    if (props.setValue) {
+      props.setValue(props.target, address);
+    } else {
+      props.setAddress(address);
+    }
+
     modalClose();
   };
 
@@ -111,7 +116,7 @@ const LocaionSearchModal = (props) => {
   );
 };
 
-export default LocaionSearchModal;
+export default memo(LocaionSearchModal);
 
 const LSMMain = styled(ModalMain)`
   position: relative;

@@ -1,4 +1,5 @@
+import HomeMain from "./HomeMain";
 import GetMiddleModal from "./GetMiddleModal";
 import LocationSearchModal from "./LocationSearchModal";
 
-export { GetMiddleModal, LocationSearchModal };
+export { HomeMain, GetMiddleModal, LocationSearchModal };

@@ -1,13 +1,16 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { IoIosArrowBack } from "react-icons/io";
 
 import { OpacityModal } from "components/common/modal";
 import { ModalTop, BackBtn, BottomBtn, ModalMain } from "./common";
 import { localAPI } from "apis";
+import { setAddress } from "store/modules/homeSlice";
 
 const LocaionSearchModal = (props) => {
+  const dispatch = useDispatch();
   const { handleSubmit, register, reset } = useForm();
   const [list, setList] = useState([]);
 
@@ -53,7 +56,7 @@ const LocaionSearchModal = (props) => {
     if (props.setValue) {
       props.setValue(props.target, address);
     } else {
-      props.setAddress(address);
+      dispatch(setAddress(address));
     }
 
     modalClose();
@@ -116,7 +119,7 @@ const LocaionSearchModal = (props) => {
   );
 };
 
-export default memo(LocaionSearchModal);
+export default LocaionSearchModal;
 
 const LSMMain = styled(ModalMain)`
   position: relative;

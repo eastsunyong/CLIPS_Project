@@ -1,44 +1,56 @@
-import React, { memo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import { SearchIcon } from "assets/icons";
 import { Map } from "components/common";
-import { MarkerDetailModal } from ".";
+import { MarkerDetailModal, LocationSearchModal } from ".";
+import { setAddress2coord } from "store/modules/mapSlice";
 
-const HomeMain = (props) => {
-  const [center, setCenter] = useState(false);
-  const address = props.address;
+const HomeMain = () => {
+  const dispatch = useDispatch();
+  const address = useSelector((state) => state.home.address);
+  const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    if (address) {
+      dispatch(setAddress2coord(address));
+    }
+  }, [address]);
 
   return (
-    <Section className="fcc">
-      <SectionTop>
-        <SearchBar
-          className="fcc"
-          onClick={() => {
-            props.setOpaToggle(true);
-          }}
-        >
-          <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
-          <div>
-            <SearchIcon />
-          </div>
-        </SearchBar>
-      </SectionTop>
+    <>
+      <Section className="fcc">
+        <SectionTop>
+          <SearchBar
+            className="fcc"
+            onClick={() => {
+              setToggle(true);
+            }}
+          >
+            <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
+            <div>
+              <SearchIcon />
+            </div>
+          </SearchBar>
+        </SectionTop>
 
-      <MarkerDetailModal setLeftToggle={props.setLeftToggle} setCenter={setCenter} />
-      <Map address={address} center={center} setCenter={setCenter} />
-    </Section>
+        <MarkerDetailModal />
+        <Map />
+      </Section>
+      <LocationSearchModal toggle={toggle} setToggle={setToggle} />
+    </>
   );
 };
 
-export default memo(HomeMain);
+export default HomeMain;
 
 const Section = styled.div`
   position: relative;
   flex-flow: column;
   width: 100%;
   height: 100%;
-  #map {
+  .map {
     position: absolute !important;
     top: 0;
     left: 0;

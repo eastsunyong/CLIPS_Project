@@ -1,5 +1,6 @@
-import HomeOrderFirst from "./HomeOrderFirst";
-import HomeOrderSecond from "./HomeOrderSecond";
-import HomeOrderThird from "./HomeOrderThird";
+import HomeMain from "./HomeMain";
+import LocationSearchModal from "./LocationSearchModal";
+import GetMiddleModal from "./GetMiddleModal";
+import MarkerDetailModal from "./MarkerDetailModal";
 
-export { HomeOrderFirst, HomeOrderSecond, HomeOrderThird };
+export { HomeMain, GetMiddleModal, LocationSearchModal, MarkerDetailModal };

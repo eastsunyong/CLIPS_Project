@@ -36,7 +36,7 @@ const Box = styled.div`
     gap: 3rem;
 
     label {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
     button {

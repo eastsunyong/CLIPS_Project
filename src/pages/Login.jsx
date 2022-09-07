@@ -2,37 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import axios from "axios";
+// import { useState } from "react";
+// import axios from "axios";
 
 const Login = () => {
-
   const navigate = useNavigate();
 
-
-  const LogInHandler = async (data) => {
-    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
-  }
-
+  // const LogInHandler = async (data) => {
+  //   await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
+  // }
 
   const {
     getValues,
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
   const onSubmit = (data) => {
     // LogInHandler(data)
-    const Qwe = getValues("nickname")
+    const Qwe = getValues("nickname");
     console.log(data);
     console.log(Qwe);
   };
 
-  const onValid = (data) => console.log(data, "onvalid");
-  const onInvalid = (data) => console.log(data, "onInvalid");
-
+  // const onValid = (data) => console.log(data, "onvalid");
+  // const onInvalid = (data) => console.log(data, "onInvalid");
 
   // {...register("email", {required: "이메일은 필수 입력입니다.",
   // minLength: {value: 8,message: "이메일을 8자 이상 작성해주세요",},maxLength: {value: 30,message: "이메일을 30자 이하로 작성해주세요", },
@@ -50,36 +46,41 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <p>nickname</p>
-          <input
-            {...register("nickname", { required: "빈칸입니다", minLength: { value: 5, message: "아이디가 짧아여", } })}
-            placeholder="닉네임" />
+          <input {...register("nickname", { required: "빈칸입니다", minLength: { value: 5, message: "아이디가 짧아여" } })} placeholder="닉네임" />
           {errors.nickname && <p style={{ color: "red" }}>{errors.nickname.message}</p>}
 
           <p>비밀번호</p>
           <input
-            {...register("password", { required: "비밀번호는 필수 입력입니다.", minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요.", }, })}
+            {...register("password", {
+              required: "비밀번호는 필수 입력입니다.",
+              minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요." },
+            })}
             placeholder="비밀번호"
-            type="password"/>
+            type="password"
+          />
           {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
-
-
         </div>
         <div className="fcc">
           <Container>
             <button>로그인</button>
-            <h2 onClick={() => { navigate('/signup') }}>회원가입</h2>
+            <h2
+              onClick={() => {
+                navigate("/signup");
+              }}
+            >
+              회원가입
+            </h2>
           </Container>
         </div>
       </form>
     </Container>
-  )
+  );
 };
 
-
 const Container = styled.div`
-
-flex-direction: column;
-  p{
+  background: black;
+  flex-direction: column;
+  p {
     font-size: 2rem;
   }
   input {
@@ -87,6 +88,6 @@ flex-direction: column;
     width: 20rem;
     padding: 0.5rem;
   }
-`
+`;
 
 export default Login;

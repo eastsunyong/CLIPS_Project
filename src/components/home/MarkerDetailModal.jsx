@@ -1,17 +1,24 @@
-import React, { memo } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import { MoveTopModal } from "components/common/modal";
 import { Btn } from "components/common";
 import { GeoIcon, PinIcon } from "assets/icons";
+import { toggleViewMiddle } from "store/modules/homeSlice";
+import { _createLatLon } from "store/modules/mapSlice";
 
-const MarkerDetailModal = (props) => {
+const MarkerDetailModal = () => {
+  const dispatch = useDispatch();
+  const map = useSelector((state) => state.map.map);
+  const coord = useSelector((state) => state.map.coord);
+
   return (
-    <MoveTopModal toggle={true} viewSlice={false}>
+    <MoveTopModal toggle={false} viewSlice={false}>
       <SectionBottom className="fcc">
         <GetMiddleBtn
           onClick={() => {
-            props.setLeftToggle(true);
+            dispatch(toggleViewMiddle());
           }}
         >
           <PinIcon />
@@ -19,7 +26,7 @@ const MarkerDetailModal = (props) => {
         </GetMiddleBtn>
         <BottomBtn
           onClick={() => {
-            props.setCenter(true);
+            map.panTo(_createLatLon(coord.x, coord.y));
           }}
         >
           <GeoIcon />
@@ -31,7 +38,7 @@ const MarkerDetailModal = (props) => {
   );
 };
 
-export default memo(MarkerDetailModal);
+export default MarkerDetailModal;
 
 const SectionBottom = styled.div`
   height: calc(${(props) => props.theme.size.m} * 2);

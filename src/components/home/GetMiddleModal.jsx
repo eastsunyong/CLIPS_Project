@@ -1,17 +1,21 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
 
 import { MoveLeftModal } from "components/common/modal";
 import { ModalTop, ModalMain, BackBtn, BottomBtn } from "./common";
-import LocaionSearchModal from "./LocationSearchModal";
+import { LocationSearchModal } from ".";
 import { localAPI } from "apis";
 import { number2kr } from "utils";
+import { setAddress, toggleViewMiddle } from "store/modules/homeSlice";
 
-const GetMiddleModal = (props) => {
+const GetMiddleModal = () => {
+  const dispatch = useDispatch();
+  const viewMiddle = useSelector((state) => state.home.viewMiddle);
   const { handleSubmit, register, setValue, reset, unregister } = useForm();
   const [idList, setIdList] = useState([1, 2]);
   const [toggle, setToggle] = useState(false);
@@ -38,7 +42,7 @@ const GetMiddleModal = (props) => {
     reset();
     setIdList([1, 2]);
     unregister(`location`);
-    props.setToggle(!props.toggle);
+    dispatch(toggleViewMiddle());
   };
 
   // 최종 선택 주소 저장 함수
@@ -57,7 +61,7 @@ const GetMiddleModal = (props) => {
     }
     const middleAddress = await localAPI.addressTransfer(x / length, y / length);
     resultLocation = middleAddress.docs[0].address.address_name;
-    props.setAddress(resultLocation);
+    dispatch(setAddress(resultLocation));
     reset();
     setIdList([1, 2]);
     unregister(`location`);
@@ -65,7 +69,7 @@ const GetMiddleModal = (props) => {
   };
 
   return (
-    <MoveLeftModal toggle={props.toggle}>
+    <MoveLeftModal toggle={viewMiddle}>
       <ModalTop className="fcc">
         <BackBtn onClick={modalClose}>
           <IoIosArrowBack />
@@ -104,12 +108,12 @@ const GetMiddleModal = (props) => {
         </AddLocationBtn>
         <SubmitBtn type="submit" value="중간위치 찾기" />
       </ModalMain>
-      <LocaionSearchModal toggle={toggle} setToggle={setToggle} target={target} setValue={setValue} />
+      <LocationSearchModal toggle={toggle} setToggle={setToggle} target={target} setValue={setValue} />
     </MoveLeftModal>
   );
 };
 
-export default memo(GetMiddleModal);
+export default GetMiddleModal;
 
 const InputArea = styled.div`
   width: 100%;

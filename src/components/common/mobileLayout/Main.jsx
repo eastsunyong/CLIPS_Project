@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const Main = (props) => {
-  return <Container>{props.children}</Container>;
+  return <Section>{props.children}</Section>;
 };
 
-const Container = styled.main`
+const Section = styled.main`
   flex: 1;
   flex-grow: 1;
   flex-shrink: 1;

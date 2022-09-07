@@ -1,7 +1,7 @@
 import React from "react";
 
+import { Layout, Main, Footer } from "components/common/mobileLayout";
 import Router from "shared/Router";
-import { Layout, Main, Footer } from "components/mobileLayout";
 
 function App() {
   return (

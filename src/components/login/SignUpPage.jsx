@@ -107,7 +107,7 @@ const SignUpPage = (props) => {
         };
     };
 
-    return (
+    return (    
         <Container>
             <div className="fcc" style={{ flexDirection: "column" }}>
                 <UserImage src={
@@ -264,18 +264,19 @@ const ChoiceImg = styled.div`
 
 const Container = styled.div`
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 3rem;
+    position: relative;
+  flex-flow: column;
+  min-width: 100%;
+  min-height: 100%;
+  padding: 0 2rem 2rem 2rem;
+  flex-direction: column;
 
     label {
         font-size: 1.8rem;
     }
 
     input {
-        width: 50rem;
+        width: 35rem;
         height: 5rem;
         border-radius: 2rem;
         border: 1px solid skyblue;

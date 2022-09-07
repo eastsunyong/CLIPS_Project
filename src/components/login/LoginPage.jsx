@@ -133,7 +133,7 @@ const Container = styled.div`
     height: 41px;
     width: 30rem;
     padding: 0.5rem;
-    border: 1px solid #0099FF;
+    border: 1px solid ${(props) => props.theme.themeColor};
     border-radius: 8px;
   }
 
@@ -148,13 +148,13 @@ const Container = styled.div`
 
   button {
     background-color: white;
-    border: 1px solid #0099FF;
+    border: 1px solid ${(props) => props.theme.themeColor};
         width: 50%;
         height: 35px;
         border-radius: 8px;
   }
   button:hover {
-    background-color: #0099FF;
+    background-color: ${(props) => props.theme.themeColor};
   }
 `
 

@@ -31,12 +31,12 @@ const Container = styled.div`
 const Box = styled.div`
     display: flex;
     align-items: center;
-    /* justify-content: center; */
     flex-direction: column;
     gap: 3rem;
 
     label {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        font-weight: 700;
     }
 
     button {

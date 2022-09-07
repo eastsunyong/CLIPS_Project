@@ -74,7 +74,7 @@ const Map = (props) => {
     }
   }, [props.center]);
 
-  return <Container ref={containerRef} />;
+  return <Container ref={containerRef} id="map" />;
 };
 
 const Container = styled.div`

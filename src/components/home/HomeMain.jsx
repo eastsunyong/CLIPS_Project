@@ -1,9 +1,9 @@
 import React, { memo, useState } from "react";
 import styled from "styled-components";
 
-import { SearchIcon, GeoIcon, PinIcon } from "assets/icons";
-import { InputBar } from "./common";
-import { Btn, Map } from "components/common";
+import { SearchIcon } from "assets/icons";
+import { Map } from "components/common";
+import { MarkerDetailModal } from ".";
 
 const HomeMain = (props) => {
   const [center, setCenter] = useState(false);
@@ -11,37 +11,21 @@ const HomeMain = (props) => {
 
   return (
     <Section className="fcc">
-      <div className="top">
-        <InputBar
+      <SectionTop>
+        <SearchBar
+          className="fcc"
           onClick={() => {
             props.setOpaToggle(true);
           }}
         >
-          <input className="inner" placeholder="시/군/구로 검색" defaultValue={address} readOnly />
-          <div className="icon">
+          <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
+          <div>
             <SearchIcon />
           </div>
-        </InputBar>
-      </div>
+        </SearchBar>
+      </SectionTop>
 
-      <div className="fcc bottom">
-        <GetMiddleBtn
-          onClick={() => {
-            props.setLeftToggle(true);
-          }}
-        >
-          <PinIcon />
-          <span>중간은 어디?</span>
-        </GetMiddleBtn>
-        <BottomBtn
-          onClick={() => {
-            setCenter(true);
-          }}
-        >
-          <GeoIcon />
-        </BottomBtn>
-      </div>
-
+      <MarkerDetailModal setLeftToggle={props.setLeftToggle} setCenter={setCenter} />
       <Map address={address} center={center} setCenter={setCenter} />
     </Section>
   );
@@ -51,42 +35,55 @@ export default memo(HomeMain);
 
 const Section = styled.div`
   position: relative;
+  flex-flow: column;
   width: 100%;
   height: 100%;
-  & > *:not(:last-child) {
-    position: absolute;
-    width: 100%;
-    padding: ${(props) => props.theme.size.s} calc(${(props) => props.theme.size.s} * 2);
-    z-index: 2;
-  }
-  .top {
+  #map {
+    position: absolute !important;
     top: 0;
-  }
-  .bottom {
-    justify-content: space-between !important;
+    left: 0;
     bottom: 0;
+    right: 0;
   }
 `;
 
-const BottomBtn = styled(Btn)`
-  font-size: ${(props) => props.theme.fontSize.s};
-  font-weight: bold;
+const SectionTop = styled.div`
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  height: calc(${(props) => props.theme.size.m} * 2);
+  padding: ${(props) => props.theme.size.s} calc(${(props) => props.theme.size.s} * 2);
+`;
 
-  padding: ${(props) => props.theme.size.s};
+const SearchBar = styled.div`
+  cursor: pointer;
+  padding: ${(props) => props.theme.size.s} calc(${(props) => props.theme.size.s} * 2);
+
+  background: white;
   border-radius: ${(props) => props.theme.size.m};
+  box-shadow: 0 0.2rem 1rem rgba(17, 24, 39, 0.15);
 
-  & > :first-child {
-    width: ${(props) => props.theme.fontSize.s};
-    height: ${(props) => props.theme.fontSize.s};
-  }
-`;
-
-const GetMiddleBtn = styled(BottomBtn)`
-  background: ${(props) => props.theme.themeColor};
-  & > :first-child {
-    margin-right: calc(${(props) => props.theme.size.s} / 2);
-  }
   & > * {
-    filter: invert(100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  input {
+    cursor: inherit;
+    border: none;
+    outline: none;
+    width: 100%;
+
+    font-size: ${(props) => props.theme.fontSize.s};
+    &::placeholder {
+      color: ${(props) => props.theme.iconsColor.disable};
+    }
+  }
+
+  div {
+    margin-left: ${(props) => props.theme.size.s};
+    fill: ${(props) => props.theme.iconsColor.disable};
   }
 `;

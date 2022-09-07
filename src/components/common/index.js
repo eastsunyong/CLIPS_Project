@@ -1,4 +1,4 @@
-import GlobalStyle from "./GlobalStyle";
-import { MoveLeftModal, MoveTopModal } from "./modal";
+import Map from "./Map";
+import Btn from "./Btn";
 
-export { GlobalStyle, MoveLeftModal, MoveTopModal };
+export { Map, Btn };

@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+//아이콘
 import { AiOutlinePlus, AiOutlineLeft } from 'react-icons/ai';
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FiMoreVertical } from 'react-icons/fi';
@@ -12,61 +16,103 @@ import "./ReactCalendar.css"
 
 //데이트 픽커 캘린더 
 import DatePicker from "react-datepicker";
-import { subDays, addDays } from 'date-fns';
-// import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css"
 
 import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
 const PromiseList = (props) => {
-
+    
     const navigater = useNavigate();
+    
+    //약속 만드는 모달창 불러오기
+    const [toggle, setToggle] = useState(false);
 
     //로그인 상태값 
-    const [onLogin, setOnLogin] = useState(false);
-
+    const [onLogin, setOnLogin] = useState(true);
+    
     //리액트 캘린더 날짜 받아오기
     const [value, onChange] = useState(new Date());
+
     //데이트 픽커 날짜 받아오기
     const [startDate, setStartDate] = useState(new Date());
-
+    
+    //날짜 값들 변환해서 저장하는 곳
     const dates = startDate.toLocaleDateString('ko-kr')
     const times = startDate.toLocaleTimeString('ko-kr').slice(0, 7)
+    //문자열로 바꾼거임
 
-    console.log(dates, times)
+    //변환힌 날짜 값 합쳐서 저장하는 곳
+    const newDay = dates+ times
+
+    console.log(newDay)
+
+    const [newPromise, setNewPromise] = useState({
+        title:'',
+        date: newDay,
+        friendList:[{}],
+        penalty:''
+    })
 
     //약속리스트 맵 돌릴 useStat
     const [list, setList] = useState([
         {
             title: "약속이름입니당",
-            date: "2022 09 07 19:28",
+            date: "2022. 09. 08",
             location: "약속 장소",
             countFriend: 4
         },
         {
             title: "약속이름입니당111",
-            date: "2022 09 07 19:28 2222",
+            date: "2022. 09. 07",
             location: "약속 장소333",
             countFriend: 1
         }
     ])
-
-
+    
     // 주말 색깔 변환 하는 함수 ?
     const createDate = (date) => {
         return new Date(new Date(date.getFullYear()
             , date.getMonth(), date.getDate(), 0, 0, 0));
     }
-
+  
     const getDayName = (date) => {
         return date.toLocaleDateString('ko-KR', {
             weekday: 'long',
         }).substr(0, 1);
     }
 
-    //약속 만드는 모달창 불러오기
-    const [toggle, setToggle] = useState(false);
+
+    const {
+        getValues,
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+      } = useForm({ mode: "onChange" });
+    
+    
+      //오류 메세지 확인
+      const onValid = (data) => console.log(data, "onvalid");
+      const onInvalid = (data) => console.log(data, "onInvalid");
+
+
+       //약속만드는 함수
+     const onSubmit = (data) => {
+        LogInHandler(data)
+        };
+
+        //약속만드는 핸들러
+  const LogInHandler = async (data) => {
+    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
+  }
+
+  const test = ["2022. 9. 8.", "2022. 9. 7."]
+
+
+
+
 
     return (
         <All>
@@ -84,6 +130,9 @@ const PromiseList = (props) => {
 
                 {/* 약속 만드는 모달창 */}
                 <OpacityModal toggle={toggle}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+
+                   
                     <AddPromise>
                         <p><AiOutlineLeft onClick={(e) => {
                             e.preventDefault();
@@ -93,7 +142,11 @@ const PromiseList = (props) => {
                     </AddPromise>
                     <InputBox>
                         <label>약속 이름</label>
+                        {errors.title && <p style={{ color: "red" }}>{errors.title.message}</p>}
                         <input
+                        {...register("title", {
+                            required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                          })}
                             placeholder="이름을 작성해보세요"
                         />
 
@@ -128,13 +181,37 @@ const PromiseList = (props) => {
                             showTimeInput
                         />
                         <label>메모</label>
-                        <input style={{ height: "10rem" }} />
+                        <textarea style={{ height: "10rem" }} 
+                        placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+                        />
                     </InputBox>
                     <MakePromise>저장하기</MakePromise>
+                </form>
                 </OpacityModal>
                 {/* 약속 만드는 모달창 끝  */}
+                    
+                <Calendar
+                tileContent={(e)=> {
+                    // console.log(new Date(test[0]).getTime())
+                    // console.log((e.date.getTime()))
+                    // 밀리세컨즈로 비교하는 방식
 
-                <Calendar onChange={onChange} value={value} />
+                    if(test.find((x) => new Date(x).getTime() === e.date.getTime())) {
+                        // console.log(e.date.getTime() / 100000)
+                        return <div style={{width: "1rem", height: "1rem" , background: "black"}}></div>
+                    }
+
+                    //스트링으로 검색하는 방법
+                    // if(test.find((x) => {
+                    //     // console.log(x)
+                    //     // console.log(e.date.toLocaleDateString("ko-KR"))
+                    //     return x === e.date.toLocaleDateString("ko-KR")})) {
+                    //     console.log(e.date)
+                    // }
+                    // console.log(e.date.toLocaleDateString("ko-KR"))
+                }}
+        
+                onChange={onChange} value={value} />
 
                 {
                     onLogin ? <>{
@@ -245,6 +322,16 @@ const InputBox = styled.div`
         height: 37px;
         border-radius: 8px;
         padding-left: 8px;
+    }
+
+    textarea {
+        border: 1px solid #4B556380;
+        width: 100%;
+        height: 37px;
+        border-radius: 8px;
+        padding-left: 8px; 
+        padding-top: 5px;
+        resize: none;
     }
 `
 

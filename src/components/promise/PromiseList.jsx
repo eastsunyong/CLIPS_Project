@@ -6,16 +6,19 @@ import { AiOutlinePlus, AiOutlineLeft } from 'react-icons/ai';
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { FiMoreVertical } from 'react-icons/fi';
 
+//React-Calendar
 import Calendar from "react-calendar";
 import "./ReactCalendar.css"
 
 //데이트 픽커 캘린더 
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { subDays, addDays } from 'date-fns';
+// import "react-datepicker/dist/react-datepicker.css";
+import "./DatePicker.css"
+
 import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
-
 const PromiseList = (props) => {
 
     const navigater = useNavigate();
@@ -50,109 +53,125 @@ const PromiseList = (props) => {
     ])
 
 
+    // 주말 색깔 변환 하는 함수 ?
+    const createDate = (date) => {
+        return new Date(new Date(date.getFullYear()
+            , date.getMonth(), date.getDate(), 0, 0, 0));
+    }
+
+    const getDayName = (date) => {
+        return date.toLocaleDateString('ko-KR', {
+            weekday: 'long',
+        }).substr(0, 1);
+    }
+
     //약속 만드는 모달창 불러오기
     const [toggle, setToggle] = useState(false);
 
     return (
         <All>
 
-        <Container className="fcc">
-            <Header>
-                <h1>Calendar</h1>
-                <Icon><AiOutlinePlus
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setToggle(!toggle)
-                    }} /></Icon>
-            </Header>
+            <Container className="fcc">
+                <Header>
+                    <h1>Calendar</h1>
+                    <Icon><AiOutlinePlus
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setToggle(!toggle)
+                        }} /></Icon>
+                </Header>
 
 
-            {/* 약속 만드는 모달창 */}
-            <OpacityModal toggle={toggle}>
-                <AddPromise>
-                    <p><AiOutlineLeft onClick={(e) => {
-                        e.preventDefault();
-                        setToggle(!toggle)
-                    }} /></p>
-                    <h2>약속 만들기</h2>
-                </AddPromise>
-                <InputBox>
-                    <label>약속 이름</label>
-                    <input
-                        placeholder="이름을 작성해보세요"
-                    />
+                {/* 약속 만드는 모달창 */}
+                <OpacityModal toggle={toggle}>
+                    <AddPromise>
+                        <p><AiOutlineLeft onClick={(e) => {
+                            e.preventDefault();
+                            setToggle(!toggle)
+                        }} /></p>
+                        <h2>약속 만들기</h2>
+                    </AddPromise>
+                    <InputBox>
+                        <label>약속 이름</label>
+                        <input
+                            placeholder="이름을 작성해보세요"
+                        />
 
-                    <label>참석자</label>
-                    <input onClick={(e) => {
-                        e.preventDefault();
-                        props.setPage(1)
-                    }}
-                        placeholder="홍길동, 우영우"
-                    />
+                        <label>참석자</label>
+                        <input onClick={(e) => {
+                            e.preventDefault();
+                            props.setPage(1)
+                        }}
+                            placeholder="홍길동, 우영우"
+                        />
 
-                    <label>약속 날짜</label>
-                    <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        locale={ko}                   // 한글로 변경
-                        dateFormat="yyyy.MM.dd" // 시간 포맷 변경
-                        showPopperArrow={false}       // 화살표 변경
-                        minDate={new Date()}          // 오늘 날짜 전은 선택 못하게
-                    />
+                        <label>약속 날짜</label>
+                        <DatePicker
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            locale={ko}                   // 한글로 변경
+                            dateFormat="yyyy.MM.dd" // 시간 포맷 변경
+                            showPopperArrow={false}       // 화살표 변경
+                            minDate={new Date()} dayClassName={date =>
+                                 getDayName(createDate(date)) === '토' ? "saturday"
+                                 :getDayName(createDate(date)) === '일' ? "sunday" : undefined
+                                 }
+                        />
 
-                    <label>약속 시간</label>
-                    <DatePicker
-                        selected={startDate}
-                        locale={ko}
-                        onChange={(date) => setStartDate(date)}
-                        dateFormat="aa h:mm"
-                        showTimeSelectOnly
-                        showTimeInput
-                    />
-                    <label>메모</label>
-                    <input style={{ height: "10rem" }} />
-                </InputBox>
-                <MakePromise>저장하기</MakePromise>
-            </OpacityModal>
-            {/* 약속 만드는 모달창 끝  */}
+                        <label>약속 시간</label>
+                        <DatePicker
+                            selected={startDate}
+                            locale={ko}
+                            onChange={(date) => setStartDate(date)}
+                            dateFormat="aa h:mm"
+                            showTimeSelectOnly
+                            showTimeInput
+                        />
+                        <label>메모</label>
+                        <input style={{ height: "10rem" }} />
+                    </InputBox>
+                    <MakePromise>저장하기</MakePromise>
+                </OpacityModal>
+                {/* 약속 만드는 모달창 끝  */}
 
-            <Calendar onChange={onChange} value={value} />
+                <Calendar onChange={onChange} value={value} />
 
-            {
-            onLogin ? <>{
-                list.map((a) => {
-                    return (
-                        <List>
-                            <ListHeader>
-                                <h2>{a.title}</h2>
-                                <p><FiMoreVertical /></p>
-                            </ListHeader>
-                            <div>
-                                <label>회원님 외 {a.countFriend}명</label>
-                            </div>
-                            <TimeLine>
-                                <h3>{a.date}</h3>
-                                <LocalArea>
-                                    <h3><HiOutlineLocationMarker /></h3>
-                                    <h3>{a.location}</h3>
-                                </LocalArea>
-                            </TimeLine>
-                        </List>
-                    )
-                })
-            }
-            </> :<NonLogin>
-                <NonLoginTitle>
-                    <label>로그인하고</label>
-                    <label>더 많은 기능을 만나보세요!</label>
-                </NonLoginTitle>
-                <button onClick={()=> {
-                    navigater('/login')
-                }}>
-                    <p>로그인 / 회원가입</p></button>
-            </NonLogin>
-        }
-        </Container>
+                {
+                    onLogin ? <>{
+                        list.map((a) => {
+                            return (
+                                <List>
+                                    <ListHeader>
+                                        <h2>{a.title}</h2>
+                                        <p><FiMoreVertical /></p>
+                                    </ListHeader>
+                                    <div>
+                                        <label>회원님 외 {a.countFriend}명</label>
+                                    </div>
+                                    <TimeLine>
+                                        <h3>{a.date}</h3>
+                                        <LocalArea>
+                                            <h3><HiOutlineLocationMarker /></h3>
+                                            <h3>{a.location}</h3>
+                                        </LocalArea>
+                                    </TimeLine>
+                                </List>
+                            )
+                        })
+                    }
+                    </> : <NonLogin>
+                        <NonLoginTitle>
+                            <label>로그인하고</label>
+                            <label>더 많은 기능을 만나보세요!</label>
+                        </NonLoginTitle>
+                        <button onClick={() => {
+                            navigater('/login')
+                        }}>
+                            <p>로그인 / 회원가입</p></button>
+                    </NonLogin>
+                }
+            </Container>
+
         </All>
     )
 }

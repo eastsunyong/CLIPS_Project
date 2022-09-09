@@ -242,7 +242,7 @@ const UserImage = styled.img`
 const ChoiceImg = styled.div`
     width: 130px;
     height: 30px;
-    border: 1px solid #0099FF;
+    border: 1px solid ${(props) => props.theme.themeColor};
     align-items: center;
     display: flex;
     align-items: center;
@@ -257,7 +257,7 @@ const ChoiceImg = styled.div`
     }
 
     :hover{
-        background-color: #0099FF;
+        background-color: ${(props) => props.theme.themeColor};
         color: white;
     }
 `

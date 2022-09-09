@@ -1,44 +1,65 @@
-import React, { memo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import { SearchIcon } from "assets/icons";
-import { Map } from "components/common";
-import { MarkerDetailModal } from ".";
+import { KakaoMap } from "components/common";
+import { MarkerDetailModal, LocationSearchModal } from ".";
+import { setPlaceList, resetState } from "store/modules/homeSlice";
 
-const HomeMain = (props) => {
-  const [center, setCenter] = useState(false);
-  const address = props.address;
+const HomeMain = () => {
+  const dispatch = useDispatch();
+  const address = useSelector((state) => state.home.address);
+  const [toggle, setToggle] = useState(false);
+  const viewPlace = useSelector((state) => state.home.viewPlace);
+
+  // 페이지 이동(컴포넌트 삭제)시 전역상태 초기화
+  useEffect(() => {
+    return () => dispatch(resetState());
+  }, []);
+
+  useEffect(() => {
+    if (address) {
+      dispatch(setPlaceList(address));
+    }
+  }, [address]);
 
   return (
-    <Section className="fcc">
-      <SectionTop>
-        <SearchBar
-          className="fcc"
-          onClick={() => {
-            props.setOpaToggle(true);
-          }}
-        >
-          <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
-          <div>
-            <SearchIcon />
-          </div>
-        </SearchBar>
-      </SectionTop>
+    <>
+      <Section className="fcc">
+        {!viewPlace ? (
+          <SectionTop>
+            <SearchBar
+              className="fcc"
+              onClick={() => {
+                setToggle(true);
+              }}
+            >
+              <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
+              <div>
+                <SearchIcon />
+              </div>
+            </SearchBar>
+          </SectionTop>
+        ) : null}
 
-      <MarkerDetailModal setLeftToggle={props.setLeftToggle} setCenter={setCenter} />
-      <Map address={address} center={center} setCenter={setCenter} />
-    </Section>
+        <MarkerDetailModal />
+        <KakaoMap />
+      </Section>
+      <LocationSearchModal toggle={toggle} setToggle={setToggle} />
+    </>
   );
 };
 
-export default memo(HomeMain);
+export default HomeMain;
 
 const Section = styled.div`
   position: relative;
   flex-flow: column;
+  overflow: hidden;
   width: 100%;
   height: 100%;
-  #map {
+  #react-kakao-maps-sdk-map-container {
     position: absolute !important;
     top: 0;
     left: 0;
@@ -78,12 +99,12 @@ const SearchBar = styled.div`
 
     font-size: ${(props) => props.theme.fontSize.s};
     &::placeholder {
-      color: ${(props) => props.theme.iconsColor.disable};
+      color: ${(props) => props.theme.disableColor};
     }
   }
 
   div {
     margin-left: ${(props) => props.theme.size.s};
-    fill: ${(props) => props.theme.iconsColor.disable};
+    fill: ${(props) => props.theme.disableColor};
   }
 `;

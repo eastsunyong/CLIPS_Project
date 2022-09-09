@@ -1,4 +1,4 @@
-import Map from "./Map";
+import KakaoMap from "./KakaoMap";
 import Btn from "./Btn";
 
-export { Map, Btn };
+export { KakaoMap, Btn };

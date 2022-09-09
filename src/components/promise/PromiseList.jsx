@@ -23,36 +23,36 @@ import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
 const PromiseList = (props) => {
-    
+
     const navigater = useNavigate();
-    
+
     //약속 만드는 모달창 불러오기
     const [toggle, setToggle] = useState(false);
 
     //로그인 상태값 
     const [onLogin, setOnLogin] = useState(true);
-    
+
     //리액트 캘린더 날짜 받아오기
     const [value, onChange] = useState(new Date());
 
     //데이트 픽커 날짜 받아오기
     const [startDate, setStartDate] = useState(new Date());
-    
+
     //날짜 값들 변환해서 저장하는 곳
     const dates = startDate.toLocaleDateString('ko-kr')
     const times = startDate.toLocaleTimeString('ko-kr').slice(0, 7)
     //문자열로 바꾼거임
 
     //변환힌 날짜 값 합쳐서 저장하는 곳
-    const newDay = dates+ times
+    const newDay = dates + times
 
     console.log(newDay)
 
     const [newPromise, setNewPromise] = useState({
-        title:'',
+        title: '',
         date: newDay,
-        friendList:[{}],
-        penalty:''
+        friendList: [{}],
+        penalty: ''
     })
 
     //약속리스트 맵 돌릴 useStat
@@ -70,13 +70,13 @@ const PromiseList = (props) => {
             countFriend: 1
         }
     ])
-    
+
     // 주말 색깔 변환 하는 함수 ?
     const createDate = (date) => {
         return new Date(new Date(date.getFullYear()
             , date.getMonth(), date.getDate(), 0, 0, 0));
     }
-  
+
     const getDayName = (date) => {
         return date.toLocaleDateString('ko-KR', {
             weekday: 'long',
@@ -90,25 +90,25 @@ const PromiseList = (props) => {
         handleSubmit,
         watch,
         formState: { errors },
-      } = useForm({ mode: "onChange" });
-    
-    
-      //오류 메세지 확인
-      const onValid = (data) => console.log(data, "onvalid");
-      const onInvalid = (data) => console.log(data, "onInvalid");
+    } = useForm({ mode: "onChange" });
 
 
-       //약속만드는 함수
-     const onSubmit = (data) => {
+    //오류 메세지 확인
+    const onValid = (data) => console.log(data, "onvalid");
+    const onInvalid = (data) => console.log(data, "onInvalid");
+
+
+    //약속만드는 함수
+    const onSubmit = (data) => {
         LogInHandler(data)
-        };
+    };
 
-        //약속만드는 핸들러
-  const LogInHandler = async (data) => {
-    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
-  }
+    //약속만드는 핸들러
+    const LogInHandler = async (data) => {
+        await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
+    }
 
-  const test = ["2022. 9. 8.", "2022. 9. 7."]
+    const test = ["2022. 9. 8.", "2022. 9. 7."]
 
 
 
@@ -116,7 +116,6 @@ const PromiseList = (props) => {
 
     return (
         <All>
-
             <Container className="fcc">
                 <Header>
                     <h1>Calendar</h1>
@@ -127,92 +126,106 @@ const PromiseList = (props) => {
                         }} /></Icon>
                 </Header>
 
-
                 {/* 약속 만드는 모달창 */}
                 <OpacityModal toggle={toggle}>
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                   
-                    <AddPromise>
-                        <p><AiOutlineLeft onClick={(e) => {
-                            e.preventDefault();
-                            setToggle(!toggle)
-                        }} /></p>
-                        <h2>약속 만들기</h2>
-                    </AddPromise>
-                    <InputBox>
-                        <label>약속 이름</label>
-                        {errors.title && <p style={{ color: "red" }}>{errors.title.message}</p>}
-                        <input
-                        {...register("title", {
-                            required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
-                          })}
-                            placeholder="이름을 작성해보세요"
-                        />
 
-                        <label>참석자</label>
-                        <input onClick={(e) => {
-                            e.preventDefault();
-                            props.setPage(1)
-                        }}
-                            placeholder="홍길동, 우영우"
-                        />
+                        <AddPromise>
+                            <p><AiOutlineLeft onClick={(e) => {
+                                e.preventDefault();
+                                setToggle(!toggle)
+                            }} /></p>
+                            <h2>약속 만들기</h2>
+                        </AddPromise>
+                        <InputBox>
+                            <label>약속 이름</label>
+                            {errors.title && <p style={{ color: "red" }}>{errors.title.message}</p>}
+                            <input
+                                {...register("title", {
+                                    required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                                })}
+                                placeholder="이름을 작성해보세요"
+                            />
 
-                        <label>약속 날짜</label>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            locale={ko}                   // 한글로 변경
-                            dateFormat="yyyy.MM.dd" // 시간 포맷 변경
-                            showPopperArrow={false}       // 화살표 변경
-                            minDate={new Date()} dayClassName={date =>
-                                 getDayName(createDate(date)) === '토' ? "saturday"
-                                 :getDayName(createDate(date)) === '일' ? "sunday" : undefined
-                                 }
-                        />
+                            <label>참석자</label>
+                            <input onClick={(e) => {
+                                e.preventDefault();
+                                props.setPage(1)
+                            }}
+                                placeholder="홍길동, 우영우"
+                            />
 
-                        <label>약속 시간</label>
-                        <DatePicker
-                            selected={startDate}
-                            locale={ko}
-                            onChange={(date) => setStartDate(date)}
-                            dateFormat="aa h:mm"
-                            showTimeSelectOnly
-                            showTimeInput
-                        />
-                        <label>메모</label>
-                        <textarea style={{ height: "10rem" }} 
-                        placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
-                        />
-                    </InputBox>
-                    <MakePromise>저장하기</MakePromise>
-                </form>
+                            <label>약속날짜</label>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                locale={ko}                   // 한글로 변경
+                                dateFormat="yyyy.MM.dd" // 시간 포맷 변경
+                                showPopperArrow={false}       // 화살표 변경
+                                minDate={new Date()} dayClassName={date =>
+                                    getDayName(createDate(date)) === '토' ? "saturday"
+                                        : getDayName(createDate(date)) === '일' ? "sunday" : undefined
+                                }
+                            />
+
+                            <label>약속시간</label>
+                            <DatePicker
+                                selected={startDate}
+                                locale={ko}
+                                onChange={(date) => setStartDate(date)}
+                                dateFormat="aa h:mm"
+                                showTimeSelectOnly
+                                showTimeInput
+                            />
+
+                            <label>약속장소</label>
+                            <input
+                                placeholder="약속 장소를 선택해주세요"
+                            />
+
+                            <label>메모</label>
+                            <textarea style={{ height: "10rem" }}
+                                placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+                            />
+                        </InputBox>
+                        <MakePromise>저장하기</MakePromise>
+                    </form>
                 </OpacityModal>
                 {/* 약속 만드는 모달창 끝  */}
-                    
+
                 <Calendar
-                tileContent={(e)=> {
-                    // console.log(new Date(test[0]).getTime())
-                    // console.log((e.date.getTime()))
-                    // 밀리세컨즈로 비교하는 방식
+                fromYear={2015} toYear={2025} captionLayout="dropdown"
+                    tileContent={(e) => {
+                        // console.log(new Date(test[0]).getTime())
+                        // console.log((e.date.getTime()))
+                        // 밀리세컨즈로 비교하는 방식
 
-                    if(test.find((x) => new Date(x).getTime() === e.date.getTime())) {
-                        // console.log(e.date.getTime() / 100000)
-                        return <div style={{width: "1rem", height: "1rem" , background: "black"}}></div>
-                    }
+                        if (test.find((x) => new Date(x).getTime() === e.date.getTime())) {
+                            // console.log(e.date.getTime() / 100000)
+                            return <Highlight />
+                        }
 
-                    //스트링으로 검색하는 방법
-                    // if(test.find((x) => {
-                    //     // console.log(x)
-                    //     // console.log(e.date.toLocaleDateString("ko-KR"))
-                    //     return x === e.date.toLocaleDateString("ko-KR")})) {
-                    //     console.log(e.date)
-                    // }
-                    // console.log(e.date.toLocaleDateString("ko-KR"))
-                }}
-        
-                onChange={onChange} value={value} />
+                        //스트링으로 검색하는 방법
+                        // if(test.find((x) => {
+                        //     // console.log(x)
+                        //     // console.log(e.date.toLocaleDateString("ko-KR"))
+                        //     return x === e.date.toLocaleDateString("ko-KR")})) {
+                        //     console.log(e.date)
+                        // }
+                        // console.log(e.date.toLocaleDateString("ko-KR"))
+                    }}
 
+                    onChange={onChange} value={value}
+                />
+
+
+                {/* 테스트 캘린더 */}
+          
+
+
+
+          
                 {
                     onLogin ? <>{
                         list.map((a) => {
@@ -278,6 +291,7 @@ const Header = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0px 10px;
+
     h1{
         font-weight: 600;
     }
@@ -296,8 +310,8 @@ const AddPromise = styled.div`
     height: 5rem;
     align-items: center;
     font-weight: 700;
-    padding-left: 1rem;
     gap: 20px;
+    margin-bottom: 25px;
 
     p {
         font-size: 20px;
@@ -313,15 +327,14 @@ const AddPromise = styled.div`
 const InputBox = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-top: 3rem;
-
+   
     input{
         border: 1px solid #4B556380;
         width: 100%;
         height: 37px;
         border-radius: 8px;
-        padding-left: 8px;
+        padding: 10px 16px;
+        margin-bottom: 24px;
     }
 
     textarea {
@@ -329,9 +342,13 @@ const InputBox = styled.div`
         width: 100%;
         height: 37px;
         border-radius: 8px;
-        padding-left: 8px; 
-        padding-top: 5px;
+        padding: 10px 16px;
         resize: none;
+    }
+    label {
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: bolder;
     }
 `
 
@@ -341,6 +358,7 @@ const MakePromise = styled.button`
     height: 41px;
     border-radius: 8px;
     background-color:${(props) => props.theme.themeColor};
+    color: white;
     border: none;
 `
 
@@ -438,6 +456,16 @@ const NonLoginTitle = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+`
+
+const Highlight = styled.div`
+    width: 6px;
+    height: 6px;
+    background:black;
+    border-radius: 50%;
+    display: flex;
+    background-color: #D9D9D9;
+    margin-left: 12px;
 `
 
 export default PromiseList

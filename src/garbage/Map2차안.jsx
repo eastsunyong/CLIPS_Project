@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { _createLatLon, setMap, resetMap } from "store/modules/mapSlice";
 
+const { kakao } = window;
 const Map = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
@@ -30,8 +31,11 @@ const Map = () => {
   useEffect(() => {
     if (map) {
       markers.forEach((marker, i) => {
-        if (i === 0) marker.setMap(map);
-        else marker.setMap(null);
+        if (i === 0) {
+          marker.setMap(map);
+        } else {
+          marker.setMap(null);
+        }
       });
     }
   }, [markers]);

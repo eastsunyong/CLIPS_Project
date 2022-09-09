@@ -3,40 +3,48 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 import { SearchIcon } from "assets/icons";
-import { Map } from "components/common";
+import { KakaoMap } from "components/common";
 import { MarkerDetailModal, LocationSearchModal } from ".";
-import { setAddress2coord } from "store/modules/mapSlice";
+import { setPlaceList, resetState } from "store/modules/homeSlice";
 
 const HomeMain = () => {
   const dispatch = useDispatch();
   const address = useSelector((state) => state.home.address);
   const [toggle, setToggle] = useState(false);
+  const viewPlace = useSelector((state) => state.home.viewPlace);
+
+  // 페이지 이동(컴포넌트 삭제)시 전역상태 초기화
+  useEffect(() => {
+    return () => dispatch(resetState());
+  }, []);
 
   useEffect(() => {
     if (address) {
-      dispatch(setAddress2coord(address));
+      dispatch(setPlaceList(address));
     }
   }, [address]);
 
   return (
     <>
       <Section className="fcc">
-        <SectionTop>
-          <SearchBar
-            className="fcc"
-            onClick={() => {
-              setToggle(true);
-            }}
-          >
-            <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
-            <div>
-              <SearchIcon />
-            </div>
-          </SearchBar>
-        </SectionTop>
+        {!viewPlace ? (
+          <SectionTop>
+            <SearchBar
+              className="fcc"
+              onClick={() => {
+                setToggle(true);
+              }}
+            >
+              <input placeholder="시/군/구로 검색" defaultValue={address} readOnly />
+              <div>
+                <SearchIcon />
+              </div>
+            </SearchBar>
+          </SectionTop>
+        ) : null}
 
         <MarkerDetailModal />
-        <Map />
+        <KakaoMap />
       </Section>
       <LocationSearchModal toggle={toggle} setToggle={setToggle} />
     </>
@@ -48,9 +56,10 @@ export default HomeMain;
 const Section = styled.div`
   position: relative;
   flex-flow: column;
+  overflow: hidden;
   width: 100%;
   height: 100%;
-  .map {
+  #react-kakao-maps-sdk-map-container {
     position: absolute !important;
     top: 0;
     left: 0;
@@ -90,12 +99,12 @@ const SearchBar = styled.div`
 
     font-size: ${(props) => props.theme.fontSize.s};
     &::placeholder {
-      color: ${(props) => props.theme.iconsColor.disable};
+      color: ${(props) => props.theme.disableColor};
     }
   }
 
   div {
     margin-left: ${(props) => props.theme.size.s};
-    fill: ${(props) => props.theme.iconsColor.disable};
+    fill: ${(props) => props.theme.disableColor};
   }
 `;

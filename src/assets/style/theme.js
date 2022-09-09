@@ -11,17 +11,11 @@ const fontSize = {
   l: "14.4rem",
 };
 
-const iconsColor = {
-  disable: "gray",
-  able: "black",
-};
-
 const theme = {
-  defaultColor: "black",
   themeColor: "#0099ff",
+  disableColor: "gray",
   size: size,
   fontSize: fontSize,
-  iconsColor: iconsColor,
 };
 
 export default theme;

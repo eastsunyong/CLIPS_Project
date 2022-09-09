@@ -46,7 +46,7 @@ const FooterNav = styled.div`
   cursor: pointer;
   width: calc(${(props) => props.theme.size.m} * 2);
   height: 100%;
-  fill: ${(props) => (props.selected ? props.theme.themeColor : props.theme.iconsColor.disable)};
+  fill: ${(props) => (props.selected ? props.theme.themeColor : props.theme.disableColor)};
   & > :nth-child(1) {
     width: ${(props) => props.theme.size.m};
     height: ${(props) => props.theme.size.m};

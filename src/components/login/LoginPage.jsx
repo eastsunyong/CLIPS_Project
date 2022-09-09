@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import axios from "axios";
 
+//아이콘
+import { AiOutlineClose } from 'react-icons/ai';
+
 const LoginPage = (props) => {
 
   const navigate = useNavigate();
@@ -41,10 +44,16 @@ const LoginPage = (props) => {
       </Header> */}
 
       <Container className="fcc">
+      <Header>
+        <p><AiOutlineClose onClick={(e) => {
+          e.preventDefault();
+          props.setPage(0)
+        }} /></p>
+        <h2>로그인</h2>
+      </Header>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box>
+          <div style={{marginBottom:"8px"}}>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              <label>이메일</label>
               {errors.email && <p style={{ color: "red" }}>{errors.email.message}</p>}
             </div>
             <input
@@ -54,12 +63,11 @@ const LoginPage = (props) => {
                   value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/, message: "이메일이 형식에 맞지 않습니다.",
                 }
               })}
-              placeholder="이메일"
+              placeholder="이메일을 입력해주세요"
             />
-          </Box>
-          <Box>
+          </div>
+          <div>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              <label>비밀번호</label>
               {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
             </div>
             <input
@@ -67,24 +75,19 @@ const LoginPage = (props) => {
                 required: "비밀번호는 필수 입력입니다", minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요.", },
                 maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요.", }, pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: "특수문자와 숫자를 포함해주세요" }
               })}
-              placeholder="비밀번호 (특수문자, 숫자 포함)"
+              placeholder="비밀번호를 입력해주세요"
               type="password"
             />
-          </Box>
-
-          <div>
-            <BtnBox>
-              <button>로그인</button>
-              <button type="button" onClick={()=> {
-              props.setPage(0)
-              }} >뒤로 가기</button>
-            </BtnBox> 
-            <TextBox>
-              <button type="button" onClick={() => {
-                props.setPage(2)
-              }}>회원가입</button>
-            </TextBox>
           </div>
+          <ButtonBox>
+            <OneButton>로그인</OneButton>
+            <Box>
+            <p>아이디 찾기</p><p>|</p><p>비밀번호 찾기</p>
+            </Box>
+              <TwoButton type="button" onClick={() => {
+                props.setPage(2)
+              }}>회원가입</TwoButton>
+          </ButtonBox>
         </form>
       </Container>
     </All>
@@ -101,20 +104,26 @@ const All = styled.div`
 `
 
 const Header = styled.div`
-  width: 100%;
-  height: 4rem;
-  border-bottom: 3px solid gray;
-  align-items: center;
-  display: flex;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5rem;
+    font-weight: 700;
+    align-items: center;
+    margin-bottom: 20px;
 
-  font-weight: 600;
-  gap: 5rem;
-  padding-left: 10px;
+    p {
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 20px;
+        font-weight: 500;
+        margin-top: 5px;
+    }
 
-  p {
-    font-size: 2rem;
-    cursor: pointer;
-  }
+    h2 {
+        font-size: 20px;
+        margin-top: 0px;
+    }
 `
 
 
@@ -124,60 +133,50 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  margin-top: 20px;
+  margin-top: 10px;
 
-  p{
-    font-size: 12px;
-  }
   input {
-    height: 41px;
-    width: 30rem;
-    padding: 0.5rem;
-    border: 1px solid #0099FF;
+    height: 40px;
+    width: 343px;
+    padding: 10px 16px 10px 16px;
+    border: 1px solid #4B556380;
     border-radius: 8px;
   }
 
-  label {
-    font-size: 1.5rem;
-  }
-
-  h2 {
-    margin-top: 20px;
-    cursor: pointer;
-  }
-
-  button {
-    background-color: white;
-    border: 1px solid #0099FF;
-        width: 50%;
-        height: 35px;
-        border-radius: 8px;
-  }
-  button:hover {
-    background-color: #0099FF;
-  }
 `
 
 const Box = styled.div`
-  margin-top: 2rem;
+ display: flex;
+ flex-direction: row;
+ gap: 8px;
+ cursor: pointer;
+`
+const ButtonBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  button {
+    height: 40px;
+    width: 343px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
 `
 
-const BtnBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
+const OneButton = styled.button`
+  background-color: ${(props) => props.theme.themeColor};
+  color: white;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  border: none;
 `
 
-const TextBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 3rem;
-  margin-top: 2rem;
+const TwoButton = styled.button`
+  margin-top: 32px;
+  background-color: white;
+  border: 1px solid ${(props) => props.theme.themeColor};
+  color: ${(props) => props.theme.themeColor};
 `
 
 export default LoginPage;

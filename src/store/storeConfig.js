@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { home, map } from "./modules";
 
 const store = configureStore({
-  reducer: {},
+  reducer: { home, map },
   devTools: false,
 });
 

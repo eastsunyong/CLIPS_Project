@@ -1,13 +1,12 @@
-import React, { useRef, useEffect, useState, memo } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 import { localAPI } from "apis";
 
 const { kakao } = window;
 const Map = (props) => {
-  // 사용법 (props 내역)
-  // center : boolean => 기준점으로 이동
-  // address : string => 기준점 변경
+  const dispatch = useDispatch();
 
   const containerRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -46,10 +45,10 @@ const Map = (props) => {
         level: 7,
       };
       const newMap = new kakao.maps.Map(containerRef.current, mapOpt);
-      setMap(newMap);
+      dispatch(setMap(newMap));
     } else {
-      moveCoord(coord.x, coord.y);
-      createMaker(coord.x, coord.y);
+      // moveCoord(coord.x, coord.y);
+      // createMaker(coord.x, coord.y);
     }
   }, [coord]);
 
@@ -77,6 +76,8 @@ const Map = (props) => {
   return <Container ref={containerRef} id="map" />;
 };
 
+export default Map;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -84,5 +85,3 @@ const Container = styled.div`
     display: none;
   }
 `;
-
-export default memo(Map);

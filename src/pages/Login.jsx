@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 
 import { Indroduce,LoginPage,SignUpPage } from "components/login";
 
 const Logins = () => {
 
-    const [page, setPage] = useState(0);
+    const goPage = useSelector((state) => state.LOGIN.page)
 
     return(
-        <Slider page={page}>
-            <Indroduce page={page} setPage={setPage}/>
-            <LoginPage setPage={setPage}/>
-            <SignUpPage setPage={setPage}/>
+        <Slider page={goPage}>
+            <Indroduce />
+            <LoginPage/>
+            <SignUpPage/>
         </Slider>
     )
 }

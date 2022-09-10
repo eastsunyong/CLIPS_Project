@@ -3,8 +3,19 @@ import styled from "styled-components";
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
-const SignUpPage = (props) => {
+import { minusNumber } from "store/modules/loginSlice";
+
+const SignUpPage = () => {
+
+    const dispatch = useDispatch();
+
+    const down= (e)=> {
+        dispatch(minusNumber(1))
+    }
+
+
     //이미지 미리보기 저장하는  곳
     const [attachment, setAttachment] = useState();
     //이미지 저장하는 곳
@@ -220,9 +231,7 @@ const SignUpPage = (props) => {
                         placeholder="숫자로만 입력해주세요"
                     />
                     <button >실행임</button>
-                    <button type="button" onClick={()=> {
-                        props.setPage(1)
-                          }} >뒤로 가기</button>
+                    <button type="button" onClick={down} >뒤로 가기</button>
                 </div>
             </form>
 

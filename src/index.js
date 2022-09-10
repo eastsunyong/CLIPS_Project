@@ -2,17 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import { Provider } from "react-redux";
 
 import reportWebVitals from "reportWebVitals";
 import App from "App";
 import { GlobalStyle, theme } from "assets/style";
+import store from "store/storeConfig";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
+      <Provider store={store}>
+        <GlobalStyle />
+        <App />
+      </Provider>
     </ThemeProvider>
   </BrowserRouter>
 );

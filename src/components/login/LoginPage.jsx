@@ -1,16 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
+
+import { addNumber, minusNumber } from "store/modules/loginSlice";
 
 //아이콘
 import { AiOutlineClose } from 'react-icons/ai';
 
-const LoginPage = (props) => {
+const LoginPage = () => {
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  //컴포넌트 앞으로 이동
+const up = (e)=> {
+        dispatch(addNumber(1))
+    }
+
+   //컴포넌트 뒤로 이동
+  const down= (e)=> {
+    dispatch(minusNumber(1))
+}
 
   //로그인 함수
   const onSubmit = (data) => {
@@ -38,17 +50,9 @@ const LoginPage = (props) => {
 
   return (
     <All>
-      {/* <Header>
-        <p>✔</p>
-        <h1>로그인</h1>
-      </Header> */}
-
       <Container className="fcc">
       <Header>
-        <p><AiOutlineClose onClick={(e) => {
-          e.preventDefault();
-          props.setPage(0)
-        }} /></p>
+        <p><AiOutlineClose onClick={down}/></p>
         <h2>로그인</h2>
       </Header>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -84,9 +88,7 @@ const LoginPage = (props) => {
             <Box>
             <p>아이디 찾기</p><p>|</p><p>비밀번호 찾기</p>
             </Box>
-              <TwoButton type="button" onClick={() => {
-                props.setPage(2)
-              }}>회원가입</TwoButton>
+              <TwoButton type="button" onClick={up}>회원가입</TwoButton>
           </ButtonBox>
         </form>
       </Container>

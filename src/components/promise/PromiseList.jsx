@@ -18,7 +18,7 @@ import "./ReactCalendar.css"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css"
-
+//달력 한국어
 import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
@@ -195,7 +195,6 @@ const PromiseList = (props) => {
                 {/* 약속 만드는 모달창 끝  */}
 
                 <Calendar
-                fromYear={2015} toYear={2025} captionLayout="dropdown"
                     tileContent={(e) => {
                         // console.log(new Date(test[0]).getTime())
                         // console.log((e.date.getTime()))

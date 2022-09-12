@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import axios from "axios";
 
 //아이콘
@@ -22,6 +23,7 @@ import "./DatePicker.css"
 import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
+
 const PromiseList = (props) => {
 
     const navigater = useNavigate();
@@ -46,28 +48,37 @@ const PromiseList = (props) => {
     //변환힌 날짜 값 합쳐서 저장하는 곳
     const newDay = dates + times
 
-    console.log(newDay)
+    const [list, setList] =useState({})
 
-    const [newPromise, setNewPromise] = useState({
-        title: '',
-        date: newDay,
-        friendList: [{}],
-        penalty: ''
-    })
+    useEffect(() => {
+        const getPromise = async () => {
+          try {
+            const axiosData = await axios.get(process.env.REACT_APP_SURVER + '/api/promise?done=true/false') 
+            const result = axiosData.data
+            console.log(result)
+            setList(result)
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        getPromise();
+      }, []) 
 
     //약속리스트 맵 돌릴 useStat
-    const [list, setList] = useState([
+    const [qwe, setQwe] = useState([
         {
             title: "약속이름입니당",
-            date: "2022. 09. 08",
+            date: "2022. 09. 08.오후 1:35",
             location: "약속 장소",
-            countFriend: 4
+            countFriend: 4,
+            PromiseId: 1
         },
         {
             title: "약속이름입니당111",
-            date: "2022. 09. 07",
+            date: "2022. 09. 07.오후 1:12",
             location: "약속 장소333",
-            countFriend: 1
+            countFriend: 1,
+            PromiseId: 2
         }
     ])
 
@@ -83,7 +94,6 @@ const PromiseList = (props) => {
         }).substr(0, 1);
     }
 
-
     const {
         getValues,
         register,
@@ -92,27 +102,23 @@ const PromiseList = (props) => {
         formState: { errors },
     } = useForm({ mode: "onChange" });
 
-
     //오류 메세지 확인
     const onValid = (data) => console.log(data, "onvalid");
     const onInvalid = (data) => console.log(data, "onInvalid");
 
+    console.log(newDay)
 
     //약속만드는 함수
-    const onSubmit = (data) => {
-        LogInHandler(data)
+    const onSubmit = async (data) => {
+        await axios.post('/api/promise', {title: data.title, date: newDay, penalty: data.penalty, location: data.location, friendList: data.friendList})
     };
 
     //약속만드는 핸들러
-    const LogInHandler = async (data) => {
-        await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
-    }
+    // const LogInHandler = async (newPromise) => {
+    //     await axios.post('/api/promise', newPromise)
+    // }
 
     const test = ["2022. 9. 8.", "2022. 9. 7."]
-
-
-
-
 
     return (
         <All>
@@ -129,8 +135,6 @@ const PromiseList = (props) => {
                 {/* 약속 만드는 모달창 */}
                 <OpacityModal toggle={toggle}>
                     <form onSubmit={handleSubmit(onSubmit)}>
-
-
                         <AddPromise>
                             <p><AiOutlineLeft onClick={(e) => {
                                 e.preventDefault();
@@ -146,6 +150,7 @@ const PromiseList = (props) => {
                                     required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
                                 })}
                                 placeholder="이름을 작성해보세요"
+                                name="title"
                             />
 
                             <label>참석자</label>
@@ -153,7 +158,11 @@ const PromiseList = (props) => {
                                 e.preventDefault();
                                 props.setPage(1)
                             }}
-                                placeholder="홍길동, 우영우"
+                            {...register("friendList", {
+                                required: "찬구들을 적어주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                            })}
+                            placeholder="홍길동, 우영우"
+                            name="location"
                             />
 
                             <label>약속날짜</label>
@@ -181,12 +190,20 @@ const PromiseList = (props) => {
 
                             <label>약속장소</label>
                             <input
-                                placeholder="약속 장소를 선택해주세요"
+                                {...register("location", {
+                                    required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                                })}
+                                placeholder="이름을 작성해보세요"
+                                name="location"
                             />
 
                             <label>메모</label>
                             <textarea style={{ height: "10rem" }}
-                                placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+                                {...register("penalty", {
+                                    required: "약속 이름은 꼭 정해주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                                })}
+
+                                placeholder="이름을 작성해보세요"
                             />
                         </InputBox>
                         <MakePromise>저장하기</MakePromise>
@@ -204,7 +221,6 @@ const PromiseList = (props) => {
                             // console.log(e.date.getTime() / 100000)
                             return <Highlight />
                         }
-
                         //스트링으로 검색하는 방법
                         // if(test.find((x) => {
                         //     // console.log(x)
@@ -218,18 +234,11 @@ const PromiseList = (props) => {
                     onChange={onChange} value={value}
                 />
 
-
-                {/* 테스트 캘린더 */}
-          
-
-
-
-          
                 {
                     onLogin ? <>{
-                        list.map((a) => {
+                        qwe.map((a) => {
                             return (
-                                <List>
+                                <List key={a.PromiseId} onClick={() => {navigater(`/promise/${a.PromiseId}`)}}>
                                     <ListHeader>
                                         <h2>{a.title}</h2>
                                         <p><FiMoreVertical /></p>
@@ -463,7 +472,7 @@ const Highlight = styled.div`
     background:black;
     border-radius: 50%;
     display: flex;
-    background-color: #D9D9D9;
+    background-color: red;
     margin-left: 12px;
 `
 

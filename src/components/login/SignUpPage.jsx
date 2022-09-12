@@ -3,42 +3,27 @@ import styled from "styled-components";
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-
-import { minusNumber } from "store/modules/loginSlice";
 
 const SignUpPage = (props) => {
 
-    const dispatch = useDispatch();
-
-    const down= (e)=> {
-        dispatch(minusNumber(1))
-    }
-
-
+    //이메일 잠금
+    const [emailNonTouch, setEmailNonTouch] = useState(false)
+    //닉네임 잠금
+    const [nickNonTouch, setNickNonTouch] = useState(false)
     //이미지 미리보기 저장하는  곳
     const [attachment, setAttachment] = useState();
     //이미지 저장하는 곳
     const fileInput = useRef(null);
-
     //이메일 정규식 맞는지 확인
     const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
-
-                   
 
     const {
         getValues,
         register,
         handleSubmit,
-        watch,
         setError,
         formState: { errors },
     } = useForm({ mode: "onChange" });
-
-    //오류 메세지 확인
-    const onValid = (data) => console.log(data, "onvalid");
-    const onInvalid = (data) => console.log(data, "onInvalid");
-
 
     //이메일 체크 함수
     const onEmailCheck = (data) => {
@@ -56,8 +41,17 @@ const SignUpPage = (props) => {
 
     //이메일 체크 핸들러
     const emailCheckHandler = async (email) => {
-        await axios.post('/api/auth/email', {email})
-        console.log(email)
+        try {
+            await axios.post(process.env.REACT_APP_SURVER + `/api/auth/email`, {email})
+            .then((res) => {
+                const msg = res.data.message
+                console.log(res)
+                alert(msg)
+                setEmailNonTouch(true)
+            });
+        } catch {
+            alert('시랲패')
+        }
     }
 
     //닉네임 체크 함수
@@ -76,8 +70,29 @@ const SignUpPage = (props) => {
 
     //닉네임 체크 핸들러
     const NicknameCheckHandler = async (nickname) => {
-        await axios.post('/api/auth/nickname', {nickname})
+        try {
+            await axios.post(process.env.REACT_APP_SURVER + `/api/auth/nickname`, {nickname})
+            .then((res) => {
+                const msg = res.data.message
+                console.log(res)
+                alert(msg)
+                setNickNonTouch(true)
+            });
+        } catch {
+            alert('시랲패')
+        }
     }
+    
+    const formData = new FormData();
+
+    let dataSet = {
+        name: "Hong gil dong",
+        phone: "010-1234-1234",
+        birth: "2001-09-11",
+      };
+  
+      formData.append("data", JSON.stringify(dataSet));
+
 
     //회원가입 함수
     const onSubmit = (data) => {
@@ -86,6 +101,7 @@ const SignUpPage = (props) => {
 
     //회원가입 핸들러
     const SignUpHandler = async (data) => {
+        console.log(data)
         //비밀번호 확인 조건문
         if (data.password !== data.confirmpassword) {
             setError(
@@ -93,17 +109,31 @@ const SignUpPage = (props) => {
                 { message: "비밀번호가 일치하지 않습니다" },
                 { shouldFocus: true }
             );
+            return;
         }
-        const formData = new FormData();
-        formData.append('image', fileInput.current.files[0])
-        formData.append('email', data.email)
-        formData.append('name', data.name)
-        formData.append('nickname', data.nickname)
-        formData.append('password', data.password)
-        formData.append('confirm', data.confirmpassword)
-        formData.append('phone', data.phone)
-
-        await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', formData)
+        try {
+            const formData = new FormData();
+            formData.append('email', data.email)
+            formData.append('name', data.name)
+            formData.append('nickname', data.nickname)
+            formData.append('password', data.password)
+            formData.append('confirm', data.confirmpassword)
+            formData.append('phone', data.phone)
+            
+            await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+            })
+            .then((res) => {
+                const msg = res.data.message
+                console.log(res)
+                alert(msg)
+            });
+        } catch (err){
+            alert('시랲패')
+            console.log(err)
+        }
     }
 
     //사진 미리보기   원리 사진을 미리 사이트에서 
@@ -156,10 +186,13 @@ const SignUpPage = (props) => {
                                 value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/, message: "이메일이 형식에 맞지 않습니다.",
                             }
                         })}
+                        className={emailNonTouch ? 'unable' : ""}
                         placeholder="이메일"
                     />
                     <Btndiv>
-                        <button type="button" onClick={() => { onEmailCheck() }}>이메일 확인 버튼</button>
+                        <button 
+                        className={emailNonTouch ? 'unable' : ""}
+                        type="button" onClick={() => { onEmailCheck() }}>이메일 확인 버튼</button>
                     </Btndiv>
 
                     <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
@@ -182,10 +215,13 @@ const SignUpPage = (props) => {
                         {...register("nickname", { required: "닉네임은 필수 입력입니다", maxLength: { value: 8, message: "8자 이하로 정해주세요" } })}
                         placeholder="닉네임"
                         maxLength="9"
+                        className={nickNonTouch ? 'unable' : ""}
                     />
                 </div>
                 <Btndiv>
-                    <button type="button" onClick={() => { onNickCheck()}}>닉네임 확인 버튼</button>
+                    <button
+                    className={nickNonTouch ? 'unable' : ""}
+                    type="button" onClick={() => { onNickCheck()}}>닉네임 확인 버튼</button>
                 </Btndiv>
                 <div style={{ flexDirection: "column", display: "flex", marginBottom: "2rem" }}    >
                     <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
@@ -293,6 +329,10 @@ const Container = styled.div`
         background-color: aliceblue;
         padding: 1rem;
     }
+    .unable {
+      opacity: .5;
+      pointer-events: none;
+    }
 
     form > input {
         background-color: white;
@@ -300,6 +340,13 @@ const Container = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    form {
+        .unable {
+      opacity: .5;
+      pointer-events: none;
+    }
     }
 
     p{

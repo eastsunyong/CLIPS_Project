@@ -2,10 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
-import { addNumber, minusNumber } from "store/modules/loginSlice";
 import { MoveLeftModal } from "components/common/modal";
 import {FindId,FindPassword} from "components/login";
 
@@ -14,34 +12,30 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 const LoginPage = (props) => {
 
-  const dispatch = useDispatch();
-
   //모달창 상태값
   const [toggle, setToggle] =useState(false)
 
   //갈림길 상태값
   const [gofind ,setGofind] =useState()
 
-  //컴포넌트 앞으로 이동
-const up = (e)=> {
-        dispatch(addNumber(1))
-    }
-
-   //컴포넌트 뒤로 이동
-  const down= (e)=> {
-    dispatch(minusNumber(1))
-}
-
   //로그인 함수
   const onSubmit = (data) => {
     LogInHandler(data)
   };
 
-
   //로그핸들러
   const LogInHandler = async (data) => {
-    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
-  }
+    try {
+        await axios.post(process.env.REACT_APP_SURVER + `/api/auth/signin`, data)
+        .then((res) => {
+            const msg = res.data.message
+            console.log(res)
+            alert(msg)
+        });
+    } catch {
+        alert('시랲패')
+    }
+}
 
   const {
     getValues,
@@ -196,13 +190,6 @@ const OneButton = styled.button`
   margin-top: 24px;
   margin-bottom: 32px;
   border: none;
-`
-
-const TwoButton = styled.button`
-  margin-top: 32px;
-  background-color: white;
-  border: 1px solid ${(props) => props.theme.themeColor};
-  color: ${(props) => props.theme.themeColor};
 `
 
 export default LoginPage;

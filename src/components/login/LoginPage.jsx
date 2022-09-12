@@ -6,13 +6,21 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import { addNumber, minusNumber } from "store/modules/loginSlice";
+import { MoveLeftModal } from "components/common/modal";
+import {FindId,FindPassword} from "components/login";
 
 //아이콘
 import { AiOutlineClose } from 'react-icons/ai';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
 
   const dispatch = useDispatch();
+
+  //모달창 상태값
+  const [toggle, setToggle] =useState(false)
+
+  //갈림길 상태값
+  const [gofind ,setGofind] =useState()
 
   //컴포넌트 앞으로 이동
 const up = (e)=> {
@@ -52,13 +60,13 @@ const up = (e)=> {
     <All>
       <Container className="fcc">
       <Header>
-        <p><AiOutlineClose onClick={down}/></p>
-        <h2>로그인</h2>
+        <p><AiOutlineClose onClick={()=> {props.setToggle(false)}}/></p>
+        <h2>CLIPs ID로 로그인</h2>
       </Header>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div style={{marginBottom:"8px"}}>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              {errors.email && <p style={{ color: "red" }}>{errors.email.message}</p>}
+              <label>아이디</label>
             </div>
             <input
               {...register("email", {
@@ -72,8 +80,8 @@ const up = (e)=> {
           </div>
           <div>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
             </div>
+            <label>비밀번호</label>
             <input
               {...register("password", {
                 required: "비밀번호는 필수 입력입니다", minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요.", },
@@ -86,12 +94,20 @@ const up = (e)=> {
           <ButtonBox>
             <OneButton>로그인</OneButton>
             <Box>
-            <p>아이디 찾기</p><p>|</p><p>비밀번호 찾기</p>
+            <p onClick={()=> {setGofind(true); setToggle(true)}}>아이디 찾기</p>
+            <p>|</p>
+            <p onClick={()=> {setGofind(false); setToggle(true)}}>비밀번호 찾기</p>
             </Box>
-              <TwoButton type="button" onClick={up}>회원가입</TwoButton>
           </ButtonBox>
         </form>
       </Container>
+      
+      <MoveLeftModal toggle={toggle}>
+          {
+            gofind === true ? <FindId setToggle={setToggle}/> : <FindPassword setToggle={setToggle}/>
+          }
+        </MoveLeftModal>
+
     </All>
   )
 };
@@ -143,6 +159,12 @@ const Container = styled.div`
     padding: 10px 16px 10px 16px;
     border: 1px solid #4B556380;
     border-radius: 8px;
+    margin-top: 8px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
   }
 
 `
@@ -152,6 +174,8 @@ const Box = styled.div`
  flex-direction: row;
  gap: 8px;
  cursor: pointer;
+ color: #4B5563;
+ font-weight: 400;
 `
 const ButtonBox = styled.div`
   display: flex;
@@ -170,7 +194,7 @@ const OneButton = styled.button`
   background-color: ${(props) => props.theme.themeColor};
   color: white;
   margin-top: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   border: none;
 `
 

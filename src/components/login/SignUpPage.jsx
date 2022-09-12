@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 
 import { minusNumber } from "store/modules/loginSlice";
 
-const SignUpPage = () => {
+const SignUpPage = (props) => {
 
     const dispatch = useDispatch();
 
@@ -39,6 +39,7 @@ const SignUpPage = () => {
     const onValid = (data) => console.log(data, "onvalid");
     const onInvalid = (data) => console.log(data, "onInvalid");
 
+
     //이메일 체크 함수
     const onEmailCheck = (data) => {
         const email = getValues("email")
@@ -55,7 +56,7 @@ const SignUpPage = () => {
 
     //이메일 체크 핸들러
     const emailCheckHandler = async (email) => {
-        await axios.post('/api/auth/nickname', {email})
+        await axios.post('/api/auth/email', {email})
         console.log(email)
     }
 
@@ -75,7 +76,7 @@ const SignUpPage = () => {
 
     //닉네임 체크 핸들러
     const NicknameCheckHandler = async (nickname) => {
-        await axios.post('/api/auth/email', {nickname})
+        await axios.post('/api/auth/nickname', {nickname})
     }
 
     //회원가입 함수
@@ -231,7 +232,7 @@ const SignUpPage = () => {
                         placeholder="숫자로만 입력해주세요"
                     />
                     <button >실행임</button>
-                    <button type="button" onClick={down} >뒤로 가기</button>
+                    <button type="button" onClick={()=> {props.setToggle(false)}} >뒤로 가기</button>
                 </div>
             </form>
 

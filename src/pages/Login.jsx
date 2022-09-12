@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { Indroduce,LoginPage,SignUpPage } from "components/login";
+import { Indroduce, Choice} from "components/login";
 
 const Logins = () => {
 
@@ -11,8 +11,7 @@ const Logins = () => {
     return(
         <Slider page={goPage}>
             <Indroduce />
-            <LoginPage/>
-            <SignUpPage/>
+            <Choice/>
         </Slider>
     )
 }

@@ -9,7 +9,7 @@ const Footer = () => {
   const pathname = useLocation().pathname;
   const icons = [
     { path: "/", component: <MapIcon /> },
-    { path: "/list", component: <CalendarIcon /> },
+    { path: "/promised", component: <CalendarIcon /> },
     { path: "/login", component: <MyIcon /> },
   ];
   return (

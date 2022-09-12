@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 import { minusNumber } from "store/modules/loginSlice";
 import { MoveLeftModal } from "components/common/modal";
-import {LoginPage,SignUpPage} from "components/login";
+import {LoginPage,SignUpPage, Line} from "components/login";
 //아이콘
 import { AiOutlineClose, AiTwotoneMessage } from 'react-icons/ai';
 
@@ -39,8 +39,8 @@ const Choice = () => {
             <OneButton>
               <h1><AiTwotoneMessage/></h1>
               <p>카카오로 빠르게 시작하기</p>
-              </OneButton>
-                <p>또는</p>
+            </OneButton>
+                <Line/>
             <Box>
             <p onClick={()=> {setGologin(false); setToggle(true)}}>회원가입</p>
             <p>|</p>
@@ -104,13 +104,11 @@ const Header = styled.div`
         cursor: pointer;
         margin-right: 20px;
         font-weight: 500;
-        margin-top: 5px;
   
     }
 
     h2 {
         font-size: 20px;
-        margin-top: 0px;
     }
 `
 
@@ -118,7 +116,6 @@ const Main =styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 120px;
 
   h3{
     font-size: 16px;
@@ -132,6 +129,7 @@ const Main =styled.div`
       font-weight: 800;
       font-size: 48px;
       line-height: 60px;
+      margin-bottom: 120px;
     }
 `
 
@@ -142,7 +140,7 @@ const Box = styled.div`
  cursor: pointer;
  color: #4B5563;
  font-weight: 400;
- margin-top: 16px;
+ margin-top: 24px;
  font-size: 12px;
  font-weight: 400;
 `
@@ -151,7 +149,6 @@ const ButtonBox = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 12px 16px;
-  gap: 4px;
 
   button {
     height: 47px;
@@ -170,7 +167,7 @@ const OneButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 
   p{
     margin-left: 50px;

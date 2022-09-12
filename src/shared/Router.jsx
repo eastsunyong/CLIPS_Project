@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Logins, Promised } from "pages";
+import { Home, Logins, Promised, DetailPromise } from "pages";
 
 const Router = () => {
   return (
@@ -9,6 +9,7 @@ const Router = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Logins />} />
       <Route path="/Promised" element={<Promised />} />
+      <Route path="/Promise/:promiseId" element={<DetailPromise />} />
     </Routes>
   );
 };

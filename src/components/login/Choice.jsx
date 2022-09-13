@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { minusNumber } from "store/modules/loginSlice";
+import { addNumber } from "store/modules/loginSlice";
 import { MoveLeftModal } from "components/common/modal";
 import {LoginPage,SignUpPage, Line} from "components/login";
 //아이콘
@@ -21,7 +21,7 @@ const Choice = () => {
 
    //컴포넌트 뒤로 이동
   const down= ()=> {
-    dispatch(minusNumber(1))
+    dispatch(addNumber(false))
 }
 
   return (

@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { addNumber } from "store/modules/loginSlice";
+import { MoveLeftModal } from "components/common/modal";
+import { Choice} from "components/login";
 
 const Indroduce = () => {
 
+    const goPage = useSelector((state) => state.LOGIN.page)
     const dispatch = useDispatch();
 
     const up = ()=> {
-        dispatch(addNumber(1))
+        dispatch(addNumber(true))
     }
     
     return (
@@ -22,6 +25,12 @@ const Indroduce = () => {
                 <button onClick={up}>
                     <p>로그인 / 회원가입</p></button>
             </Box>
+                <MoveLeftModal>
+                {
+                    goPage === true ? <Choice/> : null 
+                }
+
+                </MoveLeftModal>
         </Container>
     )
 }

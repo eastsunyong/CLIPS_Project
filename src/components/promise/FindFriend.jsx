@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLeft } from 'react-icons/ai';
 
+import { SearchIcon } from "assets/icons";
+
 const FindFriend = (props) => {
 
   return (
@@ -27,6 +29,16 @@ const FindFriend = (props) => {
         <h1>친구이름 들어감</h1>
         <p>폰번호 들어감</p>
       </SearchContent>
+
+      <SearchBar
+          className="fcc"
+        >
+          <input placeholder="시/군/구로 검색" readOnly />
+          <div>
+            <SearchIcon />
+          </div>
+        </SearchBar>
+
     </All>
   )
 }
@@ -81,5 +93,37 @@ const SearchContent = styled.div`
   border-radius: 12px;
   padding: 5px;
 `
+
+const SearchBar = styled.div`
+  cursor: pointer;
+  padding: ${(props) => props.theme.size.s} calc(${(props) => props.theme.size.s} * 2);
+
+  background: white;
+  border-radius: ${(props) => props.theme.size.m};
+  box-shadow: 0 0.2rem 1rem rgba(17, 24, 39, 0.15);
+
+  & > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  input {
+    cursor: inherit;
+    border: none;
+    outline: none;
+    width: 100%;
+
+    font-size: ${(props) => props.theme.fontSize.s};
+    &::placeholder {
+      color: ${(props) => props.theme.iconsColor.disable};
+    }
+  }
+
+  div {
+    margin-left: ${(props) => props.theme.size.s};
+    fill: ${(props) => props.theme.iconsColor.disable};
+  }
+  `
 
 export default FindFriend

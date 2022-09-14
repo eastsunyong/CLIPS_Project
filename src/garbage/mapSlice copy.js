@@ -51,7 +51,7 @@ export const setAddress2coord = createAsyncThunk("ADDRESS2COORD", async (payload
     const answer = await localAPI.coordTransfer(payload);
     const marker = _createMaker(answer.x, answer.y);
     kakao.maps.event.addListener(marker, "click", () => {
-      api.dispatch(toggleViewTitle());
+      // api.dispatch(toggleViewTitle());
     });
     return api.fulfillWithValue({ coord: { x: answer.x, y: answer.y }, marker });
   } catch (err) {

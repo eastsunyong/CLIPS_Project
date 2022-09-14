@@ -1,7 +1,7 @@
-import Home from "./Home";
+import Main from "./Main";
 import Logins from "./Login";
 import Promised from "./Promised";
 import DetailPromise from "./DetailPromise";
 import Mypage from "./Mypage";
 
-export { Home, Logins, Promised, DetailPromise, Mypage };
+export { Main, Logins, Promised, DetailPromise, Mypage };

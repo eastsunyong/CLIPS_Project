@@ -28,6 +28,8 @@ const LoginPage = (props) => {
     try {
         await axios.post(process.env.REACT_APP_SURVER + `/api/auth/signin`, data)
         .then((res) => {
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
             const msg = res.data.message
             console.log(res)
             alert(msg)

@@ -15,24 +15,29 @@ const Indroduce = () => {
   };
 
   return (
-    <Container className="fcc" style={{ width: "100%", height: "100%" }}>
-      <Box>
-        <Title>
-          <label>로그인하고</label>
-          <label>더 많은 기능을 만나보세요!</label>
-        </Title>
-        <button onClick={up}>
-          <p>로그인 / 회원가입</p>
-        </button>
-      </Box>
-      <Modal>{goPage === true ? <Choice /> : null}</Modal>
-    </Container>
+    <>
+      <Container className="fcc" style={{ width: "100%", height: "100%" }}>
+        <Box>
+          <Title>
+            <label>로그인하고</label>
+            <label>더 많은 기능을 만나보세요!</label>
+          </Title>
+          <button onClick={up}>
+            <p>로그인 / 회원가입</p>
+          </button>
+        </Box>
+        {/* <Modal>{goPage === true ? <Choice /> : null}</Modal> */}
+      </Container>
+      <Modal toggle={goPage}>
+        <Choice />
+      </Modal>
+    </>
   );
 };
 
 const Container = styled.div`
-  position: relative;
-  flex-flow: column;
+  /* position: relative; */
+  /* flex-flow: column; */
   min-width: 100%;
   min-height: 100%;
   padding: 0 2rem 2rem 2rem;

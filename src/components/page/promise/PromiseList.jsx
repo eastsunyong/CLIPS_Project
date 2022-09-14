@@ -59,7 +59,7 @@ const PromiseList = (props) => {
   useEffect(() => {
     const getPromise = async () => {
       try {
-        const axiosData = await axios.default.get(process.env.REACT_APP_SURVER + "/api/promise");
+        const axiosData = await axios.default.get(process.env.REACT_APP_SERVER + "/promise");
         const result = axiosData;
         console.log(result);
         setList(result);

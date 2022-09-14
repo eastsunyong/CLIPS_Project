@@ -10,7 +10,7 @@ const Promised = () => {
   return (
     <Slider page={page}>
       <PromiseList setPage={setPage} />
-      <FindFriend setPage={setPage} />
+      {/* <FindFriend setPage={setPage} /> */}
     </Slider>
   );
 };

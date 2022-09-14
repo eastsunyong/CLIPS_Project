@@ -10,5 +10,20 @@ import StarIcon from "./StarIcon";
 import LocationIcon from "./LocationIcon";
 import PhoneIcon from "./PhoneIcon";
 import DeleteIcon from "./DeleteIcon";
+import MsgIcon from "./MsgIcon";
 
-export { MapIcon, MyIcon, SearchIcon, GeoIcon, PinIcon, CalendarIcon, PencilIcon, LeftArrowIcon, StarIcon, LocationIcon, PhoneIcon, DeleteIcon };
+export {
+  MapIcon,
+  MyIcon,
+  SearchIcon,
+  GeoIcon,
+  PinIcon,
+  CalendarIcon,
+  PencilIcon,
+  LeftArrowIcon,
+  StarIcon,
+  LocationIcon,
+  PhoneIcon,
+  DeleteIcon,
+  MsgIcon,
+};

@@ -5,7 +5,7 @@ import { useState } from "react";
 //아이콘
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
-import { Modal } from "components/common";
+import { Btn, Modal } from "components/common";
 import { SignUpPage3 } from "components/page/login";
 
 const SignUpPage2 = (props) => {
@@ -208,24 +208,12 @@ const RightGo = styled.div`
     font-weight: 700;
   }
 `;
-const Onbutton = styled.button`
+const Onbutton = styled(Btn)`
   margin-top: 200px;
-  width: 343px;
-  height: 41px;
-  border-radius: 8px;
-  border: none;
-  background-color: ${(props) => props.theme.themeColor};
-  color: white;
 `;
 
-const NonButton = styled.button`
+const NonButton = styled(Btn)`
   margin-top: 200px;
-  width: 343px;
-  height: 41px;
-  border-radius: 8px;
-  border: none;
-  background-color: ${(props) => props.theme.themeColor};
-  color: white;
   pointer-events: none;
   opacity: 0.5;
 `;

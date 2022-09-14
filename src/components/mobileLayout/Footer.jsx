@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { MapIcon, MyIcon, CalendarIcon } from "assets/icons";
+import { MapIcon, MyIcon, CalendarIcon, MsgIcon } from "assets/icons";
 
 const Footer = () => {
   const nav = useNavigate();
@@ -10,7 +10,8 @@ const Footer = () => {
   const icons = [
     { path: "/", component: <MapIcon /> },
     { path: "/promised", component: <CalendarIcon /> },
-    { path: "/login", component: <MyIcon /> },
+    { path: "/review", component: <MsgIcon /> },
+    { path: "/myPage", component: <MyIcon /> },
   ];
   return (
     <Section>

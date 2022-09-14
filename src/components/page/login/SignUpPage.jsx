@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 //아이콘
 import { AiOutlineLeft } from "react-icons/ai";
 
-import { Modal } from "components/common";
+import { Btn, Modal } from "components/common";
 import { signUpData } from "store/modules/signupSlice";
 import { SignUpPage2 } from "components/page/login";
 
@@ -51,7 +51,7 @@ const SignUpPage = (props) => {
   //이메일 체크 핸들러
   const emailCheckHandler = async (email) => {
     try {
-      await axios.post(process.env.REACT_APP_SURVER + `/api/auth/email`, { email }).then((res) => {
+      await axios.post(process.env.REACT_APP_SERVER + `/auth/email`, { email }).then((res) => {
         const msg = res.data.message;
         console.log(res);
         alert(msg);
@@ -75,7 +75,7 @@ const SignUpPage = (props) => {
   //닉네임 체크 핸들러
   const NicknameCheckHandler = async (nickname) => {
     try {
-      await axios.post(process.env.REACT_APP_SURVER + `/api/auth/nickname`, { nickname }).then((res) => {
+      await axios.post(process.env.REACT_APP_SERVER + `/auth/nickname`, { nickname }).then((res) => {
         const msg = res.data.message;
         console.log(res);
         alert(msg);
@@ -112,7 +112,7 @@ const SignUpPage = (props) => {
       formData.append("confirm", data.confirmpassword);
       formData.append("phone", data.phone);
 
-      await axios.post(process.env.REACT_APP_SURVER + "/api/auth/signup", data).then((res) => {
+      await axios.post(process.env.REACT_APP_SERVER + "/auth/signup", data).then((res) => {
         const msg = res.data.message;
         console.log(res);
         alert(msg);
@@ -313,13 +313,6 @@ const Center = styled.div`
     margin-bottom: 8px;
   }
 `;
-const Save = styled.button`
-  width: 343px;
-  height: 41px;
-  border-radius: 8px;
-  border: none;
-  background-color: ${(props) => props.theme.themeColor};
-  color: white;
-`;
+const Save = styled(Btn)``;
 
 export default SignUpPage;

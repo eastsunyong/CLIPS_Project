@@ -1,3 +1,4 @@
 import LOGIN from "./loginSlice"
+import SIGNUP from "./signupSlice"
 
-export {LOGIN}
+export {LOGIN, SIGNUP}

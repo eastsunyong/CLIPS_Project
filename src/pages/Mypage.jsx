@@ -1,10 +1,13 @@
 import React from "react";
+import styled from "styled-components";
+
+import { ReviewList } from "components/mypage";
 
 const Mypage = ()=> {
     return (
-        <div>
-            마이페이지
-        </div>
+        <>
+        <ReviewList/>
+        </>
     )
 }
 

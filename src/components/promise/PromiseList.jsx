@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 //아이콘
 import { AiOutlinePlus, AiOutlineLeft } from 'react-icons/ai';
@@ -23,16 +24,20 @@ import "./DatePicker.css"
 import { ko } from "date-fns/esm/locale";
 
 import { OpacityModal } from "components/common/modal";
+import serverAxios from "components/tokken/Tokken";
+import { addNumber } from "store/modules/loginSlice";
 
 const PromiseList = (props) => {
 
     const navigater = useNavigate();
 
+    const dispatch = useDispatch();    
+
     //약속 만드는 모달창 불러오기
     const [toggle, setToggle] = useState(false);
 
     //로그인 상태값 
-    const [onLogin, setOnLogin] = useState(true);
+    const onLogin = localStorage.getItem("accessToken")
 
     //리액트 캘린더 날짜 받아오기
     const [value, onChange] = useState(new Date());
@@ -48,17 +53,20 @@ const PromiseList = (props) => {
     //변환힌 날짜 값 합쳐서 저장하는 곳
     const newDay = dates + times
 
+    console.log(typeof(newDay))
+
     const [list, setList] =useState({})
 
     useEffect(() => {
         const getPromise = async () => {
           try {
-            const axiosData = await axios.get(process.env.REACT_APP_SURVER + '/api/promise?done=true/false') 
-            const result = axiosData.data
+            const axiosData = await serverAxios.get(process.env.REACT_APP_SURVER + '/api/promise') 
+            const result = axiosData
             console.log(result)
             setList(result)
           } catch (err) {
             console.log(err);
+            alert('실패임')
           }
         };
         getPromise();
@@ -108,15 +116,41 @@ const PromiseList = (props) => {
 
     console.log(newDay)
 
-    //약속만드는 함수
-    const onSubmit = async (data) => {
-        await axios.post('/api/promise', {title: data.title, date: newDay, penalty: data.penalty, location: data.location, friendList: data.friendList})
+
+    const [newPromise, setNewPromise] = useState({
+        title: '',
+        date: newDay,
+        friendList: '',
+        penalty: ''
+    })
+
+
+     //약속만드는 함수
+     const onSubmit = (data) => {
+        LogInHandler(data)
     };
 
-    //약속만드는 핸들러
-    // const LogInHandler = async (newPromise) => {
-    //     await axios.post('/api/promise', newPromise)
-    // }
+      //약속만드는 핸들러
+      const LogInHandler = async (data) => {
+        await serverAxios.post(process.env.REACT_APP_SURVER +'/api/promise', data)
+    }
+
+
+    // //약속만드는 함수
+    // const onSubmit = async (data) => {
+    //     try{
+    //         await serverAxios.post(process.env.REACT_APP_SURVER +'/api/promise', {title: data.title, date: newDay, penalty: data.penalty, location: data.location})
+    //         .then((res) => {
+    //             const msg = res.data.message
+    //             console.log(res)
+    //             alert(msg)
+    //         });
+    //     } catch(err) {
+    //         alert('시랲패')
+    //         console.log(err)
+    //     }
+    //     };
+
 
     const test = ["2022. 9. 8.", "2022. 9. 7."]
 
@@ -158,9 +192,6 @@ const PromiseList = (props) => {
                                 e.preventDefault();
                                 props.setPage(1)
                             }}
-                            {...register("friendList", {
-                                required: "찬구들을 적어주세요", maxLength: { value: 30, message: "30자 이하로 정해주세요" },
-                            })}
                             placeholder="홍길동, 우영우"
                             name="location"
                             />
@@ -235,7 +266,16 @@ const PromiseList = (props) => {
                 />
 
                 {
-                    onLogin ? <>{
+                    onLogin === null ? <NonLogin>
+                        <NonLoginTitle>
+                            <label>로그인하고</label>
+                            <label>더 많은 기능을 만나보세요!</label>
+                        </NonLoginTitle>
+                        <button onClick={() => {
+                            navigater('/login'); dispatch(addNumber(true))
+                        }}>
+                            <p>로그인 / 회원가입</p></button>
+                    </NonLogin> : <>{
                         qwe.map((a) => {
                             return (
                                 <List key={a.PromiseId} onClick={() => {navigater(`/promise/${a.PromiseId}`)}}>
@@ -257,16 +297,7 @@ const PromiseList = (props) => {
                             )
                         })
                     }
-                    </> : <NonLogin>
-                        <NonLoginTitle>
-                            <label>로그인하고</label>
-                            <label>더 많은 기능을 만나보세요!</label>
-                        </NonLoginTitle>
-                        <button onClick={() => {
-                            navigater('/login')
-                        }}>
-                            <p>로그인 / 회원가입</p></button>
-                    </NonLogin>
+                    </> 
                 }
             </Container>
 

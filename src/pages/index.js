@@ -1,5 +1,6 @@
-import Home from "./Home";
+import Main from "./Main";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import MyPage from "./MyPage";
 
-export { Home, Login, SignUp };
+export { Main, Login, SignUp, MyPage };

@@ -6,6 +6,7 @@ const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 3000,
 });
 
 /** @param { Request } req */
@@ -48,8 +49,9 @@ const requestHandler = async (req) => {
     return req;
   }
 };
+instance.interceptors.request.use((req) => requestHandler(req));
 
-instance.interceptors.request.use((request) => requestHandler(request));
+instance.interceptors.request.use(requestHandler);
 
 export const kakaoAxios = axios.create({
   baseURL: "https://dapi.kakao.com/v2",

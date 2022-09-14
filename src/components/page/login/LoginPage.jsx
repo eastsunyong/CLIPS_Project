@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import axios from "axios";
 
-import { Modal } from "components/common";
+import { Btn, Modal } from "components/common";
 import { FindId, FindPassword } from "components/page/login";
 
 //아이콘
 import { AiOutlineClose } from "react-icons/ai";
+import axios from "axios";
+// import { axios } from "utils";
 
 const LoginPage = (props) => {
   //모달창 상태값
@@ -25,14 +26,17 @@ const LoginPage = (props) => {
   //로그핸들러
   const LogInHandler = async (data) => {
     try {
-      await axios.post(process.env.REACT_APP_SURVER + `/api/auth/signin`, data).then((res) => {
-        localStorage.setItem("accessToken", res.data.accessToken);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        const msg = res.data.message;
-        console.log(res);
-        alert(msg);
-      });
-    } catch {
+      const res = await axios.post(process.env.REACT_APP_SERVER + `/auth/signin`, data);
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
+      const msg = res.data.message;
+      console.log(res);
+      alert(msg);
+
+      // 얘 추가하면 새로고침 강제로 발생시키기
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
       alert("시랲패");
     }
   };
@@ -198,12 +202,12 @@ const ButtonBox = styled.div`
   }
 `;
 
-const OneButton = styled.button`
-  background-color: ${(props) => props.theme.themeColor};
-  color: white;
+const OneButton = styled(Btn)`
+  /* background-color: ${(props) => props.theme.themeColor}; */
+  /* color: white; */
   margin-top: 24px;
   margin-bottom: 32px;
-  border: none;
+  /* border: none; */
 `;
 
 export default LoginPage;

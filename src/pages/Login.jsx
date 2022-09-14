@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { Indroduce } from "components/login";
-import Mypage from "./Mypage";
+import { Indroduce } from "components/page/login";
+import MyPage from "./MyPage";
 
 const Logins = () => {
   //로그인 상태값
@@ -18,7 +18,7 @@ const Logins = () => {
           <Indroduce />
         </Slider>
       ) : (
-        <Mypage />
+        <MyPage />
       )}
     </>
   );

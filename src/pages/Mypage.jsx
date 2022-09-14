@@ -1,14 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 
-import { ReviewList } from "components/mypage";
+import { User, ReviewList } from "components/page/myPage";
 
-const Mypage = ()=> {
-    return (
-        <>
-        <ReviewList/>
-        </>
-    )
-}
+const MyPage = () => {
+  return (
+    <>
+      <User />
+      <ReviewList />
+    </>
+  );
+};
 
-export default Mypage;
+export default MyPage;

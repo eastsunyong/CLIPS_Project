@@ -2,19 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 
-import { PromiseList,FindFriend } from "components/promise";
+import { PromiseList, FindFriend } from "components/page/promise";
 
 const Promised = () => {
+  const [page, setPage] = useState(0);
 
-    const [page, setPage] = useState(0);
-
-    return(
-        <Slider page={page}>
-           <PromiseList setPage={setPage}/>
-           <FindFriend setPage={setPage}/>
-        </Slider>
-    )
-}
+  return (
+    <Slider page={page}>
+      <PromiseList setPage={setPage} />
+      <FindFriend setPage={setPage} />
+    </Slider>
+  );
+};
 
 const Slider = styled.div`
   position: relative;

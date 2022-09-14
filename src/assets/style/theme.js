@@ -1,27 +1,34 @@
-// s, m, l 각 단계 * 3
+// rem이란 : 최상위 엘리먼츠 폰트 사이즈에 영향을 받아 가변으로 크기가 지정됨
+// 현재 1rem = 10px
 const size = {
-  s: "1.2rem",
-  m: "3.6rem",
-  l: "10.8rem",
+  xs: "1.2rem", // 12px
+  s: "1.4rem", // 14px
+  m: "1.6rem", // 16x
+  l: "1.8rem", // 18px
+  xl: "2rem", // 20px
 };
 
-const fontSize = {
-  s: "1.6rem",
-  m: "4.8rem",
-  l: "14.4rem",
-};
-
-const iconsColor = {
+const color = {
+  brand: "#0099ff",
   disable: "gray",
-  able: "black",
+  hidden: "rgba(0,0,0,0)",
+};
+
+const level = {
+  back: -1,
+  default: 0,
+  front: {
+    low: 5,
+    middle: 10,
+    top: 100,
+  },
 };
 
 const theme = {
-  defaultColor: "black",
-  themeColor: "#0099ff",
   size: size,
-  fontSize: fontSize,
-  iconsColor: iconsColor,
+  color: color,
+  level: level,
+  lineHeight: "8rem",
 };
 
 export default theme;

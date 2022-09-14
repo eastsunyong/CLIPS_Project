@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import { Container } from "./HomeCommonStyle";
-import LocationSearchModal from "../components/home/LocationSearchModal";
+import LocationSearchModal from "./home/LocationSearchModal";
 import { localAPI } from "apis";
 
 const { kakao } = window;

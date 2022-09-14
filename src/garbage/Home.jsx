@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { HomeOrderFirst, HomeOrderSecond, HomeOrderThird } from "components/home";
+import { HomeOrderFirst, HomeOrderSecond, HomeOrderThird } from "garbage/home";
 
 const Home = () => {
   const [page, setPage] = useState(0);

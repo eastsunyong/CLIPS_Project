@@ -1,27 +1,43 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import axios from "axios";
+
+import { MoveLeftModal } from "components/common/modal";
+import {FindId,FindPassword} from "components/login";
 
 //아이콘
 import { AiOutlineClose } from 'react-icons/ai';
 
 const LoginPage = (props) => {
 
-  const navigate = useNavigate();
+  //모달창 상태값
+  const [toggle, setToggle] =useState(false)
+
+  //갈림길 상태값
+  const [gofind ,setGofind] =useState()
 
   //로그인 함수
   const onSubmit = (data) => {
     LogInHandler(data)
   };
 
-
   //로그핸들러
   const LogInHandler = async (data) => {
-    await axios.post(process.env.REACT_APP_SURVER + '/api/auth/signup', data)
-  }
+    try {
+        await axios.post(process.env.REACT_APP_SURVER + `/api/auth/signin`, data)
+        .then((res) => {
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
+            const msg = res.data.message
+            console.log(res)
+            alert(msg)
+        });
+    } catch {
+        alert('시랲패')
+    }
+}
 
   const {
     getValues,
@@ -38,23 +54,15 @@ const LoginPage = (props) => {
 
   return (
     <All>
-      {/* <Header>
-        <p>✔</p>
-        <h1>로그인</h1>
-      </Header> */}
-
       <Container className="fcc">
       <Header>
-        <p><AiOutlineClose onClick={(e) => {
-          e.preventDefault();
-          props.setPage(0)
-        }} /></p>
-        <h2>로그인</h2>
+        <p><AiOutlineClose onClick={()=> {props.setToggle(false)}}/></p>
+        <h2>CLIPs ID로 로그인</h2>
       </Header>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div style={{marginBottom:"8px"}}>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              {errors.email && <p style={{ color: "red" }}>{errors.email.message}</p>}
+              <label>아이디</label>
             </div>
             <input
               {...register("email", {
@@ -68,8 +76,8 @@ const LoginPage = (props) => {
           </div>
           <div>
             <div style={{ flexDirection: "row", display: "flex", gap: "2rem" }}>
-              {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
             </div>
+            <label>비밀번호</label>
             <input
               {...register("password", {
                 required: "비밀번호는 필수 입력입니다", minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요.", },
@@ -82,14 +90,20 @@ const LoginPage = (props) => {
           <ButtonBox>
             <OneButton>로그인</OneButton>
             <Box>
-            <p>아이디 찾기</p><p>|</p><p>비밀번호 찾기</p>
+            <p onClick={()=> {setGofind(true); setToggle(true)}}>아이디 찾기</p>
+            <p>|</p>
+            <p onClick={()=> {setGofind(false); setToggle(true)}}>비밀번호 찾기</p>
             </Box>
-              <TwoButton type="button" onClick={() => {
-                props.setPage(2)
-              }}>회원가입</TwoButton>
           </ButtonBox>
         </form>
       </Container>
+      
+      <MoveLeftModal toggle={toggle}>
+          {
+            gofind === true ? <FindId setToggle={setToggle}/> : <FindPassword setToggle={setToggle}/>
+          }
+        </MoveLeftModal>
+
     </All>
   )
 };
@@ -141,6 +155,12 @@ const Container = styled.div`
     padding: 10px 16px 10px 16px;
     border: 1px solid #4B556380;
     border-radius: 8px;
+    margin-top: 8px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
   }
 
 `
@@ -150,6 +170,8 @@ const Box = styled.div`
  flex-direction: row;
  gap: 8px;
  cursor: pointer;
+ color: #4B5563;
+ font-weight: 400;
 `
 const ButtonBox = styled.div`
   display: flex;
@@ -168,15 +190,8 @@ const OneButton = styled.button`
   background-color: ${(props) => props.theme.themeColor};
   color: white;
   margin-top: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   border: none;
-`
-
-const TwoButton = styled.button`
-  margin-top: 32px;
-  background-color: white;
-  border: 1px solid ${(props) => props.theme.themeColor};
-  color: ${(props) => props.theme.themeColor};
 `
 
 export default LoginPage;

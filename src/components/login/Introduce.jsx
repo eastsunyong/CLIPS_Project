@@ -1,8 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
-const Indroduce = (props) => {
+import { addNumber } from "store/modules/loginSlice";
+import { MoveLeftModal } from "components/common/modal";
+import { Choice} from "components/login";
 
+const Indroduce = () => {
+
+    const goPage = useSelector((state) => state.LOGIN.page)
+    const dispatch = useDispatch();
+
+    const up = ()=> {
+        dispatch(addNumber(true))
+    }
+    
     return (
         <Container className="fcc" style={{ width: "100%", height: "100%" }}>
             <Box>
@@ -10,11 +22,15 @@ const Indroduce = (props) => {
                     <label>로그인하고</label>
                     <label>더 많은 기능을 만나보세요!</label>
                 </Title>
-                <button onClick={() => {
-                    props.setPage(1);
-                    }}>
+                <button onClick={up}>
                     <p>로그인 / 회원가입</p></button>
             </Box>
+                <MoveLeftModal>
+                {
+                    goPage === true ? <Choice/> : null 
+                }
+
+                </MoveLeftModal>
         </Container>
     )
 }

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { axios } from "utils";
 import { localAPI } from "apis";
-import { setCoord } from "./mapSlice";
 
 export const setPlaceList = createAsyncThunk("RECOMMENDLIST", async (payload, api) => {
   try {
@@ -25,7 +24,7 @@ export const setPlaceList = createAsyncThunk("RECOMMENDLIST", async (payload, ap
     // BE 메시지
     // console.log(answer.data.data.msg);
 
-    api.dispatch(setCoord({ coord, markers }));
+    // api.dispatch(setCoord({ coord, markers }));
     return api.fulfillWithValue(placeList);
   } catch (err) {
     console.log(err);
@@ -35,11 +34,6 @@ export const setPlaceList = createAsyncThunk("RECOMMENDLIST", async (payload, ap
 
 const initialState = {
   address: null,
-  viewMiddle: false,
-  viewPlace: false,
-  viewTitle: false,
-  selected: -1,
-  placeList: [],
 };
 
 export const homeSlice = createSlice({
@@ -52,18 +46,6 @@ export const homeSlice = createSlice({
       state.viewPlace = false;
       state.viewTitle = false;
     },
-    toggleViewMiddle: (state) => {
-      state.viewMiddle = !state.viewMiddle;
-      state.viewPlace = false;
-      state.viewTitle = false;
-    },
-    toggleViewPlace: (state, action) => {
-      state.viewPlace = action.payload;
-    },
-    toggleViewTitle: (state, action) => {
-      state.selected = action.payload.index;
-      state.viewTitle = action.payload.toggle;
-    },
   },
   extraReducers: {
     [setPlaceList.fulfilled]: (state, action) => {
@@ -75,5 +57,5 @@ export const homeSlice = createSlice({
   },
 });
 
-export const { resetState, setAddress, toggleViewMiddle, toggleViewPlace, toggleViewTitle } = homeSlice.actions;
+export const { resetState, setAddress } = homeSlice.actions;
 export default homeSlice.reducer;

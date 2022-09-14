@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-import { _createLatLon, setMap, resetMap } from "store/modules/mapSlice";
+import { _createLatLon, setMap, resetMap } from "garbage/mapSlice";
 
 const { kakao } = window;
 const Map = () => {

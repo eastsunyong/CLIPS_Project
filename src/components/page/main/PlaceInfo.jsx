@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Btn, TextBox, XDragList } from "components/common";
 import { LocationIcon, PhoneIcon, StarIcon } from "assets/icons";
 import { axios } from "utils";
+import { setPlace } from "store/modules/promiseSlice";
 import imgLoading from "assets/img/imgLoading.png";
 
 const PlaceInfo = (props) => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   const [imgUrl, setImgUrl] = useState([]);
 
   useEffect(() => {
@@ -17,6 +22,18 @@ const PlaceInfo = (props) => {
       });
     }
   }, [props.placeInfo]);
+
+  // 전역에 address 등록
+  const savePlace = () => {
+    const place = {
+      name: props.placeInfo.name,
+      address: props.placeInfo.road_address ? props.placeInfo.road_address : props.placeInfo.address,
+      coord: props.placeInfo.coord,
+    };
+    dispatch(setPlace(place));
+    nav("/promised", { state: { setAddress: true } });
+  };
+
   return (
     <Section>
       <Title
@@ -29,7 +46,7 @@ const PlaceInfo = (props) => {
       >
         <div>
           <div className="title">{props.placeInfo?.name}</div>
-          <div>{props.placeInfo?.category}</div>
+          <div>{props.placeInfo?.detailCategory}</div>
         </div>
         <div className="icon">
           <StarIcon />
@@ -66,7 +83,9 @@ const PlaceInfo = (props) => {
           <span>영업시간</span>
         </div>
       </Info>
-      <Btn outLine={true}>여기로 약속잡기</Btn>
+      <Btn outLine={true} onClick={savePlace}>
+        여기로 약속잡기
+      </Btn>
     </Section>
   );
 };

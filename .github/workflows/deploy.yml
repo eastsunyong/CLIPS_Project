@@ -7,10 +7,13 @@ on:
       - main # master 브랜치에서 push 이벤트가 일어났을 때 실행
   pull_request:
     branches:
-      - main
+      - main # master 브랜치에서 pull_request 이벤트가 일어났을 때 실행
 
+# 해당 Workflow의 하나 이상의 Job 목록입니다.
 jobs:
+   # Job 이름으로, build라는 이름으로 Job이 표시됩니다.
   build:
+  # Runner가 실행되는 환경을 정의하는 부분입니다.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -47,4 +50,4 @@ jobs:
           aws s3 cp \
           --recursive \
           --region ap-northeast-2 \
-          build s3://clips-front
+          build s3://clipspromise-front

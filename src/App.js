@@ -1,11 +1,16 @@
-import './App.css';
+import React from "react";
+
+import { Layout, Main, Footer } from "components/mobileLayout";
+import Router from "shared/Router";
 
 function App() {
   return (
-    <div className="App">
-      <p>커밋하면 actions가 테스트 및 압축 후 aws s3에 배포</p>
-    </div>
+    <Layout>
+      <Main>
+        <Router />
+      </Main>
+      <Footer />
+    </Layout>
   );
 }
-
 export default App;

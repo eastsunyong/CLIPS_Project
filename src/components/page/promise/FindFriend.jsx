@@ -1,129 +1,112 @@
-import React from "react";
-import styled from "styled-components";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { AiOutlineLeft } from 'react-icons/ai';
+import styled from "styled-components";
 
-import { SearchIcon } from "assets/icons";
+import { InputDiv, Modal, PageTop } from "components/common";
+import { LeftArrowIcon, SearchIcon } from "assets/icons";
+import { promiseAPI } from "apis";
+import defaultImg from "assets/img/UserDefaultImg.png";
 
 const FindFriend = (props) => {
+  const { register, handleSubmit, reset } = useForm();
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    if (props.toggle) {
+      reset();
+      setList([]);
+    }
+  }, [props.toggle]);
+
+  const submitHandler = async (data) => {
+    if (props.friendList && props.friendList.includes(data.nickname)) {
+      alert("이미 등록되어있는 친구입니다.");
+      return;
+    }
+    const answer = await promiseAPI.findFriend(data);
+    answer.result ? setList([answer.friend]) : setList([]);
+    if (!answer.result) alert(answer.msg);
+  };
+
+  const selectNickname = (nickname) => {
+    const friendList = props.friendList ? `${props.friendList}, ${nickname}` : nickname;
+    props.setValue("friendList", friendList);
+    props.setToggle(false);
+  };
 
   return (
-    <All>
-      <Header>
-        <p><AiOutlineLeft onClick={(e) => {
-          e.preventDefault();
-          props.setPage(0)
-        }} /></p>
-        <h2>친구 찾기</h2>
-      </Header>
-      <InputBox>
-        <input
-        placeholder="찾을 친구의 닉네임을 입력해주세요"
-        />
-        <button>asdasdd</button>
-      </InputBox>
-
-      {/* 아마 맵돌릴거임 */}
-      <SearchContent>
-        <h1>친구이름 들어감</h1>
-        <p>폰번호 들어감</p>
-      </SearchContent>
-
-      <SearchBar
-          className="fcc"
-        >
-          <input placeholder="시/군/구로 검색" readOnly />
-          <div>
-            <SearchIcon />
+    <CustomModal toggle={props.toggle}>
+      <PageTop>
+        <div>
+          <div
+            className="icon"
+            onClick={() => {
+              props.setToggle(false);
+            }}
+          >
+            <LeftArrowIcon />
           </div>
-        </SearchBar>
+          <div className="title">친구 찾기</div>
+        </div>
+      </PageTop>
+      <form onSubmit={handleSubmit(submitHandler)}>
+        <CustomInputDiv>
+          <input {...register("nickname", { required: "닉네임을 입력해주세요" })} placeholder="친구의 닉네임을 입력해주세요" autoComplete="off" />
+          <span className="icon">
+            <SearchIcon />
+          </span>
+        </CustomInputDiv>
+      </form>
+      <List>
+        {list.map((person) => {
+          return (
+            <div key={person.userId} onClick={() => selectNickname(person.nickname)}>
+              <img src={person.img ? person.img : defaultImg} alt="유저이미지" />
+              <div className="text">{person.nickname}</div>
+            </div>
+          );
+        })}
+      </List>
+    </CustomModal>
+  );
+};
 
-    </All>
-  )
-}
+export default FindFriend;
 
-const All = styled.div`
-  position: relative;
-  flex-flow: column;
-  min-width: 100%;
-  min-height: 100%;
-  padding: 0 2rem 2rem 2rem;
-  flex-direction: column;
-`
-
-const Header = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 5rem;
-    align-items: center;
-    font-weight: 700;
-    gap: 20px;
-
-    p {
-        font-size: 20px;
-        cursor: pointer;
-    }
-
-    h2 {
-        margin-bottom: 3px;
-        font-size: 20px;
-    }
-`
-
-const InputBox = styled.div`
+const CustomModal = styled(Modal)`
   display: flex;
-  margin-bottom: 20px;
+  flex-flow: column;
+  & > *:not(:first-child) {
+    padding: 0 ${(props) => props.theme.size.m};
+  }
+  form {
+    margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
+  }
+`;
 
-  input{
-        border: 1px solid #4B556380;
-        width: 100%;
-        height: 37px;
-        border-radius: 8px;
-        padding-left: 8px;
-    }
+const CustomInputDiv = styled(InputDiv)`
+  .icon {
+    fill: ${(props) => props.theme.color.disable};
+  }
+`;
 
-`
-
-const SearchContent = styled.div`
-  border: 1px solid red;
-  width: 100%;
-  height: 62px;
-  border-radius: 12px;
-  padding: 5px;
-`
-
-const SearchBar = styled.div`
-  cursor: pointer;
-  padding: ${(props) => props.theme.size.s} calc(${(props) => props.theme.size.s} * 2);
-
-  background: white;
-  border-radius: ${(props) => props.theme.size.m};
-  box-shadow: 0 0.2rem 1rem rgba(17, 24, 39, 0.15);
-
+const List = styled.div`
+  flex: 1;
   & > * {
+    cursor: pointer;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+
+    padding-bottom: ${(props) => props.theme.size.m};
   }
-
-  input {
-    cursor: inherit;
-    border: none;
-    outline: none;
-    width: 100%;
-
-    font-size: ${(props) => props.theme.fontSize.s};
-    &::placeholder {
-      color: ${(props) => props.theme.iconsColor.disable};
-    }
+  img {
+    width: 4.4rem;
+    height: 4.4rem;
   }
-
-  div {
-    margin-left: ${(props) => props.theme.size.s};
-    fill: ${(props) => props.theme.iconsColor.disable};
+  .text {
+    margin-left: ${(props) => props.theme.size.m};
+    font-size: ${(props) => props.theme.size.m};
+    font-weight: bold;
   }
-  `
-
-export default FindFriend
+`;

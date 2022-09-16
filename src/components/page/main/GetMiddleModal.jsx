@@ -6,6 +6,7 @@ import { Btn, InputDiv, Modal, PageTop } from "components/common";
 import { DeleteIcon, LeftArrowIcon } from "assets/icons";
 import { SearchModal, ViewMiddleModal } from ".";
 import { localAPI } from "apis";
+import { sweetalert } from "utils";
 
 const GetMiddleModal = (props) => {
   const { handleSubmit, register, setValue, unregister, reset } = useForm();
@@ -32,7 +33,8 @@ const GetMiddleModal = (props) => {
   // input추가
   const addInputHandler = () => {
     if (inputIdList.length === 12) {
-      alert("최대 12개의 장소");
+      const messge = "최대 12개의 장소입니다";
+      sweetalert.failAlert(messge);
       return;
     }
     setInputIdList([...inputIdList, inputIdList[inputIdList.length - 1] + 1]);
@@ -72,7 +74,7 @@ const GetMiddleModal = (props) => {
 
   const registerOpt = { required: "주소를 입력해주세요" };
   return (
-    <Modal toggle={props.toggle}>
+    <CustomModal toggle={props.toggle}>
       <PageTop>
         <div>
           <span
@@ -112,27 +114,34 @@ const GetMiddleModal = (props) => {
           <span className="plus">+</span>
           <span>장소 추가</span>
         </AddBtn>
-        <Btn>중간위치 찾기</Btn>
+        <SubmitBtn>중간위치 찾기</SubmitBtn>
       </FormArea>
 
       <SearchModal toggle={searchToggle} setToggle={setSearchToggle} target={target} setValue={setValue} />
       <ViewMiddleModal locationList={locationList} toggle={resultToggle} setToggle={setResultToggle} />
-    </Modal>
+    </CustomModal>
   );
 };
 
 export default memo(GetMiddleModal);
 
-const FormArea = styled.form`
-  padding: 0 ${(props) => props.theme.size.m};
+const CustomModal = styled(Modal)`
+  display: flex;
+  flex-flow: column;
 `;
 
-const InputArea = styled.div`
-  max-height: calc(100% - 15rem);
+const FormArea = styled.form`
+  flex: 1;
   overflow: scroll;
+
+  padding: 0 ${(props) => props.theme.size.m};
+
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const InputArea = styled.div`
   & > * {
     margin-bottom: calc(${(props) => props.theme.size.m} / 2);
   }
@@ -148,7 +157,7 @@ const AddBtn = styled.div`
   justify-content: center;
   align-items: center;
 
-  margin: ${(props) => props.theme.size.s};
+  margin-top: ${(props) => props.theme.size.s};
 
   font-size: ${(props) => props.theme.size.s};
   font-weight: bold;
@@ -160,4 +169,8 @@ const AddBtn = styled.div`
     font-weight: normal;
     font-size: calc(${(props) => props.theme.size.s} * 2);
   }
+`;
+
+const SubmitBtn = styled(Btn)`
+  margin: ${(props) => props.theme.size.s} 0;
 `;

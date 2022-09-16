@@ -18,6 +18,7 @@ import { LeftArrowIcon } from "assets/icons";
 import { promiseAPI } from "apis";
 import { FindFriend } from ".";
 import { resetState, setTemporaryStorage } from "store/modules/promiseSlice";
+import { sweetalert } from "utils";
 
 const AddPromise = (props) => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const AddPromise = (props) => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm({ defaultValues: "" });
+  } = useForm();
 
   const place = useSelector((state) => state.promise.place);
   const ts = useSelector((state) => state.promise.ts);
@@ -57,11 +58,16 @@ const AddPromise = (props) => {
   const goBack = () => {
     if (ts || place) {
       const type = ts ? "정보" : "장소";
-      const msg = `입력하신 ${type}가 초기화 됩니다.`;
-      alert(msg);
-      dispatch(resetState());
+      const messge = `입력하신 ${type}가 초기화 됩니다.`;
+      sweetalert.corfirmAlert(messge).then((selected) => {
+        if (selected.isConfirmed) {
+          dispatch(resetState());
+          props.setToggle(false);
+        }
+      });
+    } else {
+      props.setToggle(false);
     }
-    props.setToggle(false);
   };
 
   // 장소 선택 버튼
@@ -91,23 +97,26 @@ const AddPromise = (props) => {
     let sendData = {
       title: data.title,
       penalty: data.penalty,
-      x: place.coord.lat ? place.coord.lat : place.coord.x,
-      y: place.coord.lng ? place.coord.lng : place.coord.y,
+      x: Number(place.coord.lat ? place.coord.lat : place.coord.y),
+      y: Number(place.coord.lng ? place.coord.lng : place.coord.x),
       date,
       friendList,
     };
 
     const answer = await promiseAPI.addList(sendData);
     if (answer.result) {
-      alert(answer.msg);
-      props.setToggle(false);
-      reset();
-      dispatch(resetState());
+      const selected = await sweetalert.successAlert(answer.msg);
+
+      if (selected.isConfirmed || selected.isDismissed) {
+        props.setToggle(false);
+        reset();
+        dispatch(resetState());
+      }
     }
   };
 
   return (
-    <Modal toggle={props.toggle}>
+    <CustomModal toggle={props.toggle}>
       <PageTop>
         <div>
           <div className="icon" onClick={goBack}>
@@ -210,14 +219,26 @@ const AddPromise = (props) => {
       </Section>
 
       <FindFriend toggle={toggle} setToggle={setToggle} friendList={getValues("friendList")} setValue={setValue} />
-    </Modal>
+    </CustomModal>
   );
 };
 
-const Section = styled.form`
+const CustomModal = styled(Modal)`
   display: flex;
   flex-flow: column;
-  height: 100%;
+`;
+
+const Section = styled.form`
+  flex: 1;
+  overflow: scroll;
+
+  display: flex;
+  flex-flow: column;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   padding: 0 ${(props) => props.theme.size.m};
   & > *:not(:last-child) {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Btn, Modal, OpacityModal, PageTop } from "components/common";
 import { LoginPage, SignUpPage, Line } from ".";
+import { sweetalert } from "utils";
 //아이콘
 import { CloseIcon, KakaoIcon } from "assets/icons";
 
@@ -30,7 +31,7 @@ const Choice = (props) => {
           <h1>CLIPs</h1>
         </Main>
         <ButtonBox>
-          <OneButton>
+          <OneButton onClick={()=> {sweetalert.avatarAlert()}}>
             <KakaoIcon />
             <span>카카오로 빠르게 시작하기</span>
           </OneButton>

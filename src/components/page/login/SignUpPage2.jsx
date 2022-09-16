@@ -7,6 +7,7 @@ import { CameraIcon, LeftArrowIcon } from "assets/icons";
 import { loginAPI } from "apis";
 import defaultImg from "assets/img/UserDefaultImg.png";
 import { useNavigate } from "react-router-dom";
+import { sweetalert } from "utils";
 
 const SignUpPage = (props) => {
   const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
@@ -31,13 +32,17 @@ const SignUpPage = (props) => {
   // 중복 체크 핸들러
   const dupCheckHandler = async (data) => {
     const answer = await loginAPI.dupCheck(data);
-    alert(answer.msg);
+    if(answer.result) {
+      sweetalert.successAlert(answer.msg)
+    } else {
+      sweetalert.failAlert(answer.msg)
+    }
   };
 
   //회원가입 함수
   const onSubmit = async (data) => {
     const answer = await loginAPI.signup(data);
-    alert(answer.msg);
+    sweetalert.successTimerAlert(answer.msg)
     if (answer.result) {
       const loginData = { email: data.email, password: data.password };
       const loginAnswer = await loginAPI.login(loginData);
@@ -91,7 +96,7 @@ const SignUpPage = (props) => {
           <div>
             <img src={attachment ? attachment : defaultImg} alt="업로드할 이미지" />
             {/* <ImgBtn htmlFor="file"> */}
-            <ImgBtn onClick={() => alert("구현중이 기능입니다.")}>
+            <ImgBtn onClick={() => sweetalert.avatarAlert()}>
               <CameraIcon></CameraIcon>
             </ImgBtn>
           </div>

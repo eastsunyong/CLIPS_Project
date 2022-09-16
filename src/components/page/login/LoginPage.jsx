@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 import { Btn, InputDiv, PageTop } from "components/common";
 // import { FindId, FindPassword } from "components/page/login";
+import { sweetalert } from "utils";
 
 //아이콘
 import { CloseIcon } from "assets/icons";
@@ -21,9 +22,12 @@ const LoginPage = (props) => {
   //로그인 함수
   const onSubmit = async (data) => {
     const answer = await loginAPI.login(data);
-    const msg = answer.msg;
-    alert(msg);
-    if (answer.result) window.location.reload();
+    if (answer.result) {
+      sweetalert.successTimerAlert(answer.msg)
+      window.location.reload();
+    } else {
+      sweetalert.failAlert(answer.msg)
+    }
   };
 
   // 모달 열릴때 input 초기화

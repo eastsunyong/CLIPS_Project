@@ -21,15 +21,14 @@ const FindFriend = (props) => {
 
   const submitHandler = async (data) => {
     if (props.friendList && props.friendList.includes(data.nickname)) {
-      const messge = "이미 등록되어있는 친구입니다."
-      sweetalert.warningAlert(messge)
+      const messge = "이미 등록되어있는 친구입니다.";
+      sweetalert.warningAlert(messge);
       return;
     }
     const answer = await promiseAPI.findFriend(data);
-    console.log(answer)
     answer.result ? setList([answer.friend]) : setList([]);
     if (!answer.result) {
-      sweetalert.failAlert(answer.msg)
+      sweetalert.failAlert(answer.msg);
     }
   };
 

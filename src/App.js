@@ -3,6 +3,7 @@ import React from "react";
 import { Layout, Main, Footer } from "components/mobileLayout";
 import Router from "shared/Router";
 
+
 function App() {
   return (
     <Layout>

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { LOGIN, SIGNUP, home } from "./modules";
+import { LOGIN, SIGNUP, promise } from "./modules";
 
 const store = configureStore({
-  reducer: { LOGIN, SIGNUP, home },
+  reducer: { LOGIN, SIGNUP, promise },
   devTools: false,
 });
 

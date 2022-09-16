@@ -1,11 +1,27 @@
 import React, { memo } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { Btn, Modal, PageTop, TextBox } from "components/common";
 import { LeftArrowIcon } from "assets/icons";
 import MiddleMap from "./MiddleMap";
+import { setPlace } from "store/modules/promiseSlice";
 
 const ViewMiddleModal = (props) => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+
+  // 전역에 address 등록
+  const savePlace = () => {
+    const place = {
+      name: props.locationList.middleLocation.address,
+      address: props.locationList.middleLocation.address,
+      coord: props.locationList.middleLocation.coord,
+    };
+    dispatch(setPlace(place));
+    nav("/promised", { state: { setAddress: true } });
+  };
   return (
     <Section toggle={props.toggle}>
       <Top>
@@ -25,7 +41,9 @@ const ViewMiddleModal = (props) => {
         <TextBox>
           <div className="title">{props.locationList?.middleLocation.address}</div>
         </TextBox>
-        <Btn outLine={true}>여기로 약속 잡기</Btn>
+        <Btn outLine={true} onClick={savePlace}>
+          여기로 약속 잡기
+        </Btn>
       </Bottom>
       <MiddleMap locationList={props.locationList} />
     </Section>

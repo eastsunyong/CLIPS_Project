@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { IconBtn, TextBox, MoveTopModal, Btn, RoundBtn } from "components/common";
 import { GeoIcon, PinIcon, BookMarkIcon, LeftArrowIcon } from "assets/icons";
-import { toggleViewMiddle, toggleViewPlace } from "store/modules/homeSlice";
+import { toggleViewMiddle, toggleViewPlace } from "store/modules/promiseSlice";
 import { setCenter } from "garbage/mapSlice";
 import { axios } from "utils";
 

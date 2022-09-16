@@ -16,7 +16,8 @@ const InputDiv = styled.div`
     align-items: center;
   }
 
-  input {
+  input,
+  textarea {
     cursor: pointer;
     outline: none;
     border: none;
@@ -26,6 +27,7 @@ const InputDiv = styled.div`
 
     font-size: ${(props) => props.theme.size.s};
     font-weight: bold;
+    resize: none;
   }
 
   .icon {

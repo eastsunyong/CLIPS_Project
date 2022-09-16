@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { localAPI } from "apis";
-import { toggleViewTitle } from "store/modules/homeSlice";
+import { toggleViewTitle } from "store/modules/promiseSlice";
 
 const { kakao } = window;
 

@@ -1,177 +1,136 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { MapMarker, StaticMap } from "react-kakao-maps-sdk";
 
-//아이콘
-import { AiOutlineLeft } from "react-icons/ai";
-
-import { axios } from "utils";
-import { Modal } from "components/common";
-import { DetailPromiseEdit } from "components/page/promise";
+import { PageTop, TextBox } from "components/common";
+import { LeftArrowIcon, LocationIcon } from "assets/icons";
+import { promiseAPI } from "apis";
 
 const DetailPromise = () => {
-  const navigate = useNavigate();
-
   const { promiseId } = useParams();
-  console.log(promiseId);
+  const nav = useNavigate();
 
-  //모달창 상태값
-  const [toggle, setToggle] = useState(false);
+  const [item, setItem] = useState();
 
-  //상세 약속 데이터 저장
-  const [detailList, setDetailList] = useState({});
+  const getItem = async (promiseId) => {
+    const answer = await promiseAPI.getPromise(promiseId);
+    if (answer) {
+      setItem(answer.promise);
+    }
+  };
 
   useEffect(() => {
-    const DetailGetData = async () => {
-      try {
-        const axiosData = await axios.default.get(process.env.REACT_APP_SURVER + `/api/promise/${promiseId}`);
-        const result = axiosData.data;
-        console.log(result);
-        setDetailList(result);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    DetailGetData();
+    getItem(promiseId);
   }, []);
 
+  console.log(item);
+
   return (
-    <All>
-      <Container>
-        <Header>
-          <div>
-            <p>
-              <AiOutlineLeft
-                onClick={() => {
-                  navigate(`/promised`);
-                }}
-              />
-            </p>
-            <h1>약속 상세</h1>
-          </div>
-          <h2
+    <>
+      <CustomPageTop>
+        <div>
+          <div
+            className="icon"
             onClick={() => {
-              setToggle(!toggle);
+              nav("/promised");
             }}
           >
-            편집
-          </h2>
-        </Header>
-
-        <InputArea>
-          <h1>철수나 누구나 명희나</h1>
-          <PromiseDate>
-            <p>약속 날짜</p>
-            <h3>2022. 09. 13.오전 8:12</h3>
-          </PromiseDate>
-          <div>
-            <p>멤버</p>
-            <PromiseMember>윤선용</PromiseMember>
+            <LeftArrowIcon />
           </div>
-          <div>
-            <p>약속장소</p>
-            <h3>약속장소 뽑는곳임</h3>
-            아마도 지도 놓을곳
-          </div>
-        </InputArea>
+          <div className="title">약속 상세</div>
+        </div>
+        <div className="title">편집</div>
+      </CustomPageTop>
+      <Section>
+        <div className="name">{item?.title}</div>
 
-        <Modal toggle={toggle}>
-          <DetailPromiseEdit setToggle={setToggle} />
-        </Modal>
-      </Container>
-    </All>
+        <CustomTb>
+          <div className="title">약속날짜</div>
+          <div>{item?.date}</div>
+        </CustomTb>
+
+        <CustomTb>
+          <div className="title">멤버</div>
+          {item?.countFriend > 0 ? (
+            item?.friendList.map((friend) => {
+              return <FriendDiv>{friend.name}</FriendDiv>;
+            })
+          ) : (
+            <div>참여 멤버가 없습니다.</div>
+          )}
+        </CustomTb>
+
+        <CustomTb>
+          <div className="title">약속장소</div>
+          <div className="icon">
+            <span>
+              <LocationIcon />
+            </span>
+            <span>
+              {item?.x} + {item?.y}
+            </span>
+          </div>
+        </CustomTb>
+        <StaticMap
+          center={{
+            lat: 33.450701,
+            lng: 126.570667,
+          }}
+          style={{
+            width: "100%",
+            height: "16rem",
+          }}
+          marker={{
+            lat: 33.450701,
+            lng: 126.570667,
+          }}
+          level={3}
+        ></StaticMap>
+      </Section>
+    </>
   );
 };
 
-const All = styled.div`
-  position: relative;
-  flex-flow: column;
-  min-width: 100%;
-  min-height: 100%;
-  padding: 0 2rem 2rem 2rem;
-  flex-direction: column;
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 5rem;
-  font-weight: 700;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 36px;
-
-  div {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    h2 {
-      font-size: 20px;
-      line-height: 24px;
-      font-weight: 700;
-      color: black;
-    }
-    p {
-      font-size: 20px;
-      cursor: pointer;
-      margin-right: 24px;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-  }
-
-  h2 {
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 700;
-    color: ${(props) => props.theme.themeColor};
-    cursor: pointer;
-  }
-`;
-
-const Container = styled.div`
-  flex-direction: column;
-  justify-content: center;
-  display: flex;
-  margin-top: 10px;
-
-  h1 {
-    font-family: "SUIT";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
-  }
-`;
-
-const InputArea = styled.div`
-  p {
-    margin-top: 24px;
-    margin-bottom: 8px;
-    font-family: "SUIT";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 17px;
-  }
-`;
-
-const PromiseDate = styled.div`
-  margin-top: 32px;
-`;
-
-const PromiseMember = styled.div`
-  width: 48px;
-  height: 23px;
-  border: 1px solid red;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 export default DetailPromise;
+
+const Section = styled.section`
+  padding: ${(props) => props.theme.size.m};
+  & > * {
+    margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
+  }
+  .name {
+    font-size: ${(props) => props.theme.size.xl};
+    font-weight: bold;
+  }
+`;
+
+const CustomPageTop = styled(PageTop)`
+  & > :last-child {
+    cursor: pointer;
+    color: ${(props) => props.theme.color.brand};
+    font-size: ${(props) => props.theme.size.s};
+  }
+`;
+
+const CustomTb = styled(TextBox)`
+  font-size: ${(props) => props.theme.size.m};
+
+  .title {
+    font-size: ${(props) => props.theme.size.s};
+  }
+  .icon {
+    fill: ${(props) => props.theme.color.disable};
+    & > :first-child {
+      margin-right: calc(${(props) => props.theme.size.m} / 2);
+    }
+  }
+`;
+
+const FriendDiv = styled.span`
+  padding: calc(${(props) => props.theme.size.xs} / 3) calc(${(props) => props.theme.size.m} / 2);
+
+  border: 0.1rem solid ${(props) => props.theme.color.disable};
+  border-radius: calc(${(props) => props.theme.size.xl} * 3);
+  font-size: ${(props) => props.theme.size.xs};
+`;

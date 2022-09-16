@@ -6,7 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 
 import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
 import { localAPI } from "apis";
-import { setAddress } from "store/modules/homeSlice";
+import { setAddress } from "store/modules/promiseSlice";
 
 const LocaionSearchModal = (props) => {
   const dispatch = useDispatch();

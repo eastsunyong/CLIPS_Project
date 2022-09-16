@@ -1,10 +1,10 @@
-import { kakaoAxios } from "utils/axios";
+import { axios } from "utils";
 
 // 입력한 주소가 존재하는 곳인지 확인
 export const searchAddress = async (address) => {
   let answer = { result: null };
   try {
-    const res = await kakaoAxios.get(`local/search/address.json?query=${address}`);
+    const res = await axios.kakaoAxios.get(`local/search/address.json?query=${address}`);
     answer.docs = res.data.documents;
     answer.result = true;
   } catch (err) {
@@ -17,7 +17,7 @@ export const searchAddress = async (address) => {
 export const addressTransfer = async (x, y) => {
   let answer = { result: null };
   try {
-    const res = await kakaoAxios.get(`local/geo/coord2address.json?x=${x}&y=${y}`);
+    const res = await axios.kakaoAxios.get(`local/geo/coord2address.json?x=${x}&y=${y}`);
     answer.docs = res.data.documents;
     answer.result = true;
   } catch (err) {
@@ -30,7 +30,7 @@ export const addressTransfer = async (x, y) => {
 export const coordTransfer = async (address) => {
   let answer = { result: null };
   try {
-    const res = await kakaoAxios.get(`local/search/address.json?query=${address}`);
+    const res = await axios.kakaoAxios.get(`local/search/address.json?query=${address}`);
 
     const doc = res.data.documents[0];
     const addressInfo = doc.address ? doc.address : doc.road_address;

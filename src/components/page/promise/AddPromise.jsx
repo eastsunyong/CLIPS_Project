@@ -92,18 +92,21 @@ const AddPromise = (props) => {
     let sendData = {
       title: data.title,
       penalty: data.penalty,
-      x: place.coord.lat ? place.coord.lat : place.coord.x,
-      y: place.coord.lng ? place.coord.lng : place.coord.y,
+      x: Number(place.coord.lat ? place.coord.lat : place.coord.x),
+      y: Number(place.coord.lng ? place.coord.lng : place.coord.y),
       date,
       friendList,
     };
 
     const answer = await promiseAPI.addList(sendData);
     if (answer.result) {
-      sweetalert.successAlert(answer.msg);
-      props.setToggle(false);
-      reset();
-      dispatch(resetState());
+      const selected = await sweetalert.successAlert(answer.msg);
+
+      if (selected.isConfirmed || selected.isDismissed) {
+        props.setToggle(false);
+        reset();
+        dispatch(resetState());
+      }
     }
   };
 

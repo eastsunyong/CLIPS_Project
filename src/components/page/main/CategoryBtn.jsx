@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import { RoundBtn } from "components/common";
 import styled from "styled-components";
 
+import { sweetalert } from "utils";
+
 const CategoryBtn = (props) => {
   const [selected, setSelected] = useState(false);
 
   const clickHandler = () => {
     if (props.category === "CLIPs Pick") {
-      alert("구현중인 기능입니다!");
+      sweetalert.avatarAlert()
       return;
     }
     if (!props.selectedCategory.find((e) => e === props.category)) {

@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 import { Btn, InputDiv, PageTop } from "components/common";
 // import { FindId, FindPassword } from "components/page/login";
+import { sweetalert } from "utils";
+import { isLogin } from "store/modules/loginSlice";
 
 //아이콘
 import { CloseIcon } from "assets/icons";
 import { loginAPI } from "apis";
-import { useEffect } from "react";
 
 const LoginPage = (props) => {
   const { register, handleSubmit, reset } = useForm({ mode: "onChange" });
+  const dispatch = useDispatch();
+
   //모달창 상태값
   // const [toggle, setToggle] = useState(false);
 
@@ -21,9 +25,12 @@ const LoginPage = (props) => {
   //로그인 함수
   const onSubmit = async (data) => {
     const answer = await loginAPI.login(data);
-    const msg = answer.msg;
-    alert(msg);
-    if (answer.result) window.location.reload();
+    if (answer.result) {
+      sweetalert.successTimerAlert(answer.msg);
+      dispatch(isLogin(true));
+    } else {
+      sweetalert.failAlert(answer.msg);
+    }
   };
 
   // 모달 열릴때 input 초기화
@@ -90,7 +97,7 @@ const LoginPage = (props) => {
         <Box>
           <p
             onClick={() => {
-              alert("구현중인 기능입니다");
+              sweetalert.avatarAlert();
               // setGofind(true);
               // setToggle(true);
             }}
@@ -100,7 +107,7 @@ const LoginPage = (props) => {
           <p>|</p>
           <p
             onClick={() => {
-              alert("구현중인 기능입니다");
+              sweetalert.avatarAlert();
               // setGofind(false);
               // setToggle(true);
             }}

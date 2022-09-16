@@ -33,7 +33,7 @@ export const setPlaceList = createAsyncThunk("RECOMMENDLIST", async (payload, ap
 });
 
 const initialState = {
-  place: null,
+  address: null,
 };
 
 export const homeSlice = createSlice({
@@ -41,8 +41,10 @@ export const homeSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    setPlace: (state, action) => {
-      state.place = action.payload;
+    setAddress: (state, action) => {
+      state.address = action.payload;
+      state.viewPlace = false;
+      state.viewTitle = false;
     },
   },
   extraReducers: {
@@ -55,5 +57,5 @@ export const homeSlice = createSlice({
   },
 });
 
-export const { resetState, setPlace } = homeSlice.actions;
+export const { resetState, setAddress } = homeSlice.actions;
 export default homeSlice.reducer;

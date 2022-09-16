@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Btn, Modal, OpacityModal, PageTop } from "components/common";
 import { LoginPage, SignUpPage, Line } from ".";
+import { sweetalert } from "utils";
 //아이콘
 import { CloseIcon, KakaoIcon } from "assets/icons";
 
@@ -30,7 +31,11 @@ const Choice = (props) => {
           <h1>CLIPs</h1>
         </Main>
         <ButtonBox>
-          <OneButton>
+          <OneButton
+            onClick={() => {
+              sweetalert.avatarAlert();
+            }}
+          >
             <KakaoIcon />
             <span>카카오로 빠르게 시작하기</span>
           </OneButton>
@@ -56,7 +61,9 @@ const Choice = (props) => {
           </Box>
         </ButtonBox>
       </Container>
-      <Modal toggle={toggle}>{gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}</Modal>
+      <CustomModal toggle={toggle}>
+        {gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}
+      </CustomModal>
     </OpacityModal>
   );
 };
@@ -125,5 +132,7 @@ const OneButton = styled(Btn)`
     margin-right: ${(props) => props.theme.size.xl};
   }
 `;
+
+const CustomModal = styled(Modal)``;
 
 export default Choice;

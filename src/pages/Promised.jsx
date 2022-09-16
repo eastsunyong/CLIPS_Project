@@ -10,9 +10,11 @@ const Promised = () => {
   const place = useSelector((state) => state.promise.place);
 
   useEffect(() => {
+    if (!place) {
+      location.state = null;
+    }
     if (location.state && place) {
       setToggle(location.state.setAddress);
-      location.state = null;
     }
   }, []);
 

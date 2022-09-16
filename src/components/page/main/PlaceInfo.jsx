@@ -1,22 +1,40 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Btn, TextBox, XDragList } from "components/common";
 import { LocationIcon, PhoneIcon, StarIcon } from "assets/icons";
 import { axios } from "utils";
+import { setPlace } from "store/modules/promiseSlice";
 import imgLoading from "assets/img/imgLoading.png";
+import imgEmpty from "assets/img/imgNull.png";
 
 const PlaceInfo = (props) => {
-  const [imgUrl, setImgUrl] = useState([]);
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+  const [crawlData, setCrawlData] = useState(null);
 
   useEffect(() => {
-    setImgUrl([]);
+    setCrawlData(null);
     if (props.placeInfo) {
-      axios.default.post("/main/crawl", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
-        setImgUrl(res.data.data);
+      axios.default.post("/main/crawlAll", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
+        setCrawlData(res.data.data);
       });
     }
   }, [props.placeInfo]);
+
+  // 전역에 address 등록
+  const savePlace = () => {
+    const place = {
+      name: props.placeInfo.name,
+      address: props.placeInfo.road_address ? props.placeInfo.road_address : props.placeInfo.address,
+      coord: props.placeInfo.coord,
+    };
+    dispatch(setPlace(place));
+    nav("/promised", { state: { setAddress: true } });
+  };
+
   return (
     <Section>
       <Title
@@ -29,7 +47,7 @@ const PlaceInfo = (props) => {
       >
         <div>
           <div className="title">{props.placeInfo?.name}</div>
-          <div>{props.placeInfo?.category}</div>
+          <div>{props.placeInfo?.detailCategory}</div>
         </div>
         <div className="icon">
           <StarIcon />
@@ -37,10 +55,14 @@ const PlaceInfo = (props) => {
       </Title>
       <ImgArea>
         <XDragList>
-          {imgUrl.length !== 0 ? (
-            imgUrl.map((url) => {
-              return <img key={url} src={url} />;
-            })
+          {crawlData && crawlData.crawlingUrllist ? (
+            crawlData.crawlingUrllist.length > 0 ? (
+              crawlData.crawlingUrllist.map((url) => {
+                return <img key={url} src={url} />;
+              })
+            ) : (
+              <img src={imgEmpty} />
+            )
           ) : (
             <img src={imgLoading} />
           )}
@@ -63,10 +85,12 @@ const PlaceInfo = (props) => {
           <span className="icon">
             <LocationIcon />
           </span>
-          <span>영업시간</span>
+          <span>{crawlData?.rawArrDateUrl ? crawlData?.rawArrDateUrl : "영업시간을 확인할 수 없습니다!"}</span>
         </div>
       </Info>
-      <Btn outLine={true}>여기로 약속잡기</Btn>
+      <Btn outLine={true} onClick={savePlace}>
+        여기로 약속잡기
+      </Btn>
     </Section>
   );
 };

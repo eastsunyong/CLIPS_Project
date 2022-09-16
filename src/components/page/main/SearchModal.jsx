@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
 import { LeftArrowIcon } from "assets/icons";
 import { localAPI } from "apis";
+import { sweetalert } from "utils";
 
 const SearchModal = (props) => {
   const { handleSubmit, register, reset } = useForm();
@@ -36,6 +37,9 @@ const SearchModal = (props) => {
   // 검색
   const getAddressList = async (data) => {
     const answer = await localAPI.searchAddress(data.search);
+    if(!answer.docs.length) {
+      sweetalert.areaWithout()
+    }
     if (answer.result) setAddressList(answer.docs);
   };
 

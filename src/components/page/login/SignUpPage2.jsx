@@ -1,221 +1,259 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
-//아이콘
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { Btn, InputDiv, PageTop } from "components/common";
+import { CameraIcon, LeftArrowIcon } from "assets/icons";
+import { loginAPI } from "apis";
+import defaultImg from "assets/img/UserDefaultImg.png";
+import { sweetalert } from "utils";
+import { isLogin } from "store/modules/loginSlice";
 
-import { Btn, Modal } from "components/common";
-import { SignUpPage3 } from "components/page/login";
+const SignUpPage = (props) => {
+  const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
+  //이미지 미리보기 저장하는  곳
+  const [attachment, setAttachment] = useState();
+  const dispatch = useDispatch();
 
-const SignUpPage2 = (props) => {
-  const [toggle, setToggle] = useState(false);
-
-  const privacySelect = [
-    { id: 0, title: "이용약관 동의 (필수)" },
-    { id: 1, title: "개인정보의 제 3자 제공 동의 (필수)" },
-  ];
-
-  // 체크된 아이템을 담을 배열
-  const [checkItems, setCheckItems] = useState([]);
-
-  // 체크박스 단일 선택
-  const handleSingleCheck = (checked, id) => {
-    if (checked) {
-      // 단일 선택 시 체크된 아이템을 배열에 추가
-      setCheckItems((prev) => [...prev, id]);
+  // 유효성 체크 함수
+  const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+  const onCheck = (e, type) => {
+    e.preventDefault();
+    const data = getValues(type);
+    if (data === "" || (type === "email" ? regPass.test(data) === false : data.length > 8)) {
+      setError(type, { message: "다시 확인해주세요" }, { shouldFocus: true });
     } else {
-      // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
-      setCheckItems(checkItems.filter((el) => el !== id));
+      let sendData = {};
+      sendData[type] = data;
+      dupCheckHandler(sendData);
     }
   };
 
-  // 체크박스 전체 선택
-  const handleAllCheck = (checked) => {
-    if (checked) {
-      // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-      const idArray = [];
-      privacySelect.forEach((el) => idArray.push(el.id));
-      setCheckItems(idArray);
+  // 중복 체크 핸들러
+  const dupCheckHandler = async (data) => {
+    const answer = await loginAPI.dupCheck(data);
+    if (answer.result) {
+      sweetalert.successAlert(answer.msg);
     } else {
-      // 전체 선택 해제 시 checkItems 를 빈 배열로 상태 업데이트
-      setCheckItems([]);
+      sweetalert.failAlert(answer.msg);
     }
   };
+
+  //회원가입 함수
+  const onSubmit = async (data) => {
+    const answer = await loginAPI.signup(data);
+    sweetalert.successTimerAlert(answer.msg);
+    if (answer.result) {
+      const loginData = { email: data.email, password: data.password };
+      const loginAnswer = await loginAPI.login(loginData);
+      if (loginAnswer) dispatch(isLogin(true));
+    }
+    // 이미지 업로드 기능 추가시 활성화
+    // const formData = new FormData();
+    // Object.keys(data).forEach((key) => {
+    //   formData.append(key, data[key]);
+    // });
+  };
+
+  //사진 미리보기   원리 사진을 미리 사이트에서
+  const previewImg = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file[0]);
+    reader.onloadend = (finishiedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishiedEvent;
+      setAttachment(result);
+    };
+  };
+
+  // 파일 업로드 감시
+  const selectImg = watch("image");
+  useEffect(() => {
+    if (selectImg?.length) {
+      previewImg(selectImg);
+    }
+  }, [selectImg]);
 
   return (
-    <All>
-      <Header>
-        <p>
-          <AiOutlineLeft
+    <>
+      <PageTop>
+        <div>
+          <div
+            className="icon"
             onClick={() => {
               props.setToggle(false);
             }}
-          />
-        </p>
-        <h2>회원가입</h2>
-      </Header>
-      <Textlocal>
-        <h1>서비스 이용약관에 동의해주세요</h1>
-      </Textlocal>
+          >
+            <LeftArrowIcon />
+          </div>
+          <div className="title">회원가입</div>
+        </div>
+      </PageTop>
 
-      <SelectBox>
-        <AllSelcet>
-          <input
-            type="checkbox"
-            onChange={(e) => handleAllCheck(e.target.checked)}
-            // 데이터 개수와 체크된 아이템의 개수가 다를 경우 선택 해제 (하나라도 해제 시 선택 해제)
-            checked={checkItems.length === privacySelect.length ? true : false}
-          />
-          <p>전체 동의합니다.</p>
-        </AllSelcet>
-        <OtherSelect>
-          {privacySelect?.map((data, key) => (
-            <RightGo key={key}>
-              <div>
+      <Container>
+        <UserImage className="fcc">
+          <div>
+            <img src={attachment ? attachment : defaultImg} alt="업로드할 이미지" />
+            {/* <ImgBtn htmlFor="file"> */}
+            <ImgBtn onClick={() => sweetalert.avatarAlert()}>
+              <CameraIcon></CameraIcon>
+            </ImgBtn>
+          </div>
+        </UserImage>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="inner">
+            <p>아이디</p>
+            <div className="withBtn">
+              <InputDiv>
                 <input
-                  type="checkbox"
-                  onChange={(e) => handleSingleCheck(e.target.checked, data.id)}
-                  // 체크된 아이템 배열에 해당 아이템이 있을 경우 선택 활성화, 아닐 시 해제
-                  checked={checkItems.includes(data.id) ? "unable" : ""}
+                  {...register("email", {
+                    required: "이메일은 필수 입력입니다",
+                    maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                    pattern: {
+                      value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+                      message: "이메일이 형식에 맞지 않습니다.",
+                    },
+                  })}
+                  placeholder="이메일을 입력해주세요"
                 />
-                <p>{data.title}</p>
-              </div>
-              <div>
-                <h4>
-                  <AiOutlineRight />
-                </h4>
-              </div>
-            </RightGo>
-          ))}
-        </OtherSelect>
-      </SelectBox>
-      {checkItems.length === privacySelect.length ? (
-        <Onbutton
-          onClick={() => {
-            setToggle(true);
-          }}
-        >
-          다음
-        </Onbutton>
-      ) : (
-        <NonButton>다음</NonButton>
-      )}
+              </InputDiv>
+              <Btn outLine={true} onClick={(e) => onCheck(e, "email")}>
+                중복확인
+              </Btn>
+            </div>
+          </div>
 
-      <Modal toggle={toggle}>
-        <SignUpPage3 setToggle={setToggle} />
-      </Modal>
-    </All>
+          <div className="inner">
+            <p>닉네임</p>
+            <div className="withBtn">
+              <InputDiv>
+                <input
+                  {...register("nickname", { required: "닉네임은 필수 입력입니다", maxLength: { value: 8, message: "8자 이하로 정해주세요" } })}
+                  placeholder="닉네임을 입력해주세요"
+                  maxLength="9"
+                />
+              </InputDiv>
+              <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")}>
+                중복확인
+              </Btn>
+            </div>
+          </div>
+
+          <div className="inner">
+            <p>비밀번호</p>
+            <InputDiv>
+              <input
+                {...register("password", {
+                  required: "비밀번호는 필수 입력입니다",
+                  minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요." },
+                  maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요." },
+                  pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: "특수문자와 숫자를 포함해주세요" },
+                })}
+                placeholder="비밀번호를 입력해주세요"
+                type="password"
+              />
+            </InputDiv>
+          </div>
+
+          <div className="inner">
+            <p>비밀번호 확인</p>
+            <InputDiv>
+              <input
+                {...register("confirm", {
+                  required: "비밀번호는 확인은 필수입니다",
+                  minLength: { value: 8, message: "8자리 이상 비밀번호를 사용하세요." },
+                  maxLength: { value: 16, message: "16자리 이하 비밀번호를 사용하세요." },
+                  pattern: { value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: "특수문자와 숫자를 포함해주세요" },
+                })}
+                placeholder="비밀번호를 한 번 더 입력해주세요"
+                type="password"
+              />
+            </InputDiv>
+          </div>
+
+          <div className="inner">
+            <p>이름</p>
+            <InputDiv>
+              <input {...register("name", { required: "이름은 필수 입력입니다" })} placeholder="이름을 입력해주세요" maxLength="9" />
+            </InputDiv>
+          </div>
+
+          <div className="inner">
+            <p>휴대폰 번호</p>
+            <InputDiv>
+              <input
+                {...register("phone", {
+                  required: "전화번호는 필수 입력입니다",
+                  minLength: { value: 10, message: "휴대번호는 최소 10자리입니다" },
+                  maxLength: { value: 11, message: "휴대번호는 최대 11자리입니다" },
+                  pattern: { value: /^01[0-1, 7][0-9]{7,8}$/, message: "휴대전화가 아닙니다" },
+                })}
+                placeholder="01012345678"
+              />
+            </InputDiv>
+          </div>
+          {/* <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden /> */}
+
+          <Btn>회원가입</Btn>
+        </form>
+      </Container>
+    </>
   );
 };
 
-const All = styled.div`
-  position: relative;
-  flex-flow: column;
-  min-width: 100%;
-  min-height: 100%;
-  padding: 0 2rem 2rem 2rem;
-  flex-direction: column;
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 5rem;
-  font-weight: 700;
-  align-items: center;
-  margin-bottom: 32px;
-
-  p {
-    font-size: 20px;
-    cursor: pointer;
-    margin-right: 24px;
-    font-weight: 500;
-    margin-top: 4px;
+const Container = styled.div`
+  padding: ${(props) => props.theme.size.m};
+  & > form > * {
+    margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
   }
-
-  h2 {
-    font-size: 20px;
-    margin-top: 0px;
-    line-height: 24.96px;
-    font-weight: 700;
-  }
-`;
-
-const Textlocal = styled.div`
-  h1 {
-    font-family: "SUIT";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 160%;
-    margin-bottom: 31px;
-  }
-`;
-
-const SelectBox = styled.div`
-  height: 138px;
-  width: 100%;
-  border-radius: 0px;
-  padding: 0px 0px 0px 16px;
-
-  p {
-    margin-left: 15px;
-  }
-`;
-
-const AllSelcet = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 50px;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-
-  font-family: "Noto Sans KR";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 150%;
-`;
-
-const OtherSelect = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  div {
+  .withBtn {
     display: flex;
-    align-items: center;
-    height: 50px;
+    button {
+      width: 30%;
+      margin-left: 0.4rem;
+    }
   }
-
-  p {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: black;
+  .inner p {
+    font-size: ${(props) => props.theme.size.s};
+    font-weight: bold;
+    margin-bottom: calc(${(props) => props.theme.size.m} / 2);
   }
 `;
-const RightGo = styled.div`
+
+const UserImage = styled.div`
+  margin-bottom: 2rem;
+  & > div {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
+const ImgBtn = styled.label`
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 
-  h4 {
-    cursor: pointer;
-    color: ${(props) => props.theme.themeColor};
-    font-size: 14px;
-    font-weight: 700;
-  }
-`;
-const Onbutton = styled(Btn)`
-  margin-top: 200px;
-`;
+  width: calc(${(props) => props.theme.size.l} * 2);
+  height: calc(${(props) => props.theme.size.l} * 2);
+  padding: ${(props) => props.theme.size.xs};
 
-const NonButton = styled(Btn)`
-  margin-top: 200px;
-  pointer-events: none;
-  opacity: 0.5;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-export default SignUpPage2;
+export default SignUpPage;

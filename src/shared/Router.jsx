@@ -1,17 +1,17 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Main, Logins, Promised, DetailPromise, MyPage } from "pages";
+import { Main, Login, Promised, DetailPromise, MyPage } from "pages";
+import { useSelector } from "react-redux";
 
 const Router = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  console.log(accessToken);
+  const isLogin = useSelector((state) => state.LOGIN.login);
   return (
     <Routes>
       <Route path="/" element={<Main />} />
-      <Route path="/myPage" element={accessToken ? <MyPage /> : <Logins />} />
-      <Route path="/Promised" element={<Promised />} />
-      <Route path="/Promise/:promiseId" element={<DetailPromise />} />
+      <Route path="/myPage" element={isLogin ? <MyPage /> : <Login />} />
+      <Route path="/Promised" element={isLogin ? <Promised /> : <Login />} />
+      <Route path="/Promise/:promiseId" element={isLogin ? <DetailPromise /> : <Login />} />
     </Routes>
   );
 };

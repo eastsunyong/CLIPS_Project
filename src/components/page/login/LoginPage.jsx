@@ -97,7 +97,7 @@ const LoginPage = (props) => {
         <Box>
           <p
             onClick={() => {
-              alert("구현중인 기능입니다");
+              sweetalert.avatarAlert();
               // setGofind(true);
               // setToggle(true);
             }}
@@ -107,7 +107,7 @@ const LoginPage = (props) => {
           <p>|</p>
           <p
             onClick={() => {
-              alert("구현중인 기능입니다");
+              sweetalert.avatarAlert();
               // setGofind(false);
               // setToggle(true);
             }}

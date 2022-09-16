@@ -6,6 +6,7 @@ import { InputDiv, Modal, PageTop } from "components/common";
 import { LeftArrowIcon, SearchIcon } from "assets/icons";
 import { promiseAPI } from "apis";
 import defaultImg from "assets/img/UserDefaultImg.png";
+import { sweetalert } from "utils";
 
 const FindFriend = (props) => {
   const { register, handleSubmit, reset } = useForm();
@@ -20,12 +21,16 @@ const FindFriend = (props) => {
 
   const submitHandler = async (data) => {
     if (props.friendList && props.friendList.includes(data.nickname)) {
-      alert("이미 등록되어있는 친구입니다.");
+      const messge = "이미 등록되어있는 친구입니다."
+      sweetalert.warningAlert(messge)
       return;
     }
     const answer = await promiseAPI.findFriend(data);
+    console.log(answer)
     answer.result ? setList([answer.friend]) : setList([]);
-    if (!answer.result) alert(answer.msg);
+    if (!answer.result) {
+      sweetalert.failAlert(answer.msg)
+    }
   };
 
   const selectNickname = (nickname) => {

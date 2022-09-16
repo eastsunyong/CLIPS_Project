@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Swer from "sweetalert2"
 
 import moment from "moment";
 
@@ -18,6 +19,7 @@ import { LeftArrowIcon } from "assets/icons";
 import { promiseAPI } from "apis";
 import { FindFriend } from ".";
 import { resetState, setTemporaryStorage } from "store/modules/promiseSlice";
+import { sweetalert } from "utils";
 
 const AddPromise = (props) => {
   const dispatch = useDispatch();
@@ -57,12 +59,37 @@ const AddPromise = (props) => {
   const goBack = () => {
     if (ts || place) {
       const type = ts ? "정보" : "장소";
-      const msg = `입력하신 ${type}가 초기화 됩니다.`;
-      alert(msg);
+      const messge = `입력하신 ${type}가 초기화 됩니다.`;
+      sweetalert.corfirmAlert(messge)
       dispatch(resetState());
     }
     props.setToggle(false);
   };
+
+  // const goBack = () => {
+  //   if (ts || place) {
+  //     const type = ts ? "정보" : "장소";
+  //     const messge = `입력하신 ${type}가 초기화 됩니다.`;
+  //     Swer.fire({
+  //       title: messge,
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: '삭제하겠습니다'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         Swer.fire(
+  //           'Deleted!',
+  //           'Your file has been deleted.',
+  //           'success',
+  //           setToggle(false)
+  //         )
+  //       }
+  //     })
+  //   }
+  // }
+
 
   // 장소 선택 버튼
   const goMap = () => {
@@ -99,7 +126,7 @@ const AddPromise = (props) => {
 
     const answer = await promiseAPI.addList(sendData);
     if (answer.result) {
-      alert(answer.msg);
+      sweetalert.successAlert(answer.msg);
       props.setToggle(false);
       reset();
       dispatch(resetState());

@@ -25,10 +25,10 @@ const PromiseList = (props) => {
     for (let p of answer.list) {
       getDateList.push(p.date);
 
-      // 주소로 변환
-      // const res = await localAPI.addressTransfer(p.x, p.y);
-      // const docInfo = res.docs[0]?.address ? res.docs[0]?.address : res.docs[0]?.road_address;
-      // answer.list.place = docInfo.address_name;
+      const res = await localAPI.addressTransfer(p.y, p.x);
+      if (!res.docs.length) continue;
+      const docInfo = res.docs[0]?.address ? res.docs[0]?.address : res.docs[0]?.road_address;
+      p.place = docInfo.address_name;
     }
 
     setDateList(getDateList);
@@ -64,7 +64,7 @@ const PromiseList = (props) => {
                         <span className="pin">
                           <LocationIcon />
                         </span>
-                        {promise.x} + {promise.y}
+                        {promise.place ? promise.place : "장소를 불러올 수 없습니다."}
                       </span>
                     </div>
                   </div>
@@ -125,6 +125,9 @@ const CustomCard = styled(Card)`
       align-items: center;
       margin-left: ${(props) => props.theme.size.m};
       .pin {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-right: calc(${(props) => props.theme.size.xs} / 2);
         fill: ${(props) => props.theme.color.disable};
       }

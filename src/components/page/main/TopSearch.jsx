@@ -5,7 +5,6 @@ import { InputDiv } from "components/common";
 const TopSearch = styled(InputDiv)`
   cursor: pointer;
   position: relative;
-  z-index: ${(props) => props.theme.level.front.low};
 
   padding: 0 calc(${(props) => props.theme.size.m} / 2);
 

@@ -1,12 +1,12 @@
 import React from "react";
 
-import { User, ReviewList } from "components/page/myPage";
+import { User } from "components/page/myPage";
+import { myPageAPI } from "apis";
 
 const MyPage = () => {
   return (
     <>
       <User />
-      <ReviewList />
     </>
   );
 };

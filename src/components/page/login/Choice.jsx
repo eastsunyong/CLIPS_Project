@@ -61,7 +61,9 @@ const Choice = (props) => {
           </Box>
         </ButtonBox>
       </Container>
-      <Modal toggle={toggle}>{gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}</Modal>
+      <CustomModal toggle={toggle}>
+        {gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}
+      </CustomModal>
     </OpacityModal>
   );
 };
@@ -130,5 +132,7 @@ const OneButton = styled(Btn)`
     margin-right: ${(props) => props.theme.size.xl};
   }
 `;
+
+const CustomModal = styled(Modal)``;
 
 export default Choice;

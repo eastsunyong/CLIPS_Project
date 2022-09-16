@@ -12,9 +12,11 @@ import { isLogin } from "store/modules/loginSlice";
 
 const SignUpPage = (props) => {
   const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [nickCheck, setNickCheck] = useState(false);
+  const dispatch = useDispatch();
   //이미지 미리보기 저장하는  곳
   const [attachment, setAttachment] = useState();
-  const dispatch = useDispatch();
 
   // 유효성 체크 함수
   const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -35,8 +37,10 @@ const SignUpPage = (props) => {
     const answer = await loginAPI.dupCheck(data);
     if (answer.result) {
       sweetalert.successAlert(answer.msg);
+      Object.keys(data)[0] === "email" ? setEmailCheck(true) : setNickCheck(true);
     } else {
       sweetalert.failAlert(answer.msg);
+      Object.keys(data)[0] === "email" ? setEmailCheck(false) : setNickCheck(false);
     }
   };
 
@@ -78,21 +82,20 @@ const SignUpPage = (props) => {
 
   return (
     <>
-      <PageTop>
-        <div>
-          <div
-            className="icon"
-            onClick={() => {
-              props.setToggle(false);
-            }}
-          >
-            <LeftArrowIcon />
-          </div>
-          <div className="title">회원가입</div>
-        </div>
-      </PageTop>
-
       <Container>
+        <PageTop>
+          <div>
+            <div
+              className="icon"
+              onClick={() => {
+                props.setToggle(false);
+              }}
+            >
+              <LeftArrowIcon />
+            </div>
+            <div className="title">회원가입</div>
+          </div>
+        </PageTop>
         <UserImage className="fcc">
           <div>
             <img src={attachment ? attachment : defaultImg} alt="업로드할 이미지" />
@@ -111,6 +114,10 @@ const SignUpPage = (props) => {
                   {...register("email", {
                     required: "이메일은 필수 입력입니다",
                     maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                    onChange: () => {
+                      setEmailCheck(false);
+                    },
+                    validate: () => emailCheck === true,
                     pattern: {
                       value: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
                       message: "이메일이 형식에 맞지 않습니다.",
@@ -119,7 +126,7 @@ const SignUpPage = (props) => {
                   placeholder="이메일을 입력해주세요"
                 />
               </InputDiv>
-              <Btn outLine={true} onClick={(e) => onCheck(e, "email")}>
+              <Btn outLine={true} onClick={(e) => onCheck(e, "email")} disabled={emailCheck}>
                 중복확인
               </Btn>
             </div>
@@ -130,12 +137,19 @@ const SignUpPage = (props) => {
             <div className="withBtn">
               <InputDiv>
                 <input
-                  {...register("nickname", { required: "닉네임은 필수 입력입니다", maxLength: { value: 8, message: "8자 이하로 정해주세요" } })}
+                  {...register("nickname", {
+                    required: "닉네임은 필수 입력입니다",
+                    maxLength: { value: 8, message: "8자 이하로 정해주세요" },
+                    onChange: () => {
+                      setNickCheck(false);
+                    },
+                    validate: () => nickCheck === true,
+                  })}
                   placeholder="닉네임을 입력해주세요"
                   maxLength="9"
                 />
               </InputDiv>
-              <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")}>
+              <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
                 중복확인
               </Btn>
             </div>
@@ -204,7 +218,14 @@ const SignUpPage = (props) => {
 };
 
 const Container = styled.div`
-  padding: ${(props) => props.theme.size.m};
+  height: 100%;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  form {
+    padding: ${(props) => props.theme.size.m};
+  }
   & > form > * {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
   }

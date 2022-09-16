@@ -90,7 +90,7 @@ const Main = styled.div`
   }
 
   h1 {
-    color: #0099ff;
+    color: ${(props) => props.theme.color.brand};
     font-weight: 800;
     font-size: 48px;
     line-height: 60px;

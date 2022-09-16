@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "REACT_APP_SERVER=$REACT_APP_SERVER" >> .env.production
           echo "REACT_APP_KAKAOJSKEY=$REACT_APP_KAKAOJSKEY" >> .env.production
-          echo "REACT_APP_KAKAORESTKEY=$REACT_APP_KAKAORESTKEY" >> .env.production
+          echo "REACT_APP_KAKAORESTKEY=$REACT_APP_KAKAORESTKEY" >> .env.Production
         env:
           REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
           REACT_APP_KAKAOJSKEY: ${{ secrets.REACT_APP_KAKAOJSKEY }}
@@ -44,6 +44,9 @@ jobs:
       - name: Build
         run: yarn build
         env:
+          REACT_APP_SERVER: ${{ secrets.REACT_APP_SERVER }}
+          REACT_APP_KAKAOJSKEY: ${{ secrets.REACT_APP_KAKAOJSKEY }}
+          REACT_APP_KAKAORESTKEY: ${{ secrets.REACT_APP_KAKAORESTKEY }}
           CI: ""
 
       - name: Deploy

@@ -59,10 +59,15 @@ const AddPromise = (props) => {
     if (ts || place) {
       const type = ts ? "정보" : "장소";
       const messge = `입력하신 ${type}가 초기화 됩니다.`;
-      sweetalert.corfirmAlert(messge);
-      dispatch(resetState());
+      sweetalert.corfirmAlert(messge).then((selected) => {
+        if (selected.isConfirmed) {
+          dispatch(resetState());
+          props.setToggle(false);
+        }
+      });
+    } else {
+      props.setToggle(false);
     }
-    props.setToggle(false);
   };
 
   // 장소 선택 버튼

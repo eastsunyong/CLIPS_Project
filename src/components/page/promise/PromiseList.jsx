@@ -21,7 +21,6 @@ const PromiseList = (props) => {
 
   const getPromise = async () => {
     const answer = await promiseAPI.getList();
-
     const getDateList = [];
     for (let p of answer.list) {
       getDateList.push(p.date);

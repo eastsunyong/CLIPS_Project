@@ -1,5 +1,5 @@
-import FindFriend from "./FindFriend";
 import PromiseList from "./PromiseList";
-import DetailPromiseEdit from "./DetailPromiseEdit";
+import AddPromise from "./AddPromise";
+import FindFriend from "./FindFriend";
 
-export {PromiseList, FindFriend, DetailPromiseEdit}
+export { PromiseList, FindFriend, AddPromise };

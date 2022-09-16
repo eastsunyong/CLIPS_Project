@@ -24,6 +24,11 @@ const MainMap = (props) => {
   useEffect(() => {
     props.setPlaceInfo(null);
     if (props.address) {
+      // 마커 초기화
+      if (markers.length !== 0) {
+        setMarkers([]);
+      }
+
       // 주소로 좌표를 검색
       geocoder.addressSearch(props.address, (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
@@ -46,14 +51,12 @@ const MainMap = (props) => {
                         lat: place.y,
                         lng: place.x,
                       },
-                      placeInfo: {
-                        name: place.place_name,
-                        phone: place.phone,
-                        category: place.category_name,
-                        address: place.address_name,
-                        road_address: place.road_address_name,
-                        placeUrl: place.place_url,
-                      },
+                      name: place.place_name,
+                      phone: place.phone,
+                      detailCategory: place.category_name,
+                      address: place.address_name,
+                      road_address: place.road_address_name,
+                      placeUrl: place.place_url,
                     });
                     bounds.extend(new kakao.maps.LatLng(place.y, place.x));
                   });
@@ -137,7 +140,7 @@ const MainMap = (props) => {
                 position={marker.coord}
                 clickable={true}
                 onClick={() => {
-                  markerClickHandler(marker.placeInfo);
+                  markerClickHandler(marker);
                 }}
               />
             );

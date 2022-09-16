@@ -1,7 +1,7 @@
 import Main from "./Main";
-import Logins from "./Login";
+import Login from "./Login";
 import Promised from "./Promised";
-import DetailPromise from "./DetailPromise";
 import MyPage from "./MyPage";
+import DetailPromise from "./DetailPromise";
 
-export { Main, Logins, Promised, DetailPromise, MyPage };
+export { Main, Login, Promised, MyPage, DetailPromise };

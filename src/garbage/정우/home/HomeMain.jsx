@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SearchIcon } from "assets/icons";
 import { Map } from "components/map";
 import { MarkerDetailModal, LocationSearchModal } from ".";
-import { setPlaceList, resetState } from "store/modules/homeSlice";
+import { setPlaceList, resetState } from "store/modules/promiseSlice";
 
 const HomeMain = () => {
   const dispatch = useDispatch();

@@ -27,8 +27,8 @@ const PageTop = styled.div`
     width: calc(${(props) => props.theme.size.xs} * 2);
     height: calc(${(props) => props.theme.size.xs} * 2);
     svg {
-      width: ${(props) => props.theme.size.xl};
-      height: ${(props) => props.theme.size.xl};
+      width: ${(props) => props.theme.size.l};
+      height: ${(props) => props.theme.size.l};
     }
   }
 `;

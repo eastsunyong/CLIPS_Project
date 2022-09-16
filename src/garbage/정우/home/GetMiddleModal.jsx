@@ -11,7 +11,7 @@ import { ModalTop, ModalMain, BackBtn, BottomBtn } from "./common";
 import { LocationSearchModal } from ".";
 import { localAPI } from "apis";
 import { number2kr } from "utils";
-import { setAddress, toggleViewMiddle } from "store/modules/homeSlice";
+import { setAddress, toggleViewMiddle } from "store/modules/promiseSlice";
 
 const GetMiddleModal = () => {
   const dispatch = useDispatch();

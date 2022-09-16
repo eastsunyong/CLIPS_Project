@@ -1,27 +1,24 @@
-import React from "react";
-import styled from "styled-components";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-import { PromiseList, FindFriend } from "components/page/promise";
+import { PromiseList, AddPromise } from "components/page/promise";
 
 const Promised = () => {
-  const [page, setPage] = useState(0);
+  const location = useLocation();
+  const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    if (location.state) {
+      setToggle(location.state.setAddress);
+    }
+  }, []);
 
   return (
-    <Slider page={page}>
-      <PromiseList setPage={setPage} />
-      {/* <FindFriend setPage={setPage} /> */}
-    </Slider>
+    <>
+      <PromiseList setToggle={setToggle} />
+      <AddPromise toggle={toggle} setToggle={setToggle} />
+    </>
   );
 };
-
-const Slider = styled.div`
-  position: relative;
-  top: 0;
-  left: calc(${(props) => props.page * -100}%);
-  transition-duration: 0.8s;
-  display: flex;
-  height: 100%;
-`;
 
 export default Promised;

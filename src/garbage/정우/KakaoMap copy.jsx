@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer } from "react-kakao-maps-sdk";
 
 import { resetState, setCenter } from "garbage/mapSlice";
-import { toggleViewTitle } from "store/modules/homeSlice";
+import { toggleViewTitle } from "store/modules/promiseSlice";
 import _ from "lodash";
 
 const { kakao } = window;

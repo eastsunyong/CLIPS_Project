@@ -6,6 +6,7 @@ import { Btn, InputDiv, Modal, PageTop } from "components/common";
 import { DeleteIcon, LeftArrowIcon } from "assets/icons";
 import { SearchModal, ViewMiddleModal } from ".";
 import { localAPI } from "apis";
+import { sweetalert } from "utils";
 
 const GetMiddleModal = (props) => {
   const { handleSubmit, register, setValue, unregister, reset } = useForm();
@@ -32,7 +33,8 @@ const GetMiddleModal = (props) => {
   // input추가
   const addInputHandler = () => {
     if (inputIdList.length === 12) {
-      alert("최대 12개의 장소");
+      const messge = "최대 12개의 장소입니다"
+      sweetalert.failAlert(messge)
       return;
     }
     setInputIdList([...inputIdList, inputIdList[inputIdList.length - 1] + 1]);

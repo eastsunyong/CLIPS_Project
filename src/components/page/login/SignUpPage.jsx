@@ -43,7 +43,7 @@ const SignUpPage = (props) => {
   };
 
   return (
-    <>
+    <Section>
       <PageTop>
         <div>
           <div className="icon" onClick={() => props.setToggle(false)}>
@@ -52,11 +52,8 @@ const SignUpPage = (props) => {
           <div className="title">회원가입</div>
         </div>
       </PageTop>
-      <Container>
-        <Textlocal>
-          <h1>서비스 이용약관에 동의해주세요</h1>
-        </Textlocal>
-
+      <Article>
+        <Title>서비스 이용약관에 동의해주세요</Title>
         <SelectBox>
           <AllSelcet>
             <input
@@ -89,46 +86,44 @@ const SignUpPage = (props) => {
           </OtherSelect>
         </SelectBox>
         {checkItems.length === privacySelect.length ? (
-          <Onbutton
+          <BottomBtn
             onClick={() => {
               setToggle(true);
             }}
           >
             다음
-          </Onbutton>
+          </BottomBtn>
         ) : (
-          <NonButton>다음</NonButton>
+          <DisableBtn>다음</DisableBtn>
         )}
-      </Container>
+      </Article>
 
       <Modal toggle={toggle}>
         <SignUpPage2 setToggle={setToggle} />
       </Modal>
-    </>
+    </Section>
   );
 };
 
-const Container = styled.div`
+const Section = styled.section`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const Article = styled.article`
   padding: ${(props) => props.theme.size.m};
 `;
 
-const Textlocal = styled.div`
-  h1 {
-    font-family: "SUIT";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 160%;
-    margin-bottom: 31px;
-  }
+const Title = styled.div`
+  font-weight: bold;
+  font-size: ${(props) => props.theme.size.xl};
 `;
 
 const SelectBox = styled.div`
-  height: 138px;
   width: 100%;
-  border-radius: 0px;
-  padding: 0px 0px 0px 16px;
 
+  margin-top: calc(${(props) => props.theme.size.xs} * 2);
   p {
     margin-left: 15px;
   }
@@ -141,8 +136,6 @@ const AllSelcet = styled.div`
   align-items: center;
   border-bottom: 1px solid #ccc;
 
-  font-family: "Noto Sans KR";
-  font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 150%;
@@ -159,7 +152,6 @@ const OtherSelect = styled.div`
   }
 
   p {
-    font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 150%;
@@ -177,13 +169,15 @@ const RightGo = styled.div`
     font-weight: 700;
   }
 `;
-const Onbutton = styled(Btn)`
-  margin-top: 200px;
+
+const BottomBtn = styled(Btn)`
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - (${(props) => props.theme.size.m} * 2));
+  margin-bottom: ${(props) => props.theme.size.m};
 `;
 
-const NonButton = styled(Btn)`
-  margin-top: 200px;
-  pointer-events: none;
+const DisableBtn = styled(BottomBtn)`
   opacity: 0.5;
 `;
 

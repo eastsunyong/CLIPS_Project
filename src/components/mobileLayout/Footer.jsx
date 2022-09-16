@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { MapIcon, MyIcon, CalendarIcon, MsgIcon } from "assets/icons";
+import { sweetalert } from "utils";
 
 const Footer = () => {
   const nav = useNavigate();
@@ -22,6 +23,10 @@ const Footer = () => {
             selected={icon.path === pathname}
             className="fcc"
             onClick={() => {
+              if (icon.path === "/review" || icon.path === "/myPage") {
+                sweetalert.avatarAlert();
+                return;
+              }
               if (pathname !== icon.path) nav(icon.path);
             }}
           >

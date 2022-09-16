@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 import { Btn, InputDiv, PageTop } from "components/common";
 import { CameraIcon, LeftArrowIcon } from "assets/icons";
 import { loginAPI } from "apis";
 import defaultImg from "assets/img/UserDefaultImg.png";
-import { useNavigate } from "react-router-dom";
 import { sweetalert } from "utils";
+import { isLogin } from "store/modules/loginSlice";
 
 const SignUpPage = (props) => {
   const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
   //이미지 미리보기 저장하는  곳
   const [attachment, setAttachment] = useState();
-  const nav = useNavigate();
+  const dispatch = useDispatch();
 
   // 유효성 체크 함수
   const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -32,21 +33,21 @@ const SignUpPage = (props) => {
   // 중복 체크 핸들러
   const dupCheckHandler = async (data) => {
     const answer = await loginAPI.dupCheck(data);
-    if(answer.result) {
-      sweetalert.successAlert(answer.msg)
+    if (answer.result) {
+      sweetalert.successAlert(answer.msg);
     } else {
-      sweetalert.failAlert(answer.msg)
+      sweetalert.failAlert(answer.msg);
     }
   };
 
   //회원가입 함수
   const onSubmit = async (data) => {
     const answer = await loginAPI.signup(data);
-    sweetalert.successTimerAlert(answer.msg)
+    sweetalert.successTimerAlert(answer.msg);
     if (answer.result) {
       const loginData = { email: data.email, password: data.password };
       const loginAnswer = await loginAPI.login(loginData);
-      if (loginAnswer) window.location.reload();
+      if (loginAnswer) dispatch(isLogin(true));
     }
     // 이미지 업로드 기능 추가시 활성화
     // const formData = new FormData();

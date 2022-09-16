@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 import { Btn, InputDiv, PageTop } from "components/common";
 // import { FindId, FindPassword } from "components/page/login";
 import { sweetalert } from "utils";
+import { isLogin } from "store/modules/loginSlice";
 
 //아이콘
 import { CloseIcon } from "assets/icons";
 import { loginAPI } from "apis";
-import { useEffect } from "react";
 
 const LoginPage = (props) => {
   const { register, handleSubmit, reset } = useForm({ mode: "onChange" });
+  const dispatch = useDispatch();
+
   //모달창 상태값
   // const [toggle, setToggle] = useState(false);
 
@@ -23,10 +26,10 @@ const LoginPage = (props) => {
   const onSubmit = async (data) => {
     const answer = await loginAPI.login(data);
     if (answer.result) {
-      sweetalert.successTimerAlert(answer.msg)
-      window.location.reload();
+      sweetalert.successTimerAlert(answer.msg);
+      dispatch(isLogin(true));
     } else {
-      sweetalert.failAlert(answer.msg)
+      sweetalert.failAlert(answer.msg);
     }
   };
 

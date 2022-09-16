@@ -8,17 +8,18 @@ import { LocationIcon, PhoneIcon, StarIcon } from "assets/icons";
 import { axios } from "utils";
 import { setPlace } from "store/modules/promiseSlice";
 import imgLoading from "assets/img/imgLoading.png";
+import imgEmpty from "assets/img/imgNull.png";
 
 const PlaceInfo = (props) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [imgUrl, setImgUrl] = useState([]);
+  const [crawlData, setCrawlData] = useState(null);
 
   useEffect(() => {
-    setImgUrl([]);
+    setCrawlData(null);
     if (props.placeInfo) {
-      axios.default.post("/main/crawl", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
-        setImgUrl(res.data.data);
+      axios.default.post("/main/crawlAll", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
+        setCrawlData(res.data.data);
       });
     }
   }, [props.placeInfo]);
@@ -54,10 +55,14 @@ const PlaceInfo = (props) => {
       </Title>
       <ImgArea>
         <XDragList>
-          {imgUrl.length !== 0 ? (
-            imgUrl.map((url) => {
-              return <img key={url} src={url} />;
-            })
+          {crawlData && crawlData.crawlingUrllist ? (
+            crawlData.crawlingUrllist.length > 0 ? (
+              crawlData.crawlingUrllist.map((url) => {
+                return <img key={url} src={url} />;
+              })
+            ) : (
+              <img src={imgEmpty} />
+            )
           ) : (
             <img src={imgLoading} />
           )}
@@ -80,7 +85,7 @@ const PlaceInfo = (props) => {
           <span className="icon">
             <LocationIcon />
           </span>
-          <span>영업시간</span>
+          <span>{crawlData?.rawArrDateUrl ? crawlData?.rawArrDateUrl : "영업시간을 확인할 수 없습니다!"}</span>
         </div>
       </Info>
       <Btn outLine={true} onClick={savePlace}>

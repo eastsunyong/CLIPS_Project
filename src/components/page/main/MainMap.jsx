@@ -24,13 +24,9 @@ const MainMap = (props) => {
   useEffect(() => {
     props.setPlaceInfo(null);
     if (props.address) {
+      // 마커 초기화
       if (markers.length !== 0) {
-        markers.forEach((marker) => {
-          const deleteMarker = new kakao.maps.Marker({
-            position: new kakao.maps.LatLng(marker.coord.y, marker.coord.x),
-          });
-          deleteMarker.setMap(null);
-        });
+        setMarkers([]);
       }
 
       // 주소로 좌표를 검색
@@ -96,6 +92,7 @@ const MainMap = (props) => {
   return (
     <Map ref={mapRef} id="mainMap">
       {center ? <MapMarker image={{ src: centerImg, size: { width: 32, height: 32 } }} position={center} /> : null}
+      {markers ? null : null}
       <MarkerClusterer
         averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
         minLevel={4} // 클러스터 할 최소 지도 레벨

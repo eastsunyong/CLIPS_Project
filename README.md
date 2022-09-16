@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# CLIPs (Chronically Late Insane Person)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* 서로간의 중간 거리를 구해서 위치를 나타내 주는 서비스
+* 만나는 장소 주변에 유명장소 추천 서비스
 
-## Available Scripts
+# 📆 프로젝트 기간 
+* 2022/08/26 ~ 2022/10/07
+
+### 😎 팀 멤버
+
+<table>
+   <tr>
+    <td align="center"><b><a href="https://github.com/horang-e">박신영</a></b></td>
+    <td align="center"><b><a href="https://github.com/appreciate87">이재철</a></b></td>
+     <td align="center"><b><a href="https://github.com/sojin0106">신용의</a></b></td>
+    <td align="center"><b><a href="https://github.com/jinlobil">김민선</a></b></td>
+    <td align="center"><b><a href="https://github.com/Son-Gyeongi">박정우</a></b></td>
+    <td align="center"><b><a href="https://github.com/DubuKim">윤선용</a></b></td>
+  </tr>
+  <tr>
+     <td align="center"><a href="https://github.com/horang-e"><img src="https://ifh.cc/g/0TgKO9.png" width="100px" /></a></td>
+     <td align="center"><a href="https://github.com/codeing999"><img src="https://avatars.githubusercontent.com/u/103627100?v=4" width="100px" /></a></td>
+     <td align="center"><a href="https://github.com/sojin0106"><img src="https://avatars.githubusercontent.com/u/97339665?v=4" width="100px" /></a></td>
+     <td align="center"><a href="https://github.com/jinlobil"><img src="https://avatars.githubusercontent.com/u/104722681?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/Son-Gyeongi"><img src="https://avatars.githubusercontent.com/u/78200199?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/DubuKim"><img src="https://avatars.githubusercontent.com/u/65989844?v=4" width="100px" /></a></td
+  </tr>
+  <tr>
+     <td align="center"><b>(VL)Frontend</b></td>
+    <td align="center"><b>Frontend</b></td>
+    <td align="center"><b>Frontend</b></td>
+    <td align="center"><b>(L)Backend</b></td>
+    <td align="center"><b>Backend</b></td>
+    <td align="center"><b>Backend</b></td>
+  </tr>
+</table>
+
 
 In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

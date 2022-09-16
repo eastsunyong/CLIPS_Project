@@ -10,6 +10,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: "SUIT", sans-serif;
+  // 모바일에서 파란 하이라이트 없애기
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
 
   ul, ol, li {
@@ -18,15 +20,6 @@ const GlobalStyle = createGlobalStyle`
 
   button {
     cursor: pointer;
-  }
-
-  // 모바일에서 파란 하이라이트 없애기
-  input,
-  textarea,
-  button,
-  select,
-  a {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
   
   input::-webkit-input-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }

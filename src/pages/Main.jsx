@@ -24,23 +24,21 @@ const Main = () => {
   return (
     <>
       <Section>
-        {infoToggle ? null : (
-          <>
-            <Top>
-              <TopSearch
-                onClick={() => {
-                  setSearchToggle(!searchToggle);
-                }}
-              >
-                <input {...register("mainLocation")} placeholder="시/군/구로 검색" readOnly />
-                <div className="icon">
-                  <SearchIcon />
-                </div>
-              </TopSearch>
-            </Top>
-            <CategoryBtnArea categoryList={categoryList} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-          </>
-        )}
+        <Top infoToggle={infoToggle}>
+          <TopControl>
+            <TopSearch
+              onClick={() => {
+                setSearchToggle(!searchToggle);
+              }}
+            >
+              <input {...register("mainLocation")} placeholder="시/군/구로 검색" readOnly />
+              <div className="icon">
+                <SearchIcon />
+              </div>
+            </TopSearch>
+          </TopControl>
+          <CategoryBtnArea categoryList={categoryList} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+        </Top>
 
         <BottomModal toggle={infoToggle} viewTitle={!!placeInfo}>
           <MapControl>
@@ -108,6 +106,11 @@ const Section = styled.section`
   }
 `;
 
-const Top = styled(MapControl)`
+const Top = styled.div`
+  position: relative;
+  z-index: ${(props) => (props.infoToggle ? props.theme.level.back : props.theme.level.front.low)};
+`;
+
+const TopControl = styled(MapControl)`
   padding-bottom: 0;
 `;

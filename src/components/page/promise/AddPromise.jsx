@@ -97,8 +97,8 @@ const AddPromise = (props) => {
     let sendData = {
       title: data.title,
       penalty: data.penalty,
-      x: Number(place.coord.lat ? place.coord.lat : place.coord.x),
-      y: Number(place.coord.lng ? place.coord.lng : place.coord.y),
+      x: Number(place.coord.lat ? place.coord.lat : place.coord.y),
+      y: Number(place.coord.lng ? place.coord.lng : place.coord.x),
       date,
       friendList,
     };

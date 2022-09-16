@@ -77,6 +77,7 @@ const Main = () => {
 
           <PlaceInfo placeInfo={placeInfo} infoToggle={infoToggle} setInfoToggle={setInfoToggle} />
         </BottomModal>
+
         <MainMap
           address={getValues("mainLocation")}
           categoryList={categoryList}

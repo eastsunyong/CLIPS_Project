@@ -12,6 +12,8 @@ const BottomModal = (props) => {
 };
 
 const Section = styled(Modal)`
+  display: flex;
+  flex-flow: column;
   z-index: ${(props) => props.theme.level.front.low};
 
   top: ${(props) => {

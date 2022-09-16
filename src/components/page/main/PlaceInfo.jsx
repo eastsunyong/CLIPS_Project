@@ -98,11 +98,18 @@ const PlaceInfo = (props) => {
 export default PlaceInfo;
 
 const Section = styled.section`
+  flex: 1;
+  overflow: scroll;
+
   padding: calc(${(props) => props.theme.size.xs} * 2);
-  background: white;
-  height: 100%;
+
   border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0;
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
+  background: white;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   & > * {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
     -ms-user-select: none;

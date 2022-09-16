@@ -116,7 +116,7 @@ const AddPromise = (props) => {
   };
 
   return (
-    <Modal toggle={props.toggle}>
+    <CustomModal toggle={props.toggle}>
       <PageTop>
         <div>
           <div className="icon" onClick={goBack}>
@@ -219,14 +219,26 @@ const AddPromise = (props) => {
       </Section>
 
       <FindFriend toggle={toggle} setToggle={setToggle} friendList={getValues("friendList")} setValue={setValue} />
-    </Modal>
+    </CustomModal>
   );
 };
 
-const Section = styled.form`
+const CustomModal = styled(Modal)`
   display: flex;
   flex-flow: column;
-  height: 100%;
+`;
+
+const Section = styled.form`
+  flex: 1;
+  overflow: scroll;
+
+  display: flex;
+  flex-flow: column;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   padding: 0 ${(props) => props.theme.size.m};
   & > *:not(:last-child) {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);

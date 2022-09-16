@@ -31,7 +31,11 @@ const Choice = (props) => {
           <h1>CLIPs</h1>
         </Main>
         <ButtonBox>
-          <OneButton onClick={()=> {sweetalert.avatarAlert()}}>
+          <OneButton
+            onClick={() => {
+              sweetalert.avatarAlert();
+            }}
+          >
             <KakaoIcon />
             <span>카카오로 빠르게 시작하기</span>
           </OneButton>
@@ -107,7 +111,6 @@ const ButtonBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-<<<<<<< HEAD
   width: 100%;
 `;
 
@@ -125,40 +128,6 @@ const OneButton = styled(Btn)`
 
   & > :first-child {
     margin-right: ${(props) => props.theme.size.xl};
-=======
-  padding: 12px 16px;
-
-  button {
-    height: 47px;
-    width: 343px;
-    border-radius: 12px;
-    font-weight: 600;
-  }
-`;
-
-const OneButton = styled.button`
-  background-color: #fee500;
-  color: black;
-  margin-top: 24px;
-  margin-bottom: 32px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 32px;
-
-  p {
-    margin-left: 50px;
-    margin-right: 50px;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 150%;
-  }
-
-  h1 {
-    font-size: 22px;
-    margin-top: 5px;
->>>>>>> 8d3e2b4d47a3322814312123280d3887a4375aa2
   }
 `;
 

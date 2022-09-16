@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { MapMarker, StaticMap } from "react-kakao-maps-sdk";
+import { StaticMap } from "react-kakao-maps-sdk";
 
 import { PageTop, TextBox } from "components/common";
 import { LeftArrowIcon, LocationIcon } from "assets/icons";
 import { promiseAPI } from "apis";
+import { sweetalert } from "utils";
 
 const DetailPromise = () => {
   const { promiseId } = useParams();
@@ -15,8 +16,12 @@ const DetailPromise = () => {
 
   const getItem = async (promiseId) => {
     const answer = await promiseAPI.getPromise(promiseId);
-    if (answer) {
+    console.log(answer);
+    if (answer.result) {
       setItem(answer.promise);
+    } else {
+      sweetalert.areaWithout();
+      nav("/promised");
     }
   };
 

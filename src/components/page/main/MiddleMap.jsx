@@ -1,11 +1,15 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 
 import { Map } from "components/map";
-import { centerImg } from "assets/img/marker";
+import { middleImg, middleMemberImg } from "assets/img/marker";
 
 const MiddleMap = (props) => {
   const { kakao } = window;
   const mapRef = useRef(null);
+
+  const [middle, setMiddle] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [lines, setLines] = useState([]);
 
   // useEffect(() => {
   //   if (props.locationList) {
@@ -22,20 +26,31 @@ const MiddleMap = (props) => {
 
   useEffect(() => {
     if (props.locationList) {
+      if (middle) {
+        middle.setMap(null);
+        markers.forEach((m) => {
+          m.setMap(null);
+        });
+        lines.forEach((l) => {
+          l.setMap(null);
+        });
+      }
       let centerPosition = new kakao.maps.LatLng(props.locationList.middleLocation.coord.y, props.locationList.middleLocation.coord.x);
-      let centerMarkerImg = new kakao.maps.MarkerImage(centerImg, new kakao.maps.Size(32, 32));
+      let centerMarkerImg = new kakao.maps.MarkerImage(middleImg, new kakao.maps.Size(36, 36), { offset: new kakao.maps.Point(20, 20) });
       let center = new kakao.maps.Marker({
         position: centerPosition,
         image: centerMarkerImg,
       });
       center.setMap(mapRef.current);
+      setMiddle(center);
 
       let bounds = new kakao.maps.LatLngBounds();
       props.locationList.list.forEach((coord) => {
         let position = new kakao.maps.LatLng(coord.y, coord.x);
-        // let markerImg = new kakao.maps.MarkerImage(centerImg, new kakao.maps.Size(32, 32));
+        let markerImg = new kakao.maps.MarkerImage(middleMemberImg, new kakao.maps.Size(36, 36), { offset: new kakao.maps.Point(20, 20) });
         let marker = new kakao.maps.Marker({
           position,
+          image: markerImg,
         });
         let polyline = new kakao.maps.Polyline({
           path: [position, centerPosition], // 선을 구성하는 좌표배열 입니다
@@ -44,6 +59,8 @@ const MiddleMap = (props) => {
           strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
           strokeStyle: "solid", // 선의 스타일입니다,
         });
+        setMarkers((markers) => [...markers, marker]);
+        setLines((lines) => [...lines, polyline]);
         bounds.extend(position);
         polyline.setMap(mapRef.current);
         marker.setMap(mapRef.current);

@@ -19,7 +19,6 @@ instance.interceptors.request.use(async (config) => {
   // isExpiredTkn 는 만료가 됐을시 트루
 
   const isExpiredTkn = reactJwt.isExpired(accessToken);
-
   if (isExpiredTkn === true) {
     //True인 경우
     // 1. 토큰이 만료된 경우

@@ -20,6 +20,8 @@ const PlaceInfo = (props) => {
     if (props.placeInfo) {
       axios.default.post("/main/crawlAll", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
         setCrawlData(res.data.data);
+
+        console.log(res);
       });
     }
   }, [props.placeInfo]);
@@ -85,7 +87,7 @@ const PlaceInfo = (props) => {
           <span className="icon">
             <LocationIcon />
           </span>
-          <span>{crawlData?.rawArrDateUrl ? crawlData?.rawArrDateUrl : "영업시간을 확인할 수 없습니다!"}</span>
+          <span>{crawlData?.rawArrDateUrl[0] ? crawlData?.rawArrDateUrl[0] : "영업시간을 확인할 수 없습니다!"}</span>
         </div>
       </Info>
       <Btn outLine={true} onClick={savePlace}>

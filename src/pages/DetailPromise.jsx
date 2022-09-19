@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { MapMarker, StaticMap } from "react-kakao-maps-sdk";
+import { StaticMap } from "react-kakao-maps-sdk";
 
 import { PageTop, TextBox } from "components/common";
 import { LeftArrowIcon, LocationIcon } from "assets/icons";
-import { promiseAPI } from "apis";
+import { localAPI, promiseAPI } from "apis";
+import { sweetalert } from "utils";
 
 const DetailPromise = () => {
   const { promiseId } = useParams();
@@ -15,8 +16,18 @@ const DetailPromise = () => {
 
   const getItem = async (promiseId) => {
     const answer = await promiseAPI.getPromise(promiseId);
-    if (answer) {
+    if (answer.result) {
+      const res = await localAPI.addressTransfer(answer.promise.y, answer.promise.x);
+      if (!res.docs.length) {
+        setItem(answer.promise);
+        return;
+      }
+      const docInfo = res.docs[0]?.address ? res.docs[0]?.address : res.docs[0]?.road_address;
+      answer.promise.place = docInfo.address_name;
       setItem(answer.promise);
+    } else {
+      sweetalert.areaWithout();
+      nav("/promised");
     }
   };
 
@@ -24,10 +35,8 @@ const DetailPromise = () => {
     getItem(promiseId);
   }, []);
 
-  console.log(item);
-
   return (
-    <>
+    <Section>
       <CustomPageTop>
         <div>
           <div
@@ -42,7 +51,7 @@ const DetailPromise = () => {
         </div>
         <div className="title">편집</div>
       </CustomPageTop>
-      <Section>
+      <Article>
         <div className="name">{item?.title}</div>
 
         <CustomTb>
@@ -67,37 +76,50 @@ const DetailPromise = () => {
             <span>
               <LocationIcon />
             </span>
-            <span>
-              {item?.x} + {item?.y}
-            </span>
+            <span>{item?.place ? item?.place : "장소를 찾을 수 없습니다."}</span>
           </div>
         </CustomTb>
-        <StaticMap
-          center={{
-            lat: 33.450701,
-            lng: 126.570667,
-          }}
-          style={{
-            width: "100%",
-            height: "16rem",
-          }}
-          marker={{
-            lat: 33.450701,
-            lng: 126.570667,
-          }}
-          level={3}
-        ></StaticMap>
-      </Section>
-    </>
+        {item?.place && (
+          <StaticMap
+            center={{
+              lat: item.x,
+              lng: item.y,
+            }}
+            style={{
+              width: "100%",
+              height: "32rem",
+            }}
+            marker={{
+              lat: item.x,
+              lng: item.y,
+            }}
+            level={3}
+          />
+        )}
+      </Article>
+    </Section>
   );
 };
 
 export default DetailPromise;
 
 const Section = styled.section`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  height: 100%;
+`;
+
+const Article = styled.article`
+  flex: 1;
+  overflow: scroll;
   padding: ${(props) => props.theme.size.m};
+
   & > * {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
+  }
+  &::-webkit-scrollbar {
+    display: none;
   }
   .name {
     font-size: ${(props) => props.theme.size.xl};

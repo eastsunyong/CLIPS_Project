@@ -1,7 +1,7 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import { Main, Login, Promised, DetailPromise, MyPage } from "pages";
+import { Main, Login, Promised, DetailPromise, Mypage } from "pages";
 import { useSelector } from "react-redux";
 
 const Router = () => {
@@ -9,9 +9,10 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
-      <Route path="/myPage" element={isLogin ? <MyPage /> : <Login />} />
-      <Route path="/Promised" element={isLogin ? <Promised /> : <Login />} />
-      <Route path="/Promise/:promiseId" element={isLogin ? <DetailPromise /> : <Login />} />
+      <Route path="/myPage" element={isLogin ? <Mypage /> : <Login />} />
+      <Route path="/promised" element={isLogin ? <Promised /> : <Login />} />
+      <Route path="/promise/:promiseId" element={isLogin ? <DetailPromise /> : <Login />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

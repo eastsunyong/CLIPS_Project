@@ -31,7 +31,11 @@ const Choice = (props) => {
           <h1>CLIPs</h1>
         </Main>
         <ButtonBox>
-          <OneButton onClick={()=> {sweetalert.avatarAlert()}}>
+          <OneButton
+            onClick={() => {
+              sweetalert.avatarAlert();
+            }}
+          >
             <KakaoIcon />
             <span>카카오로 빠르게 시작하기</span>
           </OneButton>
@@ -57,7 +61,9 @@ const Choice = (props) => {
           </Box>
         </ButtonBox>
       </Container>
-      <Modal toggle={toggle}>{gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}</Modal>
+      <CustomModal toggle={toggle}>
+        {gologin === true ? <LoginPage toggle={toggle} setToggle={setToggle} /> : <SignUpPage setToggle={setToggle} />}
+      </CustomModal>
     </OpacityModal>
   );
 };
@@ -84,7 +90,7 @@ const Main = styled.div`
   }
 
   h1 {
-    color: #0099ff;
+    color: ${(props) => props.theme.color.brand};
     font-weight: 800;
     font-size: 48px;
     line-height: 60px;
@@ -126,5 +132,7 @@ const OneButton = styled(Btn)`
     margin-right: ${(props) => props.theme.size.xl};
   }
 `;
+
+const CustomModal = styled(Modal)``;
 
 export default Choice;

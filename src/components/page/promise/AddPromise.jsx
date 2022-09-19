@@ -97,8 +97,8 @@ const AddPromise = (props) => {
     let sendData = {
       title: data.title,
       penalty: data.penalty,
-      x: Number(place.coord.lat ? place.coord.lat : place.coord.x),
-      y: Number(place.coord.lng ? place.coord.lng : place.coord.y),
+      x: Number(place.coord.lat ? place.coord.lat : place.coord.y),
+      y: Number(place.coord.lng ? place.coord.lng : place.coord.x),
       date,
       friendList,
     };
@@ -116,7 +116,7 @@ const AddPromise = (props) => {
   };
 
   return (
-    <Modal toggle={props.toggle}>
+    <CustomModal toggle={props.toggle}>
       <PageTop>
         <div>
           <div className="icon" onClick={goBack}>
@@ -219,14 +219,26 @@ const AddPromise = (props) => {
       </Section>
 
       <FindFriend toggle={toggle} setToggle={setToggle} friendList={getValues("friendList")} setValue={setValue} />
-    </Modal>
+    </CustomModal>
   );
 };
 
-const Section = styled.form`
+const CustomModal = styled(Modal)`
   display: flex;
   flex-flow: column;
-  height: 100%;
+`;
+
+const Section = styled.form`
+  flex: 1;
+  overflow: scroll;
+
+  display: flex;
+  flex-flow: column;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   padding: 0 ${(props) => props.theme.size.m};
   & > *:not(:last-child) {
     margin-bottom: calc(${(props) => props.theme.size.xs} * 2);

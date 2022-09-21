@@ -23,7 +23,7 @@ const Footer = () => {
             selected={icon.path === pathname}
             className="fcc"
             onClick={() => {
-              if (icon.path === "/review" || icon.path === "/myPage") {
+              if (icon.path === "/myPage") {
                 sweetalert.avatarAlert();
                 return;
               }

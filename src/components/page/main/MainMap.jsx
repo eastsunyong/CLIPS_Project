@@ -97,14 +97,15 @@ const MainMap = (props) => {
         minLevel={4} // 클러스터 할 최소 지도 레벨
         disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
         calculator={[5, 10, 15]}
+        // texts={["5+", "10+", "15+"]}
         styles={[
           {
             // calculator 각 사이 값 마다 적용될 스타일을 지정한다
             width: "40px",
             height: "40px",
-            background: "rgba(251, 139, 37, 0.9)",
+            background: "radial-gradient(50% 50% at 50% 50%, rgba(94, 237, 95, 0.6) 66.15%, rgba(128, 250, 160, 0) 100%)",
             borderRadius: "40px",
-            color: "white",
+            color: "black",
             textAlign: "center",
             fontSize: "20px",
             lineHeight: "40px",
@@ -112,9 +113,9 @@ const MainMap = (props) => {
           {
             width: "80px",
             height: "80px",
-            background: "rgba(251, 139, 37, 0.9)",
+            background: "radial-gradient(50% 50% at 50% 50%, rgba(94, 237, 95, 0.6) 66.15%, rgba(128, 250, 160, 0) 100%)",
             borderRadius: "80px",
-            color: "white",
+            color: "black",
             textAlign: "center",
             fontSize: "20px",
             lineHeight: "80px",
@@ -122,9 +123,9 @@ const MainMap = (props) => {
           {
             width: "120px",
             height: "120px",
-            background: "rgba(251, 139, 37, 0.9)",
+            background: "radial-gradient(50% 50% at 50% 50%, rgba(94, 237, 95, 0.6) 66.15%, rgba(128, 250, 160, 0) 100%)",
             borderRadius: "120px",
-            color: "white",
+            color: "black",
             textAlign: "center",
             fontSize: "20px",
             lineHeight: "120px",

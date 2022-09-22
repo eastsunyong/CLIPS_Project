@@ -4,11 +4,10 @@ import { axios } from "utils";
 export const getUser = async () => {
   const answer = { result: true };
   try {
-    const res = await axios.default.get("/profile");
-    console.log(res);
+    const res = await axios.default.get("/auth/mypage");
+    answer.user = res.data.data
   } catch (err) {
     answer.result = false;
-    console.log(err);
   }
   return answer;
 };

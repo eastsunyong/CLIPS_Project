@@ -123,7 +123,7 @@ const AddPromise = (props) => {
       <Section onSubmit={handleSubmit(submitHandler)}>
         <div className="inner">
           <p>약속 이름</p>
-          <InputDiv>
+          <InputDiv className={errors.title && "errorInput"}>
             <input
               {...register("title", {
                 required: "약속 이름은 꼭 정해주세요",
@@ -134,6 +134,7 @@ const AddPromise = (props) => {
               defaultValue={ts?.title ? ts?.title : ""}
             />
           </InputDiv>
+          {errors?.title?.message && <h3>{errors.title.message}</h3>}
         </div>
 
         <div className="inner">
@@ -189,7 +190,7 @@ const AddPromise = (props) => {
 
         <div className="inner">
           <p>약속 장소</p>
-          <InputDiv>
+          <InputDiv className={errors.place && "errorInput"}>
             <input
               {...register("place", {
                 required: "장소는 꼭 정해주세요",
@@ -201,6 +202,7 @@ const AddPromise = (props) => {
               defaultValue={place?.address ? place?.address : ""}
             />
           </InputDiv>
+          {errors?.place?.message && <h3>{errors.place.message}</h3>}
         </div>
 
         <div className="inner largeInner">
@@ -248,6 +250,19 @@ const Section = styled.form`
     div {
       height: 100%;
     }
+  }
+  h3{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: ${(props) => props.theme.size.xs};  
+    line-height: 130%;
+    color: #DF0C0C;
+    margin-top: calc(${(props) => props.theme.size.xs} / 3);
+  }
+
+  .errorInput {
+    border: 1px solid #DF0C0C;
   }
 `;
 

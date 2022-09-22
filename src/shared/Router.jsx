@@ -5,7 +5,7 @@ import { Main, Login, Promised, DetailPromise, Mypage, Review } from "pages";
 import { useSelector } from "react-redux";
 
 const Router = () => {
-  const isLogin = useSelector((state) => state.LOGIN.login);
+  const isLogin = useSelector((state) => state.login.login);
   return (
     <Routes>
       <Route path="/" element={<Main />} />

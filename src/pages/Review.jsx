@@ -11,7 +11,7 @@ const Review = () => {
     <>
       <Section>
         <ToggleReview selected={selected} setSelected={setSelected} />
-        {selected ? <WriteList setWriteToggle={setWriteToggle} /> : <ReviewList />}
+        {selected ? <WriteList writeToggle={writeToggle} setWriteToggle={setWriteToggle} /> : <ReviewList />}
       </Section>
       <WriteReview writeToggle={writeToggle} setWriteToggle={setWriteToggle} />
     </>

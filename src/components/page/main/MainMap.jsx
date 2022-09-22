@@ -63,6 +63,7 @@ const MainMap = (props) => {
 
                   setMarkers((markers) => [...markers, ...placeList]);
                   mapRef.current.setBounds(bounds);
+                  mapRef.current.panTo(new kakao.maps.LatLng(result[0].y, result[0].x));
                 }
               },
               placesOpt

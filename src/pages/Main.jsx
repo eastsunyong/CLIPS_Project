@@ -75,15 +75,14 @@ const Main = () => {
 
           <PlaceInfo placeInfo={placeInfo} infoToggle={infoToggle} setInfoToggle={setInfoToggle} />
         </BottomModal>
-
-        <MainMap
-          address={getValues("mainLocation")}
-          categoryList={categoryList}
-          selectedCategory={selectedCategory}
-          isCenter={isCenter}
-          setPlaceInfo={setPlaceInfo}
-        />
       </Section>
+      <MainMap
+        address={getValues("mainLocation")}
+        categoryList={categoryList}
+        selectedCategory={selectedCategory}
+        isCenter={isCenter}
+        setPlaceInfo={setPlaceInfo}
+      />
       <SearchModal toggle={searchToggle} setToggle={setSearchToggle} setValue={setValue} />
       <GetMiddleModal toggle={middleToggle} setToggle={setMiddleToggle} />
     </>
@@ -97,13 +96,6 @@ const Section = styled.section`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  #mainMap {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
 `;
 
 const Top = styled.div`

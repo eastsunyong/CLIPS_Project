@@ -2,62 +2,59 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { Btn, Card, TextBox } from "components/common";
-import { LocationIcon, MenuIcon } from "assets/icons";
-import { localAPI, promiseAPI } from "apis";
+import { LocationIcon } from "assets/icons";
+import { promiseAPI } from "apis";
+import { jwt } from "utils";
 
 const WriteList = (props) => {
   const [list, setList] = useState([]);
 
   const getPromise = async () => {
     const answer = await promiseAPI.getList();
-
-    for (let p of answer.list) {
-      const res = await localAPI.addressTransfer(p.y, p.x);
-      if (!res.docs.length) continue;
-      const docInfo = res.docs[0]?.address ? res.docs[0]?.address : res.docs[0]?.road_address;
-      p.place = docInfo.address_name;
-    }
-
     setList(answer.list);
   };
 
   useEffect(() => {
-    getPromise();
-  }, []);
+    if (!props.writeToggle.toggle) {
+      getPromise();
+    }
+  }, [props.writeToggle]);
 
   return (
     <Article>
       {list.map((promise) => {
-        return (
-          <CustomCard key={promise.promiseId}>
-            <TextBox>
-              <div>
-                <div className="title">{promise.title}</div>
-                <div>{promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}</div>
-                <div className="info">
-                  <span>{promise.date}</span>
-                  <span>
-                    <span className="pin">
-                      <LocationIcon />
+        if (promise.userId === jwt.getUserId()) {
+          return (
+            <CustomCard key={promise.promiseId}>
+              <TextBox>
+                <div>
+                  <div className="title">{promise.title}</div>
+                  <div>{promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}</div>
+                  <div className="info">
+                    <span>{promise.date}</span>
+                    <span>
+                      <span className="pin">
+                        <LocationIcon />
+                      </span>
+                      {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
                     </span>
-                    {promise.place ? promise.place : "장소를 불러올 수 없습니다."}
-                  </span>
+                  </div>
                 </div>
-              </div>
-              <InnerBtn
-                onClick={() => {
-                  props.setWriteToggle({ promise, toggle: true });
-                }}
-              >
-                후기쓰기
-              </InnerBtn>
-            </TextBox>
-
-            <div className="icon">
-              <MenuIcon />
-            </div>
-          </CustomCard>
-        );
+                {promise.done ? (
+                  <InnerBtn outLine={true}>후기 작성 완료</InnerBtn>
+                ) : (
+                  <InnerBtn
+                    onClick={() => {
+                      props.setWriteToggle({ promise, toggle: true });
+                    }}
+                  >
+                    후기쓰기
+                  </InnerBtn>
+                )}
+              </TextBox>
+            </CustomCard>
+          );
+        }
       })}
     </Article>
   );

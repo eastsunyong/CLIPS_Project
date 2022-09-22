@@ -23,7 +23,14 @@ import { sweetalert } from "utils";
 const AddPromise = (props) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const { register, handleSubmit, getValues, setValue, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const place = useSelector((state) => state.promise.place);
   const ts = useSelector((state) => state.promise.ts);
@@ -251,18 +258,18 @@ const Section = styled.form`
       height: 100%;
     }
   }
-  h3{
-    font-family: 'SUIT';
+  h3 {
+    font-family: "SUIT";
     font-style: normal;
     font-weight: 400;
-    font-size: ${(props) => props.theme.size.xs};  
+    font-size: ${(props) => props.theme.size.xs};
     line-height: 130%;
-    color: #DF0C0C;
+    color: #df0c0c;
     margin-top: calc(${(props) => props.theme.size.xs} / 3);
   }
 
   .errorInput {
-    border: 1px solid #DF0C0C;
+    border: 1px solid #df0c0c;
   }
 `;
 

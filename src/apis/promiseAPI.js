@@ -8,7 +8,6 @@ export const getList = async () => {
     answer.list = res.data;
   } catch (err) {
     answer.result = false;
-    console.log(err);
   }
   return answer;
 };
@@ -21,7 +20,6 @@ export const getPromise = async (promiseId) => {
     answer.promise = res.data;
   } catch (err) {
     answer.result = false;
-    console.log(err);
   }
   return answer;
 };
@@ -34,7 +32,31 @@ export const addList = async (list) => {
     answer.msg = res.data;
   } catch (err) {
     answer.result = false;
-    console.log(err);
+  }
+  return answer;
+};
+
+// 약속 삭제
+export const deletePromise = async (promiseId) => {
+  const answer = { result: true };
+  try {
+    const res = await axios.default.delete(`/promise/${promiseId}`);
+    answer.msg = res.data;
+  } catch (err) {
+    answer.result = false;
+  }
+  return answer;
+};
+
+// 약속 수정
+export const modifyPromise = async (promiseId, data) => {
+  const answer = { result: true };
+  try {
+    const res = await axios.default.put(`/promise/${promiseId}`, data);
+    console.log(res);
+    // answer.msg = res.data;
+  } catch (err) {
+    answer.result = false;
   }
   return answer;
 };

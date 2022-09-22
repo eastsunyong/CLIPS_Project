@@ -29,7 +29,6 @@ instance.interceptors.request.use(async (config) => {
       //액세스 토큰만 재발급
       const refreshToken = localStorage.getItem("refreshToken");
       const respense = await axios.post(process.env.REACT_APP_SERVER + `/auth/token`, {refreshToken});
-    
       localStorage.setItem("accessToken", respense.data.accessToken);
       //리퀘스트 할거다
       config.headers.Authorization = `Bearer ${respense.data.accessToken}`;
@@ -41,7 +40,7 @@ instance.interceptors.request.use(async (config) => {
       // 3. 만료된 refreshToken이 왔을 경우
       // 4. 알 수 없는 에러
       localStorage.clear();
-      window.location.reload()
+      window.location.reload();
       return config;
     }
   } else {

@@ -63,3 +63,16 @@ export const areaWithout = () => {
     timer: 1000,
   });
 };
+
+// 일반 컨펌 알렉
+export const confirm = (messge) => {
+  return Swer.fire({
+    title: messge,
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonText: "취소",
+    confirmButtonColor: "#0099ff",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "확인",
+  });
+};

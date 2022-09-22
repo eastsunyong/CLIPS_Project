@@ -110,7 +110,7 @@ const SignUpPage = (props) => {
             <img src={attachment ? attachment : defaultImg} alt="업로드할 이미지" />
             {/* <ImgBtn htmlFor="file"> */}
             <ImgBtn onClick={() => sweetalert.avatarAlert()}>
-              <CameraIcon></CameraIcon>
+              <CameraIcon />
             </ImgBtn>
           </div>
         </UserImage>

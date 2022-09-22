@@ -111,7 +111,7 @@ const WriteReview = (props) => {
           <div>
             <p className="title">후기 남기기</p>
             <InputDiv className="inner">
-              <textarea {...register("content", { required: "후기 내용은 필수입니다." })} placeholder="다녀오신 약속은 어땠나요?" />
+              <textarea {...register("content", { required: "후기 내용은 필수입니다.", minLength: 5 })} placeholder="다녀오신 약속은 어땠나요?" />
             </InputDiv>
           </div>
 
@@ -227,8 +227,8 @@ const ImgArea = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: calc(100vw / 4.6);
-    height: calc(100vw / 4.6);
+    width: 8.2rem;
+    height: 8.2rem;
 
     border-radius: ${(props) => props.theme.size.xs};
     margin-top: calc(${(props) => props.theme.size.xs} / 3);

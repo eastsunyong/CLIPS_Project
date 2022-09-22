@@ -12,7 +12,12 @@ import { __newLogin } from "store/modules/loginSlice";
 import { CloseIcon } from "assets/icons";
 
 const LoginPage = (props) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: "onChange" });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
   const dispatch = useDispatch();
 
   //모달창 상태값
@@ -33,10 +38,9 @@ const LoginPage = (props) => {
   //   }
   // };
 
-
   //로그인 함수
   const onSubmit = async (data) => {
-   const answer = await dispatch(__newLogin(data))
+    const answer = await dispatch(__newLogin(data));
   };
 
   // 모달 열릴때 input 초기화
@@ -102,7 +106,7 @@ const LoginPage = (props) => {
           <Btn>로그인</Btn>
         </form>
 
-        <Box>
+        {/* <Box>
           <p
             onClick={() => {
               sweetalert.avatarAlert();
@@ -122,7 +126,7 @@ const LoginPage = (props) => {
           >
             비밀번호 찾기
           </p>
-        </Box>
+        </Box> */}
       </Container>
 
       {/* <Modal toggle={toggle}>{gofind === true ? <FindId setToggle={setToggle} /> : <FindPassword setToggle={setToggle} />}</Modal> */}
@@ -141,17 +145,17 @@ const Container = styled.div`
     margin-bottom: calc(${(props) => props.theme.size.m} / 2);
   }
   div > h3 {
-    font-family: 'SUIT';
+    font-family: "SUIT";
     font-style: normal;
     font-weight: 400;
-    font-size: ${(props) => props.theme.size.xs};  
+    font-size: ${(props) => props.theme.size.xs};
     line-height: 130%;
-    color: #DF0C0C;
+    color: #df0c0c;
     margin-top: calc(${(props) => props.theme.size.xs} / 3);
   }
 
   .errorInput {
-    border: 1px solid #DF0C0C;
+    border: 1px solid #df0c0c;
   }
 `;
 

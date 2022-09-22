@@ -20,8 +20,6 @@ const PlaceInfo = (props) => {
     if (props.placeInfo) {
       axios.default.post("/main/crawlAll", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
         setCrawlData(res.data.data);
-
-        console.log(res);
       });
     }
   }, [props.placeInfo]);
@@ -158,7 +156,7 @@ const ImgArea = styled.div`
   display: flex;
   img {
     width: 100%;
-    height: 30rem;
+    height: 18rem;
     border-radius: ${(props) => props.theme.size.xs};
     -webkit-user-drag: none;
   }

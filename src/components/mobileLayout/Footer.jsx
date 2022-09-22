@@ -41,7 +41,7 @@ const Section = styled.footer`
   z-index: ${(props) => props.theme.level.front.middle};
 
   background: black;
-  border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0;
+  /* border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0; */
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
 `;
 

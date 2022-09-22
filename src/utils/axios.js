@@ -28,8 +28,7 @@ instance.interceptors.request.use(async (config) => {
       // 1. 만료되지 않은 올바른 refreshToken이 도착해서 새accessToken을 반환하는 경우
       //액세스 토큰만 재발급
       const refreshToken = localStorage.getItem("refreshToken");
-      const respense = await axios.post(process.env.REACT_APP_SERVER + `/auth/token`, { refreshToken });
-
+      const respense = await axios.post(process.env.REACT_APP_SERVER + `/auth/token`, {refreshToken});
       localStorage.setItem("accessToken", respense.data.accessToken);
       //리퀘스트 할거다
       config.headers.Authorization = `Bearer ${respense.data.accessToken}`;
@@ -46,7 +45,6 @@ instance.interceptors.request.use(async (config) => {
     }
   } else {
     config.headers.Authorization = `Bearer ${accessToken}`;
-
     return config;
   }
 });

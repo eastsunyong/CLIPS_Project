@@ -5,11 +5,20 @@ import { useForm } from "react-hook-form";
 import { Btn, Card, InputDiv, Modal, PageTop, TextBox } from "components/common";
 import { DeleteIcon, LeftArrowIcon, LocationIcon, PlusIcon } from "assets/icons";
 import { reviewAPI } from "apis";
+import { useEffect } from "react";
 
 const WriteReview = (props) => {
   const promise = props.writeToggle.promise;
 
-  const { register, handleSubmit, setValue, getValues } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+
+  useEffect(() => {
+    if (props.writeToggle.toggle) {
+      reset();
+      setFileList([]);
+      setImgPreview([]);
+    }
+  }, [props.writeToggle]);
 
   // 멀티 업로드 and 미리보기
   const [fileList, setFileList] = useState([]);
@@ -60,6 +69,9 @@ const WriteReview = (props) => {
     }
 
     const answer = await reviewAPI.addReview(promise.promiseId, formData);
+    if (answer.result) {
+      props.setWriteToggle({ promise, toggle: !props.writeToggle.toggle });
+    }
   };
 
   return (
@@ -69,7 +81,7 @@ const WriteReview = (props) => {
           <div
             className="icon"
             onClick={() => {
-              props.setWriteToggle({ promise: null, toggle: !props.writeToggle.toggle });
+              props.setWriteToggle({ promise, toggle: !props.writeToggle.toggle });
             }}
           >
             <LeftArrowIcon />
@@ -89,7 +101,7 @@ const WriteReview = (props) => {
                   <span className="pin">
                     <LocationIcon />
                   </span>
-                  {promise?.place ? promise.place : "장소를 불러올 수 없습니다."}
+                  {promise?.location ? promise.location : "장소를 불러올 수 없습니다."}
                 </span>
               </div>
             </div>

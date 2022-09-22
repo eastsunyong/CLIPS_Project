@@ -1,8 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import moment from "moment";
 
@@ -13,33 +12,21 @@ import "./DatePicker.css";
 // 데이트 픽커 한국어
 import { ko } from "date-fns/esm/locale";
 
-import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { LeftArrowIcon } from "assets/icons";
-import { promiseAPI } from "apis";
+import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
+import { CloseIcon } from "assets/icons";
 import { FindFriend } from ".";
-import { resetState, setTemporaryStorage } from "store/modules/promiseSlice";
+import { promiseAPI } from "apis";
 import { sweetalert } from "utils";
 
-const AddPromise = (props) => {
-  const dispatch = useDispatch();
-  const nav = useNavigate();
+const ModifyPromise = (props) => {
+  const promiseId = useParams().promiseId;
   const { register, handleSubmit, getValues, setValue, reset } = useForm();
-
-  const place = useSelector((state) => state.promise.place);
-  const ts = useSelector((state) => state.promise.ts);
 
   // 친구 찾기 모달
   const [toggle, setToggle] = useState(false);
   // 데이트 픽커 날짜
   const today = new Date().toLocaleDateString("ko-KR");
   const [startDate, setStartDate] = useState(new Date(today));
-
-  useEffect(() => {
-    if (props.toggle) {
-      reset();
-      ts ? setStartDate(new Date(ts.date)) : setStartDate(new Date(today));
-    }
-  }, [props.toggle]);
 
   // 피커 날짜 바뀔때마다 시간 조정
   useEffect(() => {
@@ -49,31 +36,7 @@ const AddPromise = (props) => {
 
   // 뒤로가기 버튼
   const goBack = () => {
-    if (ts || place) {
-      const type = ts ? "정보" : "장소";
-      const messge = `입력하신 ${type}가 초기화 됩니다.`;
-      sweetalert.corfirmAlert(messge).then((selected) => {
-        if (selected.isConfirmed) {
-          dispatch(resetState());
-          props.setToggle(false);
-        }
-      });
-    } else {
-      props.setToggle(false);
-    }
-  };
-
-  // 장소 선택 버튼
-  const goMap = () => {
-    if (!place) {
-      const data = getValues();
-      Object.keys(data).forEach((key) => {
-        if (key === "day" || key === "time") delete data[key];
-      });
-      data.date = startDate.getTime();
-      dispatch(setTemporaryStorage(data));
-      nav("/");
-    }
+    props.setToggle(false);
   };
 
   // submit후 데이터 세팅
@@ -90,36 +53,50 @@ const AddPromise = (props) => {
     let sendData = {
       title: data.title,
       penalty: data.penalty,
-      location: place.name,
-      x: Number(place.coord.lat ? place.coord.lat : place.coord.y),
-      y: Number(place.coord.lng ? place.coord.lng : place.coord.x),
+      location: props.item.location,
+      x: props.item.x,
+      y: props.item.y,
       date,
       friendList,
     };
 
-    const answer = await promiseAPI.addList(sendData);
-    if (answer.result) {
-      const selected = await sweetalert.successAlert(answer.msg);
+    // 조금 수정필요
+    // const answer = await promiseAPI.modifyPromise(promiseId, sendData);
+    // if (answer.result) {
+    //   const selected = await sweetalert.successAlert(answer.msg);
 
-      if (selected.isConfirmed || selected.isDismissed) {
-        props.setToggle(false);
-        reset();
-        dispatch(resetState());
-      }
-    }
+    //   if (selected.isConfirmed || selected.isDismissed) {
+    //     props.setToggle(false);
+    //     reset();
+    //   }
+    // }
   };
+
+  let freindListString = "";
+  if (props.item) {
+    props.item?.friendList.forEach((friend, i, source) => {
+      freindListString += friend.name;
+      if (i !== source.length - 1) freindListString += ", ";
+    });
+  }
+
+  useEffect(() => {
+    if (props.toggle) {
+      reset();
+      setStartDate(new Date(props.item.date));
+    }
+  }, [props.toggle]);
 
   return (
     <CustomModal toggle={props.toggle}>
       <PageTop>
         <div>
           <div className="icon" onClick={goBack}>
-            <LeftArrowIcon />
+            <CloseIcon />
           </div>
-          <div className="title">약속 만들기</div>
+          <div className="title">편집하기</div>
         </div>
       </PageTop>
-
       <Section onSubmit={handleSubmit(submitHandler)}>
         <div className="inner">
           <p>약속 이름</p>
@@ -131,7 +108,7 @@ const AddPromise = (props) => {
               })}
               placeholder="이름을 작성해보세요"
               autoComplete="off"
-              defaultValue={ts?.title ? ts?.title : ""}
+              defaultValue={props.item?.title ? props.item?.title : ""}
             />
           </InputDiv>
         </div>
@@ -145,9 +122,9 @@ const AddPromise = (props) => {
                 setToggle(true);
               }}
               readOnly
-              placeholder="친구1, 친구2"
+              placeholder="홍길동, 우영우"
               autoComplete="off"
-              defaultValue={ts?.friendList ? ts?.friendList : ""}
+              defaultValue={freindListString}
             />
           </InputDiv>
         </div>
@@ -188,17 +165,17 @@ const AddPromise = (props) => {
         </div>
 
         <div className="inner">
-          <p>약속 장소</p>
+          <p>
+            약속 장소 <span style={{ color: "red", fontSize: "1.2rem" }}>(변경 불가)</span>
+          </p>
           <InputDiv>
             <input
               {...register("place", {
                 required: "장소는 꼭 정해주세요",
               })}
               readOnly
-              onClick={goMap}
-              placeholder="약속장소를 선택해보세요"
               autoComplete="off"
-              defaultValue={place?.address ? place?.address : ""}
+              defaultValue={props.item?.location ? props.item?.location : ""}
             />
           </InputDiv>
         </div>
@@ -206,7 +183,11 @@ const AddPromise = (props) => {
         <div className="inner largeInner">
           <p>메모</p>
           <InputDiv>
-            <textarea {...register("penalty")} placeholder="메모를 작성해보세요 ex) 늦게오면 5만원" defaultValue={ts?.penalty ? ts?.penalty : ""} />
+            <textarea
+              {...register("penalty")}
+              placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+              defaultValue={props.item?.penalty ? props.item?.penalty : ""}
+            />
           </InputDiv>
         </div>
         <CustomBtn>저장하기</CustomBtn>
@@ -217,7 +198,9 @@ const AddPromise = (props) => {
   );
 };
 
-const CustomModal = styled(Modal)`
+export default memo(ModifyPromise);
+
+const CustomModal = styled(OpacityModal)`
   display: flex;
   flex-flow: column;
 `;
@@ -254,5 +237,3 @@ const Section = styled.form`
 const CustomBtn = styled(Btn)`
   margin: calc(${(props) => props.theme.size.xs} * 2) 0;
 `;
-
-export default memo(AddPromise);

@@ -1,19 +1,23 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Btn, InputDiv, PageTop } from "components/common";
 // import { FindId, FindPassword } from "components/page/login";
 import { sweetalert } from "utils";
-import { isLogin } from "store/modules/loginSlice";
+import { __newLogin } from "store/modules/loginSlice";
 
 //아이콘
 import { CloseIcon } from "assets/icons";
-import { loginAPI } from "apis";
 
 const LoginPage = (props) => {
-  const { register, handleSubmit, reset } = useForm({ mode: "onChange" });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
   const dispatch = useDispatch();
 
   //모달창 상태값
@@ -22,15 +26,21 @@ const LoginPage = (props) => {
   //갈림길 상태값
   // const [gofind, setGofind] = useState();
 
+  // //로그인 함수
+  // const onSubmit = async (data) => {
+  //   const answer = await loginAPI.login(data);
+  //   console.log(answer)
+  //   if (answer.result) {
+  //     sweetalert.successTimerAlert(answer.msg);
+  //     dispatch(isLogin(true));
+  //   } else {
+  //     sweetalert.failAlert(answer.msg);
+  //   }
+  // };
+
   //로그인 함수
   const onSubmit = async (data) => {
-    const answer = await loginAPI.login(data);
-    if (answer.result) {
-      sweetalert.successTimerAlert(answer.msg);
-      dispatch(isLogin(true));
-    } else {
-      sweetalert.failAlert(answer.msg);
-    }
+    const answer = await dispatch(__newLogin(data));
   };
 
   // 모달 열릴때 input 초기화
@@ -60,7 +70,7 @@ const LoginPage = (props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="inner">
             <p>아이디</p>
-            <InputDiv>
+            <InputDiv className={errors.email && "errorInput"}>
               <input
                 {...register("email", {
                   required: "이메일은 필수 입력입니다",
@@ -73,11 +83,12 @@ const LoginPage = (props) => {
                 placeholder="이메일을 입력해주세요"
               />
             </InputDiv>
+            {errors?.email?.message && <h3>{errors.email.message}</h3>}
           </div>
 
           <div className="inner">
             <p>비밀번호</p>
-            <InputDiv>
+            <InputDiv className={errors.password && "errorInput"}>
               <input
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다",
@@ -89,12 +100,13 @@ const LoginPage = (props) => {
                 type="password"
               />
             </InputDiv>
+            {errors?.password?.message && <h3>{errors.password.message}</h3>}
           </div>
 
           <Btn>로그인</Btn>
         </form>
 
-        <Box>
+        {/* <Box>
           <p
             onClick={() => {
               sweetalert.avatarAlert();
@@ -114,7 +126,7 @@ const LoginPage = (props) => {
           >
             비밀번호 찾기
           </p>
-        </Box>
+        </Box> */}
       </Container>
 
       {/* <Modal toggle={toggle}>{gofind === true ? <FindId setToggle={setToggle} /> : <FindPassword setToggle={setToggle} />}</Modal> */}
@@ -132,6 +144,19 @@ const Container = styled.div`
     font-weight: bold;
     margin-bottom: calc(${(props) => props.theme.size.m} / 2);
   }
+  div > h3 {
+    font-family: "SUIT";
+    font-style: normal;
+    font-weight: 400;
+    font-size: ${(props) => props.theme.size.xs};
+    line-height: 130%;
+    color: #df0c0c;
+    margin-top: calc(${(props) => props.theme.size.xs} / 3);
+  }
+
+  .errorInput {
+    border: 1px solid #df0c0c;
+  }
 `;
 
 const Box = styled.div`
@@ -144,4 +169,5 @@ const Box = styled.div`
   color: #4b5563;
   font-size: ${(props) => props.theme.size.xs};
 `;
+
 export default LoginPage;

@@ -23,10 +23,6 @@ const Footer = () => {
             selected={icon.path === pathname}
             className="fcc"
             onClick={() => {
-              if (icon.path === "/review" || icon.path === "/myPage") {
-                sweetalert.avatarAlert();
-                return;
-              }
               if (pathname !== icon.path) nav(icon.path);
             }}
           >
@@ -44,6 +40,8 @@ const Section = styled.footer`
   justify-content: space-around;
   z-index: ${(props) => props.theme.level.front.middle};
 
+  background: black;
+  /* border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0; */
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
 `;
 

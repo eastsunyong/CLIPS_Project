@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
-import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
-import { CameraIcon, LeftArrowIcon } from "assets/icons";
+import { Btn, InputDiv, Modal, PageTop } from "components/common";
+import { LeftArrowIcon } from "assets/icons";
 import { loginAPI } from "apis";
-import defaultImg from "assets/img/UserDefaultImg.png";
 import { sweetalert } from "utils";
-import { isLogin } from "store/modules/loginSlice";
+import { SignUpPage3 } from ".";
 
 const SignUpPage = (props) => {
-  const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
-  const dispatch = useDispatch();
+  const {
+    getValues,
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
   const [emailCheck, setEmailCheck] = useState(false);
-  const [nickCheck, setNickCheck] = useState(false);
-  const [loginToggle, setLoginToggle] = useState({ toggle: false });
-  //이미지 미리보기 저장하는  곳
-  const [attachment, setAttachment] = useState();
+  const [toggle, setToggle] = useState(false);
+  const [stepOne, setStepOne] = useState(null);
 
   // 유효성 체크 함수
   const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -38,53 +39,18 @@ const SignUpPage = (props) => {
     const answer = await loginAPI.dupCheck(data);
     if (answer.result) {
       sweetalert.successAlert(answer.msg);
-      Object.keys(data)[0] === "email" ? setEmailCheck(true) : setNickCheck(true);
+      setEmailCheck(true);
     } else {
       sweetalert.failAlert(answer.msg);
-      Object.keys(data)[0] === "email" ? setEmailCheck(false) : setNickCheck(false);
+      setEmailCheck(false);
     }
   };
 
   //회원가입 함수
   const onSubmit = async (data) => {
-    const answer = await loginAPI.signup(data);
-    if (answer.result) {
-      sweetalert.successTimerAlert(answer.msg);
-      setLoginToggle({ toggle: true, email: data.email, password: data.password });
-    }
-    // 이미지 업로드 기능 추가시 활성화
-    // const formData = new FormData();
-    // Object.keys(data).forEach((key) => {
-    //   formData.append(key, data[key]);
-    // });
+    setStepOne(data);
+    setToggle(!toggle);
   };
-
-  // 자동 로그인
-  const autoLogin = async () => {
-    const loginData = { email: loginToggle.email, password: loginToggle.password };
-    const loginAnswer = await loginAPI.login(loginData);
-    if (loginAnswer) dispatch(isLogin(true));
-  };
-
-  //사진 미리보기   원리 사진을 미리 사이트에서
-  const previewImg = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file[0]);
-    reader.onloadend = (finishiedEvent) => {
-      const {
-        currentTarget: { result },
-      } = finishiedEvent;
-      setAttachment(result);
-    };
-  };
-
-  // 파일 업로드 감시
-  const selectImg = watch("image");
-  useEffect(() => {
-    if (selectImg?.length) {
-      previewImg(selectImg);
-    }
-  }, [selectImg]);
 
   return (
     <Container>
@@ -102,20 +68,11 @@ const SignUpPage = (props) => {
         </div>
       </PageTop>
       <Article>
-        <UserImage className="fcc">
-          <div>
-            <img src={attachment ? attachment : defaultImg} alt="업로드할 이미지" />
-            {/* <ImgBtn htmlFor="file"> */}
-            <ImgBtn onClick={() => sweetalert.avatarAlert()}>
-              <CameraIcon></CameraIcon>
-            </ImgBtn>
-          </div>
-        </UserImage>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="inner">
             <p>아이디</p>
             <div className="withBtn">
-              <InputDiv>
+              <InputDiv className={errors.email && "errorInput"}>
                 <input
                   {...register("email", {
                     required: "이메일은 필수 입력입니다",
@@ -136,34 +93,12 @@ const SignUpPage = (props) => {
                 중복확인
               </Btn>
             </div>
-          </div>
-
-          <div className="inner">
-            <p>닉네임</p>
-            <div className="withBtn">
-              <InputDiv>
-                <input
-                  {...register("nickname", {
-                    required: "닉네임은 필수 입력입니다",
-                    maxLength: { value: 8, message: "8자 이하로 정해주세요" },
-                    onChange: () => {
-                      setNickCheck(false);
-                    },
-                    validate: () => nickCheck === true,
-                  })}
-                  placeholder="닉네임을 입력해주세요"
-                  maxLength="9"
-                />
-              </InputDiv>
-              <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
-                중복확인
-              </Btn>
-            </div>
+            {errors?.email?.message && <h3>{errors.email.message}</h3>}
           </div>
 
           <div className="inner">
             <p>비밀번호</p>
-            <InputDiv>
+            <InputDiv className={errors.password && "errorInput"}>
               <input
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다",
@@ -175,11 +110,12 @@ const SignUpPage = (props) => {
                 type="password"
               />
             </InputDiv>
+            {errors?.password?.message && <h3>{errors.password.message}</h3>}
           </div>
 
           <div className="inner">
             <p>비밀번호 확인</p>
-            <InputDiv>
+            <InputDiv className={errors.confirm && "errorInput"}>
               <input
                 {...register("confirm", {
                   required: "비밀번호는 확인은 필수입니다",
@@ -191,18 +127,20 @@ const SignUpPage = (props) => {
                 type="password"
               />
             </InputDiv>
+            {errors?.confirm?.message && <h3>{errors.confirm.message}</h3>}
           </div>
 
           <div className="inner">
             <p>이름</p>
-            <InputDiv>
+            <InputDiv className={errors.name && "errorInput"}>
               <input {...register("name", { required: "이름은 필수 입력입니다" })} placeholder="이름을 입력해주세요" maxLength="9" />
             </InputDiv>
+            {errors?.name?.message && <h3>{errors.name.message}</h3>}
           </div>
 
           <div className="inner">
             <p>휴대폰 번호</p>
-            <InputDiv>
+            <InputDiv className={errors.phone && "errorInput"}>
               <input
                 {...register("phone", {
                   required: "전화번호는 필수 입력입니다",
@@ -213,29 +151,20 @@ const SignUpPage = (props) => {
                 placeholder="01012345678"
               />
             </InputDiv>
+            {errors?.phone?.message && <h3>{errors.phone.message}</h3>}
           </div>
-          {/* <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden /> */}
-
-          <Btn>가입 완료</Btn>
+          <BottomBtn>다음</BottomBtn>
         </form>
       </Article>
-      <OpacityModal toggle={loginToggle.toggle}>
-        <EndPage>
-          <Comment>
-            <h1>CLIPs</h1>
-            <div>
-              <h3>우리의 ‘합리적’ 약속 생활,</h3>
-              <h3>클립스에 오신 것을 환영합니다.</h3>
-            </div>
-          </Comment>
-          <Btn onClick={autoLogin}>클립스 시작하기</Btn>
-        </EndPage>
-      </OpacityModal>
+      <Modal toggle={toggle}>
+        <SignUpPage3 stepOne={stepOne} setStepOne={setStepOne} setToggle={setToggle} />
+      </Modal>
     </Container>
   );
 };
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column;
   height: 100%;
@@ -251,6 +180,20 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.size.s};
     font-weight: bold;
     margin-bottom: calc(${(props) => props.theme.size.m} / 2);
+  }
+
+  div > h3 {
+    font-family: "SUIT";
+    font-style: normal;
+    font-weight: 400;
+    font-size: ${(props) => props.theme.size.xs};
+    line-height: 130%;
+    color: #df0c0c;
+    margin-top: calc(${(props) => props.theme.size.xs} / 3);
+  }
+
+  .errorInput {
+    border: 1px solid #df0c0c;
   }
 `;
 
@@ -270,81 +213,11 @@ const Article = styled.article`
   }
 `;
 
-const UserImage = styled.div`
-  margin-bottom: 2rem;
-  & > div {
-    position: relative;
-    width: 10rem;
-    height: 10rem;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-  }
-`;
-
-const ImgBtn = styled.label`
-  cursor: pointer;
+const BottomBtn = styled(Btn)`
   position: absolute;
   bottom: 0;
-  right: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: calc(${(props) => props.theme.size.l} * 2);
-  height: calc(${(props) => props.theme.size.l} * 2);
-  padding: ${(props) => props.theme.size.xs};
-
-  background: white;
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-`;
-
-const EndPage = styled.article`
-  position: relative;
-  height: 100%;
-  padding: ${(props) => props.theme.size.m};
-
-  & > button {
-    position: absolute;
-    bottom: 0;
-    width: calc(100% - (${(props) => props.theme.size.m} * 2));
-    margin-bottom: ${(props) => props.theme.size.m};
-  }
-`;
-
-const Comment = styled.div`
-  height: 50%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  & > :last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: calc(${(props) => props.theme.size.xs} * 2);
-  }
-
-  h3 {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-  }
-
-  h1 {
-    color: ${(props) => props.theme.color.brand};
-    font-weight: 800;
-    font-size: 48px;
-    line-height: 60px;
-  }
+  width: calc(100% - (${(props) => props.theme.size.m} * 2));
+  margin-bottom: ${(props) => props.theme.size.m};
 `;
 
 export default SignUpPage;

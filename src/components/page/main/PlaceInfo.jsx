@@ -85,7 +85,7 @@ const PlaceInfo = (props) => {
           <span className="icon">
             <LocationIcon />
           </span>
-          <span>{crawlData?.rawArrDateUrl ? crawlData?.rawArrDateUrl : "영업시간을 확인할 수 없습니다!"}</span>
+          {/* <span>{crawlData?.rawArrDateUrl[0] ? crawlData?.rawArrDateUrl[0] : "영업시간을 확인할 수 없습니다!"}</span> */}
         </div>
       </Info>
       <Btn outLine={true} onClick={savePlace}>
@@ -156,7 +156,7 @@ const ImgArea = styled.div`
   display: flex;
   img {
     width: 100%;
-    height: 30rem;
+    height: 18rem;
     border-radius: ${(props) => props.theme.size.xs};
     -webkit-user-drag: none;
   }

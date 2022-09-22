@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 //moment
 import moment from "moment";
 
-import { Card, PageTop, TextBox } from "components/common";
-import { LocationIcon, MenuIcon, PlusIcon } from "assets/icons";
+import { Card, DropDownMenu, PageTop, TextBox } from "components/common";
+import { DeleteIcon, LocationIcon, PlusIcon } from "assets/icons";
 import { Calendar } from "components/calendar";
-import { promiseAPI, localAPI } from "apis";
-import { useNavigate } from "react-router-dom";
+import { promiseAPI } from "apis";
+import { jwt, sweetalert } from "utils";
 
 const PromiseList = (props) => {
   const promise = useSelector((state) => state.promise);
@@ -21,23 +22,31 @@ const PromiseList = (props) => {
 
   const getPromise = async () => {
     const answer = await promiseAPI.getList();
+
     const getDateList = [];
     for (let p of answer.list) {
       getDateList.push(p.date);
-
-      const res = await localAPI.addressTransfer(p.y, p.x);
-      if (!res.docs.length) continue;
-      const docInfo = res.docs[0]?.address ? res.docs[0]?.address : res.docs[0]?.road_address;
-      p.place = docInfo.address_name;
     }
 
     setDateList(getDateList);
     setList(answer.list);
   };
 
+  const deleteHandler = async (promiseId) => {
+    const result = await sweetalert.confirm("정말로 삭제하시겠습니까?");
+    if (result.isConfirmed) {
+      const answer = await promiseAPI.deletePromise(promiseId);
+      if (answer.result) {
+        sweetalert.successTimerAlert(answer.msg);
+        getPromise();
+      }
+    }
+  };
+
   useEffect(() => {
     getPromise();
   }, [promise]);
+
   return (
     <Section>
       <CustomTop>
@@ -64,15 +73,24 @@ const PromiseList = (props) => {
                         <span className="pin">
                           <LocationIcon />
                         </span>
-                        {promise.place ? promise.place : "장소를 불러올 수 없습니다."}
+                        {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
                       </span>
                     </div>
                   </div>
                 </TextBox>
 
-                <div className="icon">
-                  <MenuIcon />
-                </div>
+                {promise?.userId === jwt.getUserId() && (
+                  <DropDownMenu>
+                    <DeleteBtn
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteHandler(promise.promiseId);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </DeleteBtn>
+                  </DropDownMenu>
+                )}
               </CustomCard>
             );
           }
@@ -133,13 +151,10 @@ const CustomCard = styled(Card)`
       }
     }
   }
-  .icon {
-    cursor: pointer;
-    width: ${(props) => props.theme.size.xl};
-    height: ${(props) => props.theme.size.xl};
-    display: flex;
-    justify-content: center;
-  }
+`;
+
+const DeleteBtn = styled.li`
+  fill: red;
 `;
 
 export default PromiseList;

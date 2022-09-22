@@ -11,7 +11,7 @@ import { sweetalert } from "utils";
 import { isLogin } from "store/modules/loginSlice";
 
 const SignUpPage = (props) => {
-  const { getValues, register, handleSubmit, setError, watch } = useForm({ mode: "onChange" });
+  const { getValues, register, handleSubmit, setError, watch, formState: { errors } } = useForm({ mode: "onChange" });
   const dispatch = useDispatch();
   const [emailCheck, setEmailCheck] = useState(false);
   const [nickCheck, setNickCheck] = useState(false);
@@ -25,7 +25,7 @@ const SignUpPage = (props) => {
     e.preventDefault();
     const data = getValues(type);
     if (data === "" || (type === "email" ? regPass.test(data) === false : data.length > 8)) {
-      setError(type, { message: "다시 확인해주세요" }, { shouldFocus: true });
+      setError(type, { message: "다시 확인해주세요" }, { shouldFocus: true } ,alert("asd"));
     } else {
       let sendData = {};
       sendData[type] = data;
@@ -39,9 +39,11 @@ const SignUpPage = (props) => {
     if (answer.result) {
       sweetalert.successAlert(answer.msg);
       Object.keys(data)[0] === "email" ? setEmailCheck(true) : setNickCheck(true);
+      alert("트루쪽")
     } else {
       sweetalert.failAlert(answer.msg);
       Object.keys(data)[0] === "email" ? setEmailCheck(false) : setNickCheck(false);
+      alert("flase 쪽")
     }
   };
 
@@ -51,6 +53,7 @@ const SignUpPage = (props) => {
     if (answer.result) {
       sweetalert.successTimerAlert(answer.msg);
       setLoginToggle({ toggle: true, email: data.email, password: data.password });
+      alert("회원가입쪽")
     }
     // 이미지 업로드 기능 추가시 활성화
     // const formData = new FormData();
@@ -115,7 +118,7 @@ const SignUpPage = (props) => {
           <div className="inner">
             <p>아이디</p>
             <div className="withBtn">
-              <InputDiv>
+              <InputDiv className={errors.email && "errorInput"}>
                 <input
                   {...register("email", {
                     required: "이메일은 필수 입력입니다",
@@ -130,18 +133,20 @@ const SignUpPage = (props) => {
                     },
                   })}
                   placeholder="이메일을 입력해주세요"
+      
                 />
               </InputDiv>
               <Btn outLine={true} onClick={(e) => onCheck(e, "email")} disabled={emailCheck}>
                 중복확인
               </Btn>
             </div>
+            {errors?.email?.message && <h3>{errors.email.message}</h3>}
           </div>
 
           <div className="inner">
             <p>닉네임</p>
             <div className="withBtn">
-              <InputDiv>
+              <InputDiv className={errors.nickname && "errorInput"}>
                 <input
                   {...register("nickname", {
                     required: "닉네임은 필수 입력입니다",
@@ -159,11 +164,12 @@ const SignUpPage = (props) => {
                 중복확인
               </Btn>
             </div>
+            {errors?.nickname?.message && <h3>{errors.nickname.message}</h3>}
           </div>
 
           <div className="inner">
             <p>비밀번호</p>
-            <InputDiv>
+            <InputDiv className={errors.password && "errorInput"}>
               <input
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다",
@@ -175,11 +181,12 @@ const SignUpPage = (props) => {
                 type="password"
               />
             </InputDiv>
+            {errors?.password?.message && <h3>{errors.password.message}</h3>}
           </div>
 
           <div className="inner">
             <p>비밀번호 확인</p>
-            <InputDiv>
+            <InputDiv className={errors.confirm && "errorInput"}>
               <input
                 {...register("confirm", {
                   required: "비밀번호는 확인은 필수입니다",
@@ -191,18 +198,23 @@ const SignUpPage = (props) => {
                 type="password"
               />
             </InputDiv>
+            {errors?.confirm?.message && <h3>{errors.confirm.message}</h3>}
           </div>
 
           <div className="inner">
             <p>이름</p>
-            <InputDiv>
-              <input {...register("name", { required: "이름은 필수 입력입니다" })} placeholder="이름을 입력해주세요" maxLength="9" />
+            <InputDiv className={errors.name && "errorInput"}>
+              <input {...register("name", { required: "이름은 필수 입력입니다" })}
+               placeholder="이름을 입력해주세요"
+               maxLength="9" 
+               />
             </InputDiv>
+            {errors?.name?.message && <h3>{errors.name.message}</h3>}
           </div>
 
           <div className="inner">
             <p>휴대폰 번호</p>
-            <InputDiv>
+            <InputDiv className={errors.phone && "errorInput"}>
               <input
                 {...register("phone", {
                   required: "전화번호는 필수 입력입니다",
@@ -213,6 +225,7 @@ const SignUpPage = (props) => {
                 placeholder="01012345678"
               />
             </InputDiv>
+            {errors?.phone?.message && <h3>{errors.phone.message}</h3>}
           </div>
           {/* <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden /> */}
 
@@ -251,6 +264,20 @@ const Container = styled.div`
     font-size: ${(props) => props.theme.size.s};
     font-weight: bold;
     margin-bottom: calc(${(props) => props.theme.size.m} / 2);
+  }
+
+  div > h3 {
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: ${(props) => props.theme.size.xs};  
+    line-height: 130%;
+    color: #DF0C0C;
+    margin-top: calc(${(props) => props.theme.size.xs} / 3);
+  }
+
+  .errorInput {
+    border: 1px solid #DF0C0C;
   }
 `;
 
@@ -336,7 +363,7 @@ const Comment = styled.div`
   h3 {
     font-size: 16px;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 24px;  
   }
 
   h1 {

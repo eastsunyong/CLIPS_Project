@@ -40,3 +40,21 @@ export const dupCheck = async (data) => {
   }
   return answer;
 };
+
+//로그아웃 
+export const logout = async (refreshToken) => {
+  const answer = { result: true };
+  try {
+    const res = await axios.default.delete("/auth/signout", {
+      data: {
+        refreshToken
+      }
+    });
+    console.log(res)
+    localStorage.clear()
+  } catch (err) {
+    answer.result = false;
+    answer.msg = err.response;
+  }
+  return answer;
+};

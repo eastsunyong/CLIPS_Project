@@ -79,7 +79,7 @@ const PromiseList = (props) => {
                   </div>
                 </TextBox>
 
-                {promise.userId === jwt.getUserId() && (
+                {promise?.userId === jwt.getUserId() && (
                   <DropDownMenu>
                     <DeleteBtn
                       onClick={(e) => {

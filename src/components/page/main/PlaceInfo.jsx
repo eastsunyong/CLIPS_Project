@@ -85,7 +85,7 @@ const PlaceInfo = (props) => {
           <span className="icon">
             <LocationIcon />
           </span>
-          {/* <span>{crawlData?.rawArrDateUrl[0] ? crawlData?.rawArrDateUrl[0] : "영업시간을 확인할 수 없습니다!"}</span> */}
+          <span>{crawlData?.rawArrDateUrl[0] ? crawlData?.rawArrDateUrl[0] : "영업시간을 확인할 수 없습니다!"}</span>
         </div>
       </Info>
       <Btn outLine={true} onClick={savePlace}>

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 import { Card, DropDownMenu, PageTop, TextBox } from "components/common";
-import { DeleteIcon, LocationIcon, PlusIcon } from "assets/icons";
+import { DeleteIcon, LocationIcon, PlusIcon } from "assets/iconList";
 import { Calendar } from "components/calendar";
 import { promiseAPI } from "apis";
 import { jwt, sweetalert } from "utils";

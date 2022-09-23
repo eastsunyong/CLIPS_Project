@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { Btn, Card, TextBox } from "components/common";
-import { LocationIcon } from "assets/icons";
+import { LocationIcon } from "assets/iconList";
 import { promiseAPI } from "apis";
 import { jwt } from "utils";
 

@@ -14,7 +14,7 @@ import "./DatePicker.css";
 import { ko } from "date-fns/esm/locale";
 
 import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { LeftArrowIcon } from "assets/icons";
+import { LeftArrowIcon } from "assets/iconList";
 import { promiseAPI } from "apis";
 import { FindFriend } from ".";
 import { resetState, setTemporaryStorage } from "store/modules/promiseSlice";

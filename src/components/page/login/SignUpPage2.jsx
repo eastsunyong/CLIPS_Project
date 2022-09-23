@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { LeftArrowIcon } from "assets/icons";
+import { LeftArrowIcon } from "assets/iconList";
 import { loginAPI } from "apis";
 import { sweetalert } from "utils";
 import { SignUpPage3 } from ".";

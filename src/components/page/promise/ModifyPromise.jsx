@@ -13,7 +13,7 @@ import "./DatePicker.css";
 import { ko } from "date-fns/esm/locale";
 
 import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
-import { CloseIcon } from "assets/icons";
+import { CloseIcon } from "assets/iconList";
 import { FindFriend } from ".";
 import { promiseAPI } from "apis";
 import { sweetalert } from "utils";

@@ -9,7 +9,7 @@ import { sweetalert } from "utils";
 import { __newLogin } from "store/modules/loginSlice";
 
 //아이콘
-import { CloseIcon } from "assets/icons";
+import { CloseIcon } from "assets/iconList";
 
 const LoginPage = (props) => {
   const {

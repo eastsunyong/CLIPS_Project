@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import { MapControl, TopSearch, CategoryBtnArea, BottomModal, PlaceInfo, SearchModal, GetMiddleModal, MainMap } from "components/page/main";
-import { GeoIcon, PinIcon, SearchIcon, LeftArrowIcon } from "assets/icons";
+import { GeoIcon, PinIcon, SearchIcon, LeftArrowIcon } from "assets/iconList";
 import { IconBtn, RoundBtn } from "components/common";
 
 const Main = () => {

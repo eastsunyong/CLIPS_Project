@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Btn, Modal, PageTop, TextBox } from "components/common";
-import { LeftArrowIcon } from "assets/icons";
+import { LeftArrowIcon } from "assets/iconList";
 import MiddleMap from "./MiddleMap";
 import { setPlace } from "store/modules/promiseSlice";
 

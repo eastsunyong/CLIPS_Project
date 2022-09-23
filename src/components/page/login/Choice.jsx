@@ -6,7 +6,7 @@ import { Btn, Modal, OpacityModal, PageTop } from "components/common";
 import { LoginPage, SignUpPage, Line } from ".";
 import { sweetalert } from "utils";
 //아이콘
-import { CloseIcon, KakaoIcon } from "assets/icons";
+import { CloseIcon, KakaoIcon } from "assets/iconList";
 
 const Choice = (props) => {
   //맞는거 불러오기

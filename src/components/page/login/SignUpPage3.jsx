@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
-import { CameraIcon, LeftArrowIcon } from "assets/icons";
+import { CameraIcon, LeftArrowIcon } from "assets/iconList";
 import { loginAPI } from "apis";
 import defaultImg from "assets/img/UserDefaultImg.png";
 import { sweetalert } from "utils";

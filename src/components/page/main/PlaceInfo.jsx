@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { Btn, TextBox, XDragList } from "components/common";
-import { LocationIcon, PhoneIcon, StarIcon } from "assets/icons";
+import { LocationIcon, PhoneIcon, StarIcon } from "assets/iconList";
 import { axios } from "utils";
 import { setPlace } from "store/modules/promiseSlice";
 import imgLoading from "assets/img/imgLoading.png";

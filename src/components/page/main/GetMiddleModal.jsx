@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { DeleteIcon, LeftArrowIcon } from "assets/icons";
+import { DeleteIcon, LeftArrowIcon } from "assets/iconList";
 import { SearchModal, ViewMiddleModal } from ".";
 import { localAPI } from "apis";
 import { sweetalert } from "utils";

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 //아이콘
 import { Btn, Modal, PageTop } from "components/common";
-import { LeftArrowIcon, RightArrowIcon } from "assets/icons";
+import { LeftArrowIcon, RightArrowIcon } from "assets/iconList";
 import { SignUpPage2 } from ".";
 
 const SignUpPage = (props) => {

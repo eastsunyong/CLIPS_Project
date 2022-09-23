@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { MenuIcon } from "assets/icons";
+import { MenuIcon } from "assets/iconList";
 
 const DropDownMenu = (props) => {
   const [toggle, setToggle] = useState(false);

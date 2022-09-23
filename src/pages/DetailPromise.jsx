@@ -5,7 +5,7 @@ import { StaticMap } from "react-kakao-maps-sdk";
 
 import { ModifyPromise } from "components/page/promise";
 import { PageTop, TextBox } from "components/common";
-import { LeftArrowIcon, LocationIcon } from "assets/icons";
+import { LeftArrowIcon, LocationIcon } from "assets/iconList";
 import { promiseAPI } from "apis";
 import { jwt, sweetalert } from "utils";
 

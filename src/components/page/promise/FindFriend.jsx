@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
 import { InputDiv, Modal, PageTop } from "components/common";
-import { LeftArrowIcon, SearchIcon } from "assets/icons";
+import { LeftArrowIcon, SearchIcon } from "assets/iconList";
 import { promiseAPI } from "apis";
 import defaultImg from "assets/img/UserDefaultImg.png";
 import { sweetalert } from "utils";

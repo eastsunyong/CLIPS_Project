@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { reviewAPI } from "apis";
 import { Card, DropDownMenu, TextBox } from "components/common";
-import { DeleteIcon, LocationIcon } from "assets/icons";
+import { DeleteIcon, LocationIcon } from "assets/iconList";
 import { jwt, sweetalert } from "utils";
 
 const ReviewList = () => {

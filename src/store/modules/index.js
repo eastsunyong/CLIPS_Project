@@ -1,4 +1,5 @@
-import promise from "./promiseSlice";
 import login from "./loginSlice";
+import main from "./mainSlice";
+import promise from "./promiseSlice";
 
-export { login, promise };
+export { login, main, promise };

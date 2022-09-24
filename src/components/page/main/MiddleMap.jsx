@@ -1,104 +1,81 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef } from "react";
+import styled from "styled-components";
+import { CustomOverlayMap, Polygon } from "react-kakao-maps-sdk";
 
 import { Map } from "components/map";
-import { middleImg, middleMemberImg } from "assets/img/marker";
+import { Heart } from "assets/icons";
+import { kakaoMap } from "utils";
 
-const MiddleMap = (props) => {
-  const { kakao } = window;
+const MiddleMap = ({ locationList }) => {
   const mapRef = useRef(null);
 
-  const [middle, setMiddle] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [lines, setLines] = useState([]);
-
-  // useEffect(() => {
-  //   if (props.locationList) {
-  //     setCenter(props.locationList.middleLocation.coord);
-  //     setMarkers(props.locationList.list);
-
-  //     const bounds = new kakao.maps.LatLngBounds();
-  //     props.locationList.list.forEach((marker) => {
-  //       bounds.extend(new kakao.maps.LatLng(marker.y, marker.x));
-  //     });
-  //     mapRef.current.setBounds(bounds);
-  //   }
-  // }, [props.locationList]);
-
   useEffect(() => {
-    if (props.locationList) {
-      if (middle) {
-        middle.setMap(null);
-        markers.forEach((m) => {
-          m.setMap(null);
-        });
-        lines.forEach((l) => {
-          l.setMap(null);
-        });
-      }
-      let centerPosition = new kakao.maps.LatLng(props.locationList.middleLocation.coord.y, props.locationList.middleLocation.coord.x);
-      let centerMarkerImg = new kakao.maps.MarkerImage(middleImg, new kakao.maps.Size(36, 36), { offset: new kakao.maps.Point(20, 20) });
-      let center = new kakao.maps.Marker({
-        position: centerPosition,
-        image: centerMarkerImg,
-      });
-      center.setMap(mapRef.current);
-      setMiddle(center);
-
-      let bounds = new kakao.maps.LatLngBounds();
-      props.locationList.list.forEach((coord) => {
-        let position = new kakao.maps.LatLng(coord.y, coord.x);
-        let markerImg = new kakao.maps.MarkerImage(middleMemberImg, new kakao.maps.Size(36, 36), { offset: new kakao.maps.Point(20, 20) });
-        let marker = new kakao.maps.Marker({
-          position,
-          image: markerImg,
-        });
-        let polyline = new kakao.maps.Polyline({
-          path: [position, centerPosition], // 선을 구성하는 좌표배열 입니다
-          strokeWeight: 3, // 선의 두께 입니다
-          strokeColor: "#0099FF", // 선의 색깔입니다
-          strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-          strokeStyle: "solid", // 선의 스타일입니다,
-        });
-        setMarkers((markers) => [...markers, marker]);
-        setLines((lines) => [...lines, polyline]);
-        bounds.extend(position);
-        polyline.setMap(mapRef.current);
-        marker.setMap(mapRef.current);
+    if (locationList.middle.address) {
+      const bounds = kakaoMap.createBounds();
+      locationList.list.forEach((location) => {
+        bounds.extend(kakaoMap.xy2latlng(location.coord.x, location.coord.y));
       });
       mapRef.current.setBounds(bounds);
     }
-  }, [props.locationList]);
+  }, [locationList.middle.address]);
 
-  // useEffect(() => {
-  //   if (markers.length !== 0) {
-  //     const bounds = new kakao.maps.LatLngBounds();
-  //     markers.forEach((marker) => {
-  //       bounds.extend(new kakao.maps.LatLng(marker.y, marker.x));
-  //     });
-  //     mapRef.current.setBounds(bounds);
-  //   }
-  // }, [markers]);
+  return (
+    <Map ref={mapRef} id="subMap">
+      {locationList.middle.address && (
+        // 중간 장소 오버레이
+        <CustomOverlayMap position={{ lng: locationList.middle.coord.x, lat: locationList.middle.coord.y }}>
+          <CenterOverlay>
+            <Heart className="sm" />
+          </CenterOverlay>
+        </CustomOverlayMap>
+      )}
 
-  // 정확한 폴리라인용 => 작업예정
-  // useEffect(() => {
-  //   if (center) {
-  //     console.log(markers);
-  //     markers.forEach((marker) => {
-  //       axios.kakaoAxios
-  //         .get(`https://apis-navi.kakaomobility.com/v1/directions?origin=${marker.lng},${marker.lat}&destination=${center.lng},${center.lat}`)
-  //         .then((res) => {
-  //           const guides = res.data.routes[0].sections[0].guides;
-  //           let guidesXY = [];
-  //           guides.forEach((lngLat) => {
-  //             guidesXY.push({ lng: lngLat.y, lat: lngLat.x });
-  //           });
-  //           setPolyline((polyline) => [polyline, guidesXY]);
-  //         });
-  //     });
-  //   }
-  // }, [markers]);
-
-  return <Map ref={mapRef} id="subMap"></Map>;
+      {locationList.middle.address &&
+        locationList.list.map((location, i) => {
+          // 출발지점들 오버레이, 폴리라인
+          return (
+            <React.Fragment key={`${location.coord.x}-${location.coord.y}-${i}`}>
+              <CustomOverlayMap position={{ lng: location.coord.x, lat: location.coord.y }}>
+                <PointOverlay>{i + 1}</PointOverlay>
+              </CustomOverlayMap>
+              <Polygon
+                path={[
+                  { lng: locationList.middle.coord.x, lat: locationList.middle.coord.y },
+                  { lng: location.coord.x, lat: location.coord.y },
+                ]}
+                strokeWeight={3} // 선의 두께
+                strokeColor={"#00D685"} // 선의 색깔
+                strokeOpacity={0.8} // 선의 불투명도
+                strokeStyle={"solid"} // 선의 스타일
+                fillColor={"#00D685"} // 채우기 색깔
+                fillOpacity={0.7} // 채우기 불투명도
+              />
+            </React.Fragment>
+          );
+        })}
+    </Map>
+  );
 };
 
 export default memo(MiddleMap);
+
+const CenterOverlay = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 3.2rem;
+  height: 3.2rem;
+
+  border: 0.2rem solid ${(props) => props.theme.color.brand};
+  border-radius: 50%;
+  background: ${(props) => props.theme.color.brand};
+
+  color: white;
+`;
+
+const PointOverlay = styled(CenterOverlay)`
+  border: 0.2rem solid white;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;

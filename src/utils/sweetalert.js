@@ -76,3 +76,13 @@ export const confirm = (messge) => {
     confirmButtonText: "확인",
   });
 };
+
+// 타이머
+export const timer = (msg) => {
+  return Swer.fire({
+    title: msg,
+    timer: 1000,
+    showConfirmButton: false,
+    timerProgressBar: true,
+  });
+};

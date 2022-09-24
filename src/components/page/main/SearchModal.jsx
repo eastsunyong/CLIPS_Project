@@ -1,53 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import _ from "lodash";
 
-import { Btn, InputDiv, OpacityModal, PageTop } from "components/common";
-import { LeftArrowIcon } from "assets/iconList";
-import { localAPI } from "apis";
-import { sweetalert } from "utils";
+import { Btn, OpacityModal, Pagefield, Textfield } from "components/common";
+import { LeftArrow, Location } from "assets/icons";
+import { kakaoMap } from "utils";
 
-const SearchModal = (props) => {
-  const { handleSubmit, register, reset } = useForm();
+const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
+  const geocoder = kakaoMap.createGeocoder();
+  const { register, resetField, setFocus } = useForm();
   const [list, setList] = useState([]);
 
-  // 모달 열릴때 초기화
   useEffect(() => {
-    if (props.toggle) {
-      reset();
+    if (toggle) {
       setList([]);
+      resetField("search");
+      setFocus("search");
     }
-  }, [props.toggle]);
+  }, [toggle, resetField, setFocus]);
 
-  // list 저장
-  const setAddressList = (arr) => {
-    setList([]);
-    arr.forEach((doc) => {
-      let address = doc.address_name;
-      if (!address) {
-        const addressInfo = doc.road_address ? doc.road_address : doc.address;
-        address = addressInfo.address_name;
-      }
-      setList((addressList) => {
-        return [...addressList, address];
-      });
-    });
+  // 객체에서 주소값, 좌표값 필터
+  const addressFilter = (ob) => {
+    return { address: ob.address_name, coord: { x: Number(ob.x), y: Number(ob.y) } };
   };
 
   // 검색
-  const getAddressList = async (data) => {
-    const answer = await localAPI.searchAddress(data.search);
-    if (!answer.docs.length) {
-      sweetalert.areaWithout();
-    }
-    if (answer.result) setAddressList(answer.docs);
-  };
+  const searchHandler = async (e) => {
+    const address = e.target.value;
 
-  // 리스트중 지역 선택
-  const selectLocation = (address) => {
-    const target = props.target ? props.target : "mainLocation";
-    props.setValue(target, address);
-    props.setToggle(!props.toggle);
+    if (!address) {
+      setList([]);
+      return;
+    }
+
+    geocoder.addressSearch(address, (result, status) => {
+      if (status === "OK") {
+        setList(_.map(result, addressFilter));
+      }
+    });
   };
 
   // geo옵션
@@ -58,82 +49,94 @@ const SearchModal = (props) => {
   };
 
   // 내위치 리스트에 저장
-  const getMyLocation = (e) => {
-    e.preventDefault();
+  const getMyLocation = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const answer = await localAPI.addressTransfer(position.coords.longitude, position.coords.latitude);
-        if (answer.result) setAddressList(answer.docs);
+        geocoder.coord2Address(position.coords.longitude, position.coords.latitude, (result, status) => {
+          if (status === "OK") {
+            const address = result[0].road_address ? result[0].road_address : result[0].address;
+
+            geocoder.addressSearch(address.address_name, (result, status) => {
+              if (status === "OK") {
+                selectLocation(_.map(result, addressFilter)[0]);
+              }
+            });
+          }
+        });
       },
+
       () => {},
+
       geolocationOpt
     );
   };
 
   // register옵션
   const registerOpt = {
-    required: "검색어를 입력해주세요",
+    onChange: _.debounce(searchHandler, 200),
   };
 
   return (
-    <OpacityModal toggle={props.toggle}>
-      <PageTop>
-        <div>
-          <span
-            className="icon"
+    <OpacityModal toggle={toggle}>
+      <Pagefield
+        icon={
+          <div
+            className="btn"
             onClick={() => {
-              props.setToggle(!props.toggle);
+              selectTarget(null);
             }}
           >
-            <LeftArrowIcon />
-          </span>
-          <span className="title">주소 검색</span>
-        </div>
-      </PageTop>
-      <SearchArea>
-        <form onSubmit={handleSubmit(getAddressList)}>
-          <InputDiv>
-            <input {...register("search", registerOpt)} type="search" placeholder="시/군/구로 검색" autoComplete="off" />
-          </InputDiv>
-        </form>
+            <LeftArrow className="sm" />
+          </div>
+        }
+        title="주소 검색"
+      >
+        <Textfield>
+          <input autoComplete="off" placeholder="시/군/구로 검색" {...register("search", registerOpt)} />
+        </Textfield>
 
-        <LocationList>
-          {list.map((address, i) => {
+        <List>
+          {list.map((location) => {
             return (
-              <Location
-                key={address + i}
-                onClick={() => {
-                  selectLocation(address);
-                }}
-              >
-                {address}
-              </Location>
+              <LocationInfo key={`${location.coord.x}-${location.coord.y}`} onClick={() => selectLocation(location)}>
+                <div>
+                  <Location className="sm" />
+                </div>
+                {location.address}
+              </LocationInfo>
             );
           })}
-        </LocationList>
 
-        {list.length === 0 ? <Btn onClick={getMyLocation}>내 위치 찾기</Btn> : null}
-      </SearchArea>
+          {list.length === 0 && <Btn onClick={getMyLocation}>내 위치 찾기</Btn>}
+        </List>
+      </Pagefield>
     </OpacityModal>
   );
 };
 
 export default SearchModal;
 
-const SearchArea = styled.div`
-  padding: 0 ${(props) => props.theme.size.m};
+const List = styled.div`
+  margin-top: 2rem;
 `;
 
-const LocationList = styled.div`
-  padding-top: calc(${(props) => props.theme.size.xs} * 2);
-`;
+const LocationInfo = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
-const Location = styled.div`
-  cursor: pointer;
-  padding: ${(props) => props.theme.size.xs} 0;
+  padding: 1.2rem 0;
 
-  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.1);
+  border-bottom: 0.1rem solid ${(props) => props.theme.color.disable};
 
-  font-size: ${(props) => props.theme.size.s};
-  font-weight: 500;
+  font-size: 1.4rem;
+
+  div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-right: 1rem;
+    color: ${(props) => props.theme.color.black.light};
+  }
 `;

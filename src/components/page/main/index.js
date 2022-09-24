@@ -1,11 +1,9 @@
-import MapControl from "./MapControl";
-import TopSearch from "./TopSearch";
-import CategoryBtnArea from "./CategoryBtnArea";
-import BottomModal from "./BottomModal";
-import PlaceInfo from "./PlaceInfo";
+import CategoryList from "./CategoryList";
+import MainMap from "./MainMap";
+import MiddleMap from "./MiddleMap";
 import SearchModal from "./SearchModal";
+import BottomModal from "./BottomModal";
 import GetMiddleModal from "./GetMiddleModal";
 import ViewMiddleModal from "./ViewMiddleModal";
-import MainMap from "./MainMap";
 
-export { MapControl, TopSearch, CategoryBtnArea, BottomModal, PlaceInfo, SearchModal, GetMiddleModal, MainMap, ViewMiddleModal };
+export { CategoryList, MainMap, MiddleMap, SearchModal, BottomModal, GetMiddleModal, ViewMiddleModal };

@@ -2,15 +2,15 @@ import styled from "styled-components";
 
 const Btn = styled.button`
   width: 100%;
-  padding: ${(props) => props.theme.size.xs};
+  padding: 0.8rem;
 
   border: 0.1rem solid ${(props) => props.theme.color.brand};
-  border-radius: calc(${(props) => props.theme.size.m} / 2);
+  border-radius: 0.4rem;
   background: ${(props) => (props.outLine ? "white" : props.theme.color.brand)};
 
-  font-weight: bold;
-  font-size: ${(props) => props.theme.size.s};
   color: ${(props) => (props.outLine ? props.theme.color.brand : "white")};
+  font-weight: bold;
+  font-size: 1.4rem;
 `;
 
 export default Btn;

@@ -1,90 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
-import { MapControl, TopSearch, CategoryBtnArea, BottomModal, PlaceInfo, SearchModal, GetMiddleModal, MainMap } from "components/page/main";
-import { GeoIcon, PinIcon, SearchIcon, LeftArrowIcon } from "assets/iconList";
-import { IconBtn, RoundBtn } from "components/common";
+import { Textfield } from "components/common";
+import { BottomModal, CategoryList, MainMap, GetMiddleModal, SearchModal } from "components/page/main";
+import { Search } from "assets/icons";
+import { useSearch } from "hooks";
 
 const Main = () => {
-  const categoryList = ["음식점", "카페", "술집", "헬스장", "운동장"];
-  const { register, setValue, getValues } = useForm();
-  // 모달관련 상태
-  const [searchToggle, setSearchToggle] = useState(false);
-  const [middleToggle, setMiddleToggle] = useState(false);
-  const [infoToggle, setInfoToggle] = useState(false);
+  const infoView = useSelector((state) => state.main.infoView);
 
-  // 맵관련 상태
-  const [isCenter, setIsCenter] = useState(false);
-
-  // 검색관련 상태
-  const [placeInfo, setPlaceInfo] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  // 주소검색 커스텀훅
+  const { register, selectTarget, location, selectLocation, toggle } = useSearch();
 
   return (
     <>
-      <Section>
-        <Top infoToggle={infoToggle}>
-          <TopControl>
-            <TopSearch
-              onClick={() => {
-                setSearchToggle(!searchToggle);
-              }}
-            >
-              <input {...register("mainLocation")} placeholder="시/군/구로 검색" readOnly />
-              <div className="icon">
-                <SearchIcon />
-              </div>
-            </TopSearch>
-          </TopControl>
-          <CategoryBtnArea categoryList={categoryList} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
-        </Top>
+      <Section infoView={infoView}>
+        <SearchBar
+          className="topContral"
+          onClick={() => {
+            selectTarget("center");
+          }}
+        >
+          <input readOnly autoComplete="off" placeholder="시/군/구로 검색" {...register("center")} />
+          <div>
+            <Search className="md" />
+          </div>
+        </SearchBar>
 
-        <BottomModal toggle={infoToggle} viewTitle={!!placeInfo}>
-          <MapControl>
-            {infoToggle ? (
-              <IconBtn
-                onClick={() => {
-                  setInfoToggle(!infoToggle);
-                }}
-              >
-                <LeftArrowIcon />
-              </IconBtn>
-            ) : (
-              <>
-                <RoundBtn
-                  selected={true}
-                  onClick={() => {
-                    setMiddleToggle(!searchToggle);
-                  }}
-                >
-                  <PinIcon />
-                  <span>중간은 어디?</span>
-                </RoundBtn>
+        <CategoryList className="topContral" />
 
-                <IconBtn
-                  onClick={() => {
-                    setIsCenter(!isCenter);
-                  }}
-                >
-                  <GeoIcon />
-                </IconBtn>
-              </>
-            )}
-          </MapControl>
-
-          <PlaceInfo placeInfo={placeInfo} infoToggle={infoToggle} setInfoToggle={setInfoToggle} />
-        </BottomModal>
+        <MainMap location={location} />
+        <BottomModal />
       </Section>
-      <MainMap
-        address={getValues("mainLocation")}
-        categoryList={categoryList}
-        selectedCategory={selectedCategory}
-        isCenter={isCenter}
-        setPlaceInfo={setPlaceInfo}
-      />
-      <SearchModal toggle={searchToggle} setToggle={setSearchToggle} setValue={setValue} />
-      <GetMiddleModal toggle={middleToggle} setToggle={setMiddleToggle} />
+      <SearchModal toggle={toggle} selectLocation={selectLocation} selectTarget={selectTarget} />
+      <GetMiddleModal />
     </>
   );
 };
@@ -93,16 +43,35 @@ export default Main;
 
 const Section = styled.section`
   position: relative;
+  overflow: hidden;
+
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  padding: 1.6rem 0;
+
+  #mainMap {
+    position: absolute;
+    top: 0;
+  }
+
+  .topContral {
+    position: relative;
+    z-index: ${(props) => (props.infoView ? props.theme.level.back : props.theme.level.front.low)};
+  }
 `;
 
-const Top = styled.div`
-  position: relative;
-  z-index: ${(props) => (props.infoToggle ? props.theme.level.back : props.theme.level.front.low)};
-`;
+const SearchBar = styled(Textfield)`
+  cursor: pointer;
 
-const TopControl = styled(MapControl)`
-  padding-bottom: 0;
+  padding: 1rem 1.8rem;
+  margin: 0 1.6rem;
+
+  border: none;
+  box-shadow: 0px 2px 10px rgba(17, 24, 39, 0.15);
+  input {
+    cursor: pointer;
+  }
+  .md {
+    color: ${(props) => props.theme.color.black.light};
+  }
 `;

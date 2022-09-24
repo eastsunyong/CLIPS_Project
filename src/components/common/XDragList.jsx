@@ -33,13 +33,13 @@ export default XDragList;
 const List = styled.div`
   cursor: pointer;
   position: relative;
-  z-index: ${(props) => props.theme.level.front.low};
+  /* z-index: ${(props) => props.theme.level.front.low}; */
   overflow-x: scroll;
 
   display: flex;
 
   width: 100%;
-  padding: ${(props) => props.theme.size.xs} ${(props) => props.theme.size.m};
+  /* padding: ${(props) => props.theme.size.xs} ${(props) => props.theme.size.m}; */
 
   &::-webkit-scrollbar {
     display: none;

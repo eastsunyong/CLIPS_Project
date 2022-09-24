@@ -9,8 +9,13 @@ const size = {
 };
 
 const color = {
-  brand: "#0099ff",
-  disable: "gray",
+  brand: "#00D685",
+  disable: "#d1d5db",
+  black: {
+    dark: "#111827",
+    main: "#1f2937",
+    light: "#6b7280",
+  },
   hidden: "rgba(0,0,0,0)",
 };
 

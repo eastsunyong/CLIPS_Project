@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 
-import { Layout, Main, Footer } from "components/mobileLayout";
+import { Mobile, Main, Footer } from "components/Layout";
 import { RandingPage } from "pages";
 import { isLogin } from "store/modules/loginSlice";
 
@@ -16,14 +16,14 @@ function App() {
   }, []);
 
   return (
-    <Layout>
+    <Mobile>
       <Suspense fallback={<RandingPage />}>
         <Main>
           <Router />
         </Main>
         <Footer />
       </Suspense>
-    </Layout>
+    </Mobile>
   );
 }
 

@@ -3,6 +3,7 @@ import Camera from "./Camera";
 import Close from "./Close";
 import Delete from "./Delete";
 import FullStar from "./FullStar";
+import Kakao from "./Kakao";
 import Heart from "./Heart";
 import Location from "./Location";
 import Map from "./Map";
@@ -25,6 +26,7 @@ export {
   Close,
   Delete,
   FullStar,
+  Kakao,
   Heart,
   Location,
   Map,

@@ -8,7 +8,7 @@ const Textfield = styled.div`
   padding: 0.6rem 1.2rem;
 
   background: white;
-  border: 0.1rem solid ${(props) => props.theme.color.disable};
+  border: 0.1rem solid ${(props) => (props.bdColor ? props.theme.color.error.main : props.theme.color.disable)};
   border-radius: 0.8rem;
 
   div {

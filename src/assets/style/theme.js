@@ -16,6 +16,11 @@ const color = {
     main: "#1f2937",
     light: "#6b7280",
   },
+  error: {
+    dark: "#DF0C0C",
+    main: "#FF5252",
+    light: "#FF7A7A",
+  },
   hidden: "rgba(0,0,0,0)",
 };
 

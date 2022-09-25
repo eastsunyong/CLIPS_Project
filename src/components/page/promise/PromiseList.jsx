@@ -33,14 +33,14 @@ const PromiseList = (props) => {
   };
 
   const deleteHandler = async (promiseId) => {
-    const result = await sweetalert.confirm("정말로 삭제하시겠습니까?");
-    if (result.isConfirmed) {
-      const answer = await promiseAPI.deletePromise(promiseId);
-      if (answer.result) {
-        sweetalert.successTimerAlert(answer.msg);
-        getPromise();
-      }
-    }
+    // const result = await sweetalert.confirm("정말로 삭제하시겠습니까?");
+    // if (result.isConfirmed) {
+    //   const answer = await promiseAPI.deletePromise(promiseId);
+    //   if (answer.result) {
+    //     sweetalert.successTimerAlert(answer.msg);
+    //     getPromise();
+    //   }
+    // }
   };
 
   useEffect(() => {

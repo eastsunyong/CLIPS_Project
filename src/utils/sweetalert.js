@@ -1,7 +1,7 @@
-import Swer from "sweetalert2";
+import Swal from "sweetalert2";
 
 export const corfirmAlert = (messge) => {
-  return Swer.fire({
+  return Swal.fire({
     title: messge,
     icon: "warning",
     showCancelButton: true,
@@ -13,7 +13,7 @@ export const corfirmAlert = (messge) => {
 };
 
 export const successAlert = (messge) => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "success",
     title: messge,
   });
@@ -21,7 +21,7 @@ export const successAlert = (messge) => {
 
 //느낌표 아이콘
 export const warningAlert = (messge) => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "warning",
     title: messge,
   });
@@ -29,7 +29,7 @@ export const warningAlert = (messge) => {
 
 //실패 아이콘
 export const failAlert = (messge) => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "error",
     title: messge,
   });
@@ -37,7 +37,7 @@ export const failAlert = (messge) => {
 
 //타임아웃 알림
 export const successTimerAlert = (messge) => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "success",
     title: messge,
     showConfirmButton: false,
@@ -46,7 +46,7 @@ export const successTimerAlert = (messge) => {
 };
 
 export const avatarAlert = () => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "warning",
     title: "구현중인 기능입니다",
     showConfirmButton: false,
@@ -56,7 +56,7 @@ export const avatarAlert = () => {
 
 //없는 지역 알림창
 export const areaWithout = () => {
-  return Swer.fire({
+  return Swal.fire({
     icon: "warning",
     title: "찾을 수 없습니다",
     showConfirmButton: false,
@@ -64,25 +64,28 @@ export const areaWithout = () => {
   });
 };
 
-// 일반 컨펌 알렉
-export const confirm = (messge) => {
-  return Swer.fire({
-    title: messge,
-    icon: "warning",
+//----최신
+
+// 컨펌
+export const confirm = (msg, type) => {
+  return Swal.fire({
+    title: msg,
+    icon: type,
+    confirmButtonText: "확인",
+    confirmButtonColor: "#00D685",
     showCancelButton: true,
     cancelButtonText: "취소",
-    confirmButtonColor: "#0099ff",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "확인",
+    cancelButtonColor: "#FF5252",
   });
 };
 
 // 타이머
-export const timer = (msg) => {
-  return Swer.fire({
+export const timer = (msg, type) => {
+  return Swal.fire({
     title: msg,
+    icon: type,
     timer: 1000,
-    showConfirmButton: false,
     timerProgressBar: true,
+    showConfirmButton: false,
   });
 };

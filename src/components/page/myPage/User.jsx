@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { loginAPI, myPageAPI } from "apis";
+import { myPageAPI } from "apis";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 import defaultImg from "assets/img/UserDefaultImg.png";
-import { isLogin } from "store/modules/loginSlice";
+import { __signout } from "store/modules/loginSlice";
 import { sweetalert } from "utils";
 import { Btn } from "components/common";
 import { useState } from "react";
@@ -18,19 +18,6 @@ const User = () => {
   const getMypage = async () => {
     const answer = await myPageAPI.getUser();
     setUser([answer.user]);
-  };
-
-  const onsubmit = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    const answer = await loginAPI.logout(refreshToken);
-    if (answer.result) {
-      dispatch(isLogin(false));
-      localStorage.clear();
-    } else {
-      sweetalert.warningAlert("이미 로그아웃된 상태입니다");
-      dispatch(isLogin(false));
-      localStorage.clear();
-    }
   };
 
   useEffect(() => {
@@ -93,7 +80,7 @@ const User = () => {
       </Notice>
       <Line />
       <Notice>
-        <p onClick={onsubmit}>로그아웃</p>
+        <p onClick={() => dispatch(__signout())}>로그아웃</p>
       </Notice>
     </Section>
   );
@@ -101,13 +88,13 @@ const User = () => {
 
 const Section = styled.div`
   justify-content: flex-start !important;
-  padding: calc(${(props) => props.theme.size.m} * 2) ${(props) => props.theme.size.m};
+  padding: 3.2rem 1.6rem;
   display: flex;
   flex-direction: column;
 `;
 const Profile = styled.div`
-  width: calc(${(props) => props.theme.size.m} * 3);
-  height: calc(${(props) => props.theme.size.m} * 3);
+  width: 4.8rem;
+  height: 4.8rem;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -116,17 +103,17 @@ const Profile = styled.div`
   }
 `;
 const Info = styled.div`
-  margin-left: ${(props) => props.theme.size.m};
-  font-size: ${(props) => props.theme.size.xs};
+  margin-left: 1.6rem;
+  font-size: 1.2rem;
 `;
 const NickName = styled.p`
-  font-size: ${(props) => props.theme.size.l};
+  font-size: 1.8rem;
   span {
     font-weight: bold;
   }
 `;
 const Phone = styled.p`
-  color: ${(props) => props.theme.color.disable};
+  color: ${(props) => props.theme.color.black.light};
   margin-top: 0.3rem;
 `;
 
@@ -143,9 +130,9 @@ const OutBtn = styled(Btn)`
   font-family: "SUIT";
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.theme.size.xs};
-  line-height: 15px;
-  margin-top: ${(props) => props.theme.size.xs};
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  margin-top: 1.2rem;
   height: 3.1rem;
   margin-bottom: 2.4rem;
 `;
@@ -155,12 +142,12 @@ const Notice = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px ${(props) => props.theme.size.m};
+  padding: 0 1.6rem;
   font-family: "SUIT";
   font-style: normal;
   font-weight: 400;
-  font-size: ${(props) => props.theme.size.m};
-  line-height: ${(props) => props.theme.size.xl};
+  font-size: 1.6rem;
+  line-height: 2rem;
 
   & > :last-child {
     color: red;
@@ -173,12 +160,12 @@ const Notice = styled.div`
 `;
 
 const Line = styled.div`
-  height: 6px;
+  height: 0.6rem;
   background-color: #f0f0f0;
   flex: none;
   align-self: stretch;
   flex-grow: 0;
-  margin: 0.8rem 0px;
+  margin: 0.8rem 0;
 `;
 
 export default User;

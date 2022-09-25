@@ -1,45 +1,51 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { axios } from "utils";
+import { loginAPI } from "apis";
+import { decodeToken } from "react-jwt";
 import { sweetalert } from "utils";
 
 const initialState = {
-  isLogin : false,
+  userId: null,
 };
 
-export const __newLogin = createAsyncThunk(
-  "login/Login",
-  async (payload, api) => {
-    try {
-      const res = await axios.default.post("/auth/signin", payload);
-      sweetalert.successTimerAlert(res.data.message);
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
-      api.dispatch(isLogin(true))
-    } catch (err) {
-      sweetalert.failAlert(err.response.data.message);
-    }
-  }
-);
+// 로그인
+export const __signin = createAsyncThunk("__signin", async (payload, api) => {
+  const answer = await loginAPI.login(payload);
 
-export const loginSlice = createSlice({
-  name: "login",
-  initialState,
-  reducers: {
-    isLogin: (state, action) => {
-      state.login = action.payload;
-    },
-  },
-  extraReducers:{
-    [__newLogin.pending]: (state) => {
-    },
-    [__newLogin.fulfilled]: (state, action) => {
+  if (answer.result) {
+    localStorage.setItem("accessToken", answer.accessToken);
+    localStorage.setItem("refreshToken", answer.refreshToken);
 
-    },
-    [__newLogin.rejected]: (state, action) => {
-      console.log(action)
-    },
+    api.dispatch(setLogin(answer.accessToken));
+  } else {
+    sweetalert.timer(answer.msg, "error");
   }
 });
 
-export const { isLogin } = loginSlice.actions;
+// 로그아웃
+export const __signout = createAsyncThunk("__signout", async (payload, api) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const answer = await loginAPI.logout(refreshToken);
+
+  if (answer.result) {
+    localStorage.clear();
+
+    api.dispatch(resetState());
+  } else {
+    sweetalert.timer("이미 로그아웃된 상태입니다", "error");
+  }
+});
+
+export const loginSlice = createSlice({
+  name: "LOGIN",
+  initialState,
+  reducers: {
+    resetState: () => initialState,
+    setLogin: (state, action) => {
+      state.userId = decodeToken(action.payload).userId;
+    },
+  },
+  extraReducers: {},
+});
+
+export const { setLogin, resetState } = loginSlice.actions;
 export default loginSlice.reducer;

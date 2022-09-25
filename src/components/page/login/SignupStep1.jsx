@@ -1,15 +1,10 @@
-import React from "react";
+import React, { memo, useState } from "react";
 import styled from "styled-components";
-import { useState } from "react";
 
-//아이콘
-import { Btn, Modal, PageTop } from "components/common";
-import { LeftArrowIcon, RightArrowIcon } from "assets/iconList";
-import { SignUpPage2 } from ".";
+import { Btn } from "components/common";
+import { RightArrow } from "assets/icons";
 
-const SignUpPage = (props) => {
-  const [toggle, setToggle] = useState(false);
-
+const SignupStep1 = ({ setNext }) => {
   const privacySelect = [
     { id: 0, title: "이용약관 동의 (필수)" },
     { id: 1, title: "개인정보의 제 3자 제공 동의 (필수)" },
@@ -41,18 +36,10 @@ const SignUpPage = (props) => {
       setCheckItems([]);
     }
   };
-
   return (
-    <Section>
-      <PageTop>
-        <div>
-          <div className="icon" onClick={() => props.setToggle(false)}>
-            <LeftArrowIcon />
-          </div>
-          <div className="title">회원가입</div>
-        </div>
-      </PageTop>
-      <Article>
+    <>
+      <div className="inputArea">
+        <Title>CLIPs 회원가입을 위해</Title>
         <Title>서비스 이용약관에 동의해주세요</Title>
         <SelectBox>
           <AllSelcet>
@@ -76,109 +63,86 @@ const SignUpPage = (props) => {
                   />
                   <p>{data.title}</p>
                 </div>
-                <div>
-                  <h4>
-                    <RightArrowIcon />
-                  </h4>
+                <div className="icon">
+                  <RightArrow className="sm" />
                 </div>
               </RightGo>
             ))}
           </OtherSelect>
         </SelectBox>
-        {checkItems.length === privacySelect.length ? (
-          <BottomBtn
-            onClick={() => {
-              setToggle(true);
-            }}
-          >
-            다음
-          </BottomBtn>
-        ) : (
-          <DisableBtn>다음</DisableBtn>
-        )}
-      </Article>
-
-      <Modal toggle={toggle}>
-        <SignUpPage2 setToggle={setToggle} />
-      </Modal>
-    </Section>
+      </div>
+      {checkItems.length === privacySelect.length ? (
+        <Btn
+          onClick={(e) => {
+            e.preventDefault();
+            setNext(true);
+          }}
+        >
+          다음
+        </Btn>
+      ) : (
+        <DisableBtn>다음</DisableBtn>
+      )}
+    </>
   );
 };
 
-const Section = styled.section`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-
-const Article = styled.article`
-  padding: ${(props) => props.theme.size.m};
-`;
+export default memo(SignupStep1);
 
 const Title = styled.div`
+  margin-bottom: 1rem;
+
   font-weight: bold;
-  font-size: ${(props) => props.theme.size.xl};
+  font-size: 1.6rem;
 `;
 
 const SelectBox = styled.div`
   width: 100%;
-
-  margin-top: calc(${(props) => props.theme.size.xs} * 2);
   p {
-    margin-left: 15px;
+    margin-left: 1.5rem;
   }
 `;
 
 const AllSelcet = styled.div`
   display: flex;
   flex-direction: row;
-  height: 50px;
   align-items: center;
-  border-bottom: 1px solid #ccc;
+
+  height: 5rem;
+
+  border-bottom: 0.1rem solid #ccc;
 
   font-weight: 700;
-  font-size: 16px;
-  line-height: 150%;
+  font-size: 1.6rem;
 `;
 
 const OtherSelect = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+
   div {
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 5rem;
   }
 
   p {
     font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: black;
+    font-size: 1.6rem;
   }
 `;
 const RightGo = styled.div`
   display: flex;
   justify-content: space-between;
 
-  h4 {
+  .icon {
     cursor: pointer;
-    color: ${(props) => props.theme.themeColor};
-    font-size: 14px;
-    font-weight: 700;
+    color: ${(props) => props.theme.color.brand};
   }
 `;
 
-const BottomBtn = styled(Btn)`
-  position: absolute;
-  bottom: 0;
-  width: calc(100% - (${(props) => props.theme.size.m} * 2));
-  margin-bottom: ${(props) => props.theme.size.m};
-`;
-
-const DisableBtn = styled(BottomBtn)`
+const DisableBtn = styled(Btn)`
   opacity: 0.5;
 `;
-
-export default SignUpPage;

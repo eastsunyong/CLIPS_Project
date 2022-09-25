@@ -39,8 +39,8 @@ const GetMiddleModal = () => {
   // input추가
   const addInputHandler = () => {
     if (numberId.length === maxCnt) {
-      const messge = `최대 ${maxCnt}개의 장소입니다`;
-      sweetalert.failAlert(messge);
+      const msg = `최대 ${maxCnt}개의 장소입니다`;
+      sweetalert.timer(msg);
       return;
     }
     setNumberId([...numberId, numberId[numberId.length - 1] + 1]);

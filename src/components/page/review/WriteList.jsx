@@ -1,111 +1,66 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { memo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Btn, Card, TextBox } from "components/common";
-import { LocationIcon } from "assets/icons";
-import { promiseAPI } from "apis";
-import { jwt } from "utils";
+import { Btn, Card } from "components/common";
+import { CalendarI, Location, My } from "assets/icons";
+import { __getPromiseList } from "store/modules/promiseSlice";
+import { startWriteReview, typeToggle } from "store/modules/reviewSlice";
 
-const WriteList = (props) => {
-  const [list, setList] = useState([]);
+const WriteList = () => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.login.userId);
+  const list = useSelector((state) => state.promise.promiseList);
 
-  const getPromise = async () => {
-    const answer = await promiseAPI.getList();
-    setList(answer.list);
-  };
-
+  // 마운트 시 리스트 호출
   useEffect(() => {
-    if (!props.writeToggle.toggle) {
-      getPromise();
+    if (!list.length) {
+      dispatch(__getPromiseList());
     }
-  }, [props.writeToggle]);
+  }, []);
 
   return (
-    <Article>
+    <>
       {list.map((promise) => {
-        if (promise.userId === jwt.getUserId()) {
+        if (promise.userId === userId) {
           return (
-            <CustomCard key={promise.promiseId}>
-              <TextBox>
-                <div>
-                  <div className="title">{promise.title}</div>
-                  <div>{promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}</div>
-                  <div className="info">
-                    <span>{promise.date}</span>
-                    <span>
-                      <span className="pin">
-                        <LocationIcon />
-                      </span>
-                      {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
-                    </span>
-                  </div>
+            <Card key={promise.promiseId}>
+              <div className="cardTitle">{promise.title}</div>
+
+              <div>
+                <div className="contentIcon">
+                  <My className="sm" />
                 </div>
-                {promise.done ? (
-                  <InnerBtn outLine={true}>후기 작성 완료</InnerBtn>
-                ) : (
-                  <InnerBtn
-                    onClick={() => {
-                      props.setWriteToggle({ promise, toggle: true });
-                    }}
-                  >
-                    후기쓰기
-                  </InnerBtn>
-                )}
-              </TextBox>
-            </CustomCard>
+                {promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}
+              </div>
+
+              <div>
+                <div className="contentIcon">
+                  <CalendarI className="sm" />
+                </div>
+                {promise.date}
+              </div>
+
+              <div>
+                <div className="contentIcon">
+                  <Location className="sm" />
+                </div>
+                {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
+              </div>
+
+              <Btn
+                outLine={promise.done}
+                onClick={() => {
+                  promise.done ? dispatch(typeToggle()) : dispatch(startWriteReview(promise));
+                }}
+              >
+                {promise.done ? "후기 작성 완료" : "후기 쓰기"}
+              </Btn>
+            </Card>
           );
         }
       })}
-    </Article>
+    </>
   );
 };
 
-export default WriteList;
-
-const Article = styled.article`
-  flex: 1;
-  overflow: scroll;
-
-  padding: ${(props) => props.theme.size.m};
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const CustomCard = styled(Card)`
-  cursor: pointer;
-  display: flex;
-
-  margin-bottom: ${(props) => props.theme.size.m};
-
-  .info {
-    display: flex;
-    align-items: center;
-    margin: ${(props) => props.theme.size.m} 0;
-    & > :last-child {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: ${(props) => props.theme.size.m};
-      .pin {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: calc(${(props) => props.theme.size.xs} / 2);
-        fill: ${(props) => props.theme.color.disable};
-      }
-    }
-  }
-  .icon {
-    cursor: pointer;
-    width: ${(props) => props.theme.size.xl};
-    height: ${(props) => props.theme.size.xl};
-    display: flex;
-    justify-content: center;
-  }
-`;
-
-const InnerBtn = styled(Btn)`
-  padding: calc(${(props) => props.theme.size.m} / 2);
-`;
+export default memo(WriteList);

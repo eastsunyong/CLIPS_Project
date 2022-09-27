@@ -1,6 +1,6 @@
 import PromiseList from "./PromiseList";
+import DetailPromise from "./DetailPromise";
 import AddPromise from "./AddPromise";
 import FindFriend from "./FindFriend";
-import ModifyPromise from "./ModifyPromise";
 
-export { PromiseList, FindFriend, AddPromise, ModifyPromise };
+export { PromiseList, DetailPromise, FindFriend, AddPromise };

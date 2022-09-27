@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const Modal = styled.div`
+  display: flex;
+  flex-flow: column;
+
   height: 100%;
   width: 100%;
 

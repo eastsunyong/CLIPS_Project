@@ -3,25 +3,28 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { PromiseList, AddPromise } from "components/page/promise";
+import DetailPromise from "../components/page/promise/DetailPromise";
 
 const Promised = () => {
   const location = useLocation();
-  const [toggle, setToggle] = useState(false);
-  const place = useSelector((state) => state.promise.place);
+  const addData = useSelector((state) => state.promise.addData);
+
+  const [addToggle, setAddToggle] = useState(false);
 
   useEffect(() => {
-    if (!place) {
+    if (!addData.place.name) {
       location.state = null;
     }
-    if (location.state && place) {
-      setToggle(location.state.setAddress);
+    if (location.state && addData.place.name) {
+      setAddToggle(location.state.setAddress);
     }
   }, []);
 
   return (
     <>
-      <PromiseList setToggle={setToggle} />
-      <AddPromise toggle={toggle} setToggle={setToggle} />
+      <PromiseList setAddToggle={setAddToggle} />
+      <AddPromise addData={addData} addToggle={addToggle} setAddToggle={setAddToggle} />
+      <DetailPromise />
     </>
   );
 };

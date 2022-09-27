@@ -1,93 +1,85 @@
-import React, { useEffect, useState } from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import _ from "lodash";
 
-import { Btn, TextBox, XDragList } from "components/common";
-import { LocationIcon, PhoneIcon, StarIcon } from "assets/icons";
-import { axios } from "utils";
-import { setPlace } from "store/modules/promiseSlice";
-import imgLoading from "assets/img/imgLoading.png";
-import imgEmpty from "assets/img/imgNull.png";
+import { Btn, Card } from "components/common";
+import { Location, OutlineStar, Phone, Time } from "assets/icons";
+import { setAddData } from "store/modules/promiseSlice";
+import { infoToggle, resetMainState } from "store/modules/mainSlice";
+import { imgLoading, imgNull } from "assets/img";
+import { useXDrag } from "hooks";
 
-const PlaceInfo = (props) => {
+const PlaceInfo = ({ placeInfo }) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [crawlData, setCrawlData] = useState(null);
 
-  useEffect(() => {
-    setCrawlData(null);
-    if (props.placeInfo) {
-      axios.default.post("/main/crawlAll", { placeUrl: props.placeInfo.placeUrl }).then((res) => {
-        setCrawlData(res.data.data);
-      });
-    }
-  }, [props.placeInfo]);
+  const [ref, start, end, moving] = useXDrag();
 
   // 전역에 address 등록
   const savePlace = () => {
     const place = {
-      name: props.placeInfo.name,
-      address: props.placeInfo.road_address ? props.placeInfo.road_address : props.placeInfo.address,
-      coord: props.placeInfo.coord,
+      name: placeInfo.name,
+      address: placeInfo.road_address ? placeInfo.road_address : placeInfo.address,
+      coord: placeInfo.coord,
     };
-    dispatch(setPlace(place));
+    dispatch(setAddData({ place }));
+    dispatch(resetMainState());
     nav("/promised", { state: { setAddress: true } });
   };
 
   return (
     <Section>
-      <Title
-        cursor={props.infoToggle ? "auto" : "pointer"}
+      <CustomCard
         onClick={() => {
-          if (!props.infoToggle) {
-            props.setInfoToggle(!props.infoToggle);
-          }
+          dispatch(infoToggle());
         }}
       >
-        <div>
-          <div className="title">{props.placeInfo?.name}</div>
-          <div>{props.placeInfo?.detailCategory}</div>
+        <div className="cardTitle">
+          {placeInfo?.name}
+          <div>
+            <OutlineStar className="md" />
+          </div>
         </div>
-        <div className="icon">
-          <StarIcon />
-        </div>
-      </Title>
-      <ImgArea>
-        <XDragList>
-          {crawlData && crawlData.crawlingUrllist ? (
-            crawlData.crawlingUrllist.length > 0 ? (
-              crawlData.crawlingUrllist.map((url) => {
-                return <img key={url} src={url} />;
-              })
-            ) : (
-              <img src={imgEmpty} />
-            )
+        <div>{placeInfo?.detailCategory}</div>
+      </CustomCard>
+
+      <ImgList ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
+        {placeInfo?.img ? (
+          placeInfo.img.length > 0 ? (
+            placeInfo.img.map((url) => {
+              return <img key={url} src={url} alt="가게 이미지" />;
+            })
           ) : (
-            <img src={imgLoading} />
-          )}
-        </XDragList>
-      </ImgArea>
-      <Info>
+            <img src={imgNull} alt="이미지 없음 이미지" />
+          )
+        ) : (
+          <img src={imgLoading} alt="로딩 이미지" />
+        )}
+      </ImgList>
+
+      <CustomCard>
         <div>
-          <span className="icon">
-            <LocationIcon />
-          </span>
-          <span>{props.placeInfo?.address}</span>
+          <div className="contentIcon">
+            <Location className="md" />
+          </div>
+          <div className="content">{placeInfo?.road_address ? placeInfo?.road_address : placeInfo?.address}</div>
         </div>
         <div>
-          <span className="icon">
-            <PhoneIcon />
-          </span>
-          <span>{props.placeInfo?.phone ? props.placeInfo?.phone : "연락처가 없어요!"}</span>
+          <div className="contentIcon">
+            <Phone className="md" />
+          </div>
+          <div className="content">{placeInfo?.phone ? placeInfo.phone : "연락처를 확인할 수 없어요!"}</div>
         </div>
         <div>
-          <span className="icon">
-            <LocationIcon />
-          </span>
-          <span>{crawlData?.rawArrDateUrl[0] ? crawlData?.rawArrDateUrl[0] : "영업시간을 확인할 수 없습니다!"}</span>
+          <div className="contentIcon">
+            <Time className="md" />
+          </div>
+          <div className="content">{placeInfo?.time ? placeInfo.time[0] : "영업시간을 확인할 수 없어요!"}</div>
         </div>
-      </Info>
+      </CustomCard>
+
       <Btn outLine={true} onClick={savePlace}>
         여기로 약속잡기
       </Btn>
@@ -95,15 +87,13 @@ const PlaceInfo = (props) => {
   );
 };
 
-export default PlaceInfo;
+export default memo(PlaceInfo);
 
 const Section = styled.section`
   flex: 1;
-  overflow: scroll;
+  padding: 2rem;
 
-  padding: calc(${(props) => props.theme.size.xs} * 2);
-
-  border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0;
+  border-radius: 1.6rem 1.6rem 0 0;
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
   background: white;
 
@@ -111,7 +101,7 @@ const Section = styled.section`
     display: none;
   }
   & > * {
-    margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
+    margin-bottom: 2rem;
     -ms-user-select: none;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
@@ -120,47 +110,34 @@ const Section = styled.section`
   }
 `;
 
-const Title = styled(TextBox)`
-  cursor: ${(props) => props.cursor};
-
-  min-height: 4.8rem;
-
-  display: flex;
-  justify-content: space-between;
-  .title {
-    font-size: ${(props) => props.theme.size.xl};
+const CustomCard = styled(Card)`
+  padding: 0;
+  box-shadow: none;
+  .cardTitle {
+    font-size: 2rem;
+    & > div {
+      color: ${(props) => props.theme.color.disable};
+    }
   }
-  .icon {
-    fill: ${(props) => props.theme.color.disable};
-  }
-`;
-
-const Info = styled.div`
-  font-size: ${(props) => props.theme.size.s};
-  * {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  div:not(:last-child) {
-    margin-bottom: ${(props) => props.theme.size.xs};
-  }
-  .icon {
-    fill: ${(props) => props.theme.color.disable};
-    margin-right: calc(${(props) => props.theme.size.l} / 2);
+  .content {
+    color: black;
+    font-size: 1.4rem;
   }
 `;
 
-const ImgArea = styled.div`
+const ImgList = styled.div`
   cursor: pointer;
   display: flex;
+  overflow: scroll;
+
   img {
     width: 100%;
     height: 18rem;
-    border-radius: ${(props) => props.theme.size.xs};
+    border-radius: 1.2rem;
     -webkit-user-drag: none;
   }
+
   img:not(:first-child) {
-    margin-left: ${(props) => props.theme.size.s};
+    margin-left: 1.2rem;
   }
 `;

@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-//아이콘
-import { AiOutlineLeft } from 'react-icons/ai';
-
 
 
 const FindId = (props) => {
@@ -28,7 +25,7 @@ const FindId = (props) => {
     <All>
       <Container className="fcc">
       <Header>
-        <p><AiOutlineLeft onClick={()=> {props.setToggle(false)}}/></p>
+        {/* <p><AiOutlineLeft onClick={()=> {props.setToggle(false)}}/></p> */}
         <h2>아이디 찾기</h2>
       </Header>
         <form>

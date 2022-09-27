@@ -1,89 +1,100 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { loginAPI, myPageAPI } from "apis";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import defaultImg from "assets/img/UserDefaultImg.png";
-import { isLogin } from "store/modules/loginSlice";
-import { sweetalert } from "utils";
 import { Btn } from "components/common";
-import { useState } from "react";
-import { RightArrowIcon } from "assets/icons";
+import defaultImg from "assets/img/UserDefaultImg.png";
+import { RightArrow } from "assets/icons";
+import { sweetalert, download } from "utils";
+import { myPageAPI } from "apis";
+import { __signout } from "store/modules/loginSlice";
 
 const User = () => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
   const [user, setUser] = useState();
 
   const getMypage = async () => {
-    const answer = await myPageAPI.getUser()
-    setUser([answer.user])
-  }
-
-
-  const onsubmit = async () => {
-    const refreshToken = localStorage.getItem("refreshToken")
-    const answer = await loginAPI.logout(refreshToken);
-    if (answer.result) {
-      dispatch(isLogin(false))
-      localStorage.clear()
-    } else {
-      sweetalert.warningAlert("이미 로그아웃된 상태입니다")
-      dispatch(isLogin(false));
-      localStorage.clear()
-    }
-  }
+    const answer = await myPageAPI.getUser();
+    setUser([answer.user]);
+  };
 
   useEffect(() => {
-    getMypage()
+    getMypage();
   }, []);
 
   return (
     <Section>
-      {
-        user?.map((a) => {
-          return (
-            <div key={a.userId}>
-              <Sort>
-                <Profile>
-                  <img src={defaultImg} />
-                </Profile>
-                <Info>
-                  <NickName>
-                    <span>{a.name}</span>님
-                  </NickName>
-                  <Phone>{a.phone}</Phone>
-                </Info>
-              </Sort>
-              <div>
-                <OutBtn className="fcc" onClick={()=> {
-                    sweetalert.avatarAlert()
-                }}>프로필 편집</OutBtn>
-              </div>
+      {user?.map((a) => {
+        return (
+          <div key={a.userId}>
+            <Sort>
+              <Profile>
+                <img src={defaultImg} />
+              </Profile>
+              <Info>
+                <NickName>
+                  <span>{a.name}</span>님
+                </NickName>
+                <Phone>{a.phone}</Phone>
+              </Info>
+            </Sort>
+            <div>
+              <OutBtn
+                className="fcc"
+                onClick={() => {
+                  sweetalert.avatarAlert();
+                }}
+              >
+                프로필 편집
+              </OutBtn>
             </div>
-          )
-        })
-      }
-      <Notice>
-        <p>북마크</p>
-        <h4><RightArrowIcon /></h4>
-      </Notice>
-      <Line/>
+          </div>
+        );
+      })}
+
+      {download.deferredInstallPrompt ? (
+        <>
+          <Notice>
+            <p>앱 다운로드</p>
+            <h4 onClick={download.userClickedAddToHome}>
+              <RightArrow className="sm" />
+            </h4>
+          </Notice>
+          <Line />
+        </>
+      ) : null}
+
       <Notice>
         <p>공지사항</p>
-        <h4><RightArrowIcon /></h4>
+        <h4>
+          <RightArrow className="sm" />
+        </h4>
       </Notice>
       <Notice>
         <p>이용약관</p>
-        <h4><RightArrowIcon /></h4>
+        <h4>
+          <RightArrow className="sm" />
+        </h4>
       </Notice>
       <Notice>
         <p>개인정보 처리 방침</p>
-        <h4><RightArrowIcon /></h4>
+        <h4>
+          <RightArrow className="sm" />
+        </h4>
       </Notice>
-      <Line/>
+      <Line />
       <Notice>
-        <p onClick={onsubmit}>로그아웃</p>
+        <p
+          style={{ color: "red" }}
+          onClick={() => {
+            dispatch(__signout());
+            nav("/");
+          }}
+        >
+          로그아웃
+        </p>
       </Notice>
     </Section>
   );
@@ -91,13 +102,13 @@ const User = () => {
 
 const Section = styled.div`
   justify-content: flex-start !important;
-  padding: calc(${(props) => props.theme.size.m} * 2) ${(props) => props.theme.size.m};
+  padding: 3.2rem 1.6rem;
   display: flex;
   flex-direction: column;
 `;
 const Profile = styled.div`
-  width: calc(${(props) => props.theme.size.m} * 3);
-  height: calc(${(props) => props.theme.size.m} * 3);
+  width: 4.8rem;
+  height: 4.8rem;
   border-radius: 50%;
   overflow: hidden;
   img {
@@ -106,70 +117,68 @@ const Profile = styled.div`
   }
 `;
 const Info = styled.div`
-  margin-left: ${(props) => props.theme.size.m};
-  font-size: ${(props) => props.theme.size.xs};
+  margin-left: 1.6rem;
+  font-size: 1.2rem;
 `;
 const NickName = styled.p`
-  font-size: ${(props) => props.theme.size.l};
+  font-size: 1.8rem;
   span {
     font-weight: bold;
   }
 `;
 const Phone = styled.p`
-  color: ${(props) => props.theme.color.disable};
-  margin-top:0.3rem;
-  
+  color: ${(props) => props.theme.color.black.light};
+  margin-top: 0.3rem;
 `;
 
 const Sort = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
+`;
 
 const OutBtn = styled(Btn)`
   background-color: white;
-  border: 1px solid #D9D9D9;
-  color : #333333;
-  font-family: 'SUIT';
+  border: 1px solid #d9d9d9;
+  color: #333333;
+  font-family: "SUIT";
   font-style: normal;
   font-weight: 600;
-  font-size: ${(props) => props.theme.size.xs};
-  line-height: 15px;
-  margin-top: ${(props) => props.theme.size.xs};
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  margin-top: 1.2rem;
   height: 3.1rem;
   margin-bottom: 2.4rem;
-`
+`;
 
-const Notice =styled.div`
+const Notice = styled.div`
   height: 4.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px ${(props) => props.theme.size.m};
-  font-family: 'SUIT';
+  padding: 0 1.6rem;
+  font-family: "SUIT";
   font-style: normal;
   font-weight: 400;
-  font-size: ${(props) => props.theme.size.m};
-  line-height: ${(props) => props.theme.size.xl};
+  font-size: 1.6rem;
+  line-height: 2rem;
 
   & > :last-child {
-      color: red;
-      cursor: pointer;
+    cursor: pointer;
   }
 
   h4 {
     cursor: pointer;
   }
-`
+`;
 
 const Line = styled.div`
-  height: 6px;
-  background-color: #F0F0F0;
+  height: 0.6rem;
+  background-color: #f0f0f0;
   flex: none;
   align-self: stretch;
   flex-grow: 0;
-  margin: 0.8rem 0px;
-`
+  margin: 0.8rem 0;
+`;
 
 export default User;

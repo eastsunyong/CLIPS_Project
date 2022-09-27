@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Pagefield = (props) => {
+const PageField = (props) => {
   return (
     <Section>
       <Header>
@@ -65,4 +65,4 @@ const Article = styled.article`
     display: none;
   }
 `;
-export default Pagefield;
+export default PageField;

@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { myPageAPI } from "apis";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import defaultImg from "assets/img/UserDefaultImg.png";
-import { __signout } from "store/modules/loginSlice";
-import { sweetalert } from "utils";
 import { Btn } from "components/common";
-import { useState } from "react";
-import { RightArrowIcon } from "assets/iconList";
+import defaultImg from "assets/img/UserDefaultImg.png";
+import { RightArrow } from "assets/icons";
+import { sweetalert, download } from "utils";
+import { myPageAPI } from "apis";
+import { __signout } from "store/modules/loginSlice";
 
 const User = () => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
   const [user, setUser] = useState();
 
   const getMypage = async () => {
@@ -53,34 +53,48 @@ const User = () => {
           </div>
         );
       })}
-      <Notice>
-        <p>북마크</p>
-        <h4>
-          <RightArrowIcon />
-        </h4>
-      </Notice>
-      <Line />
+
+      {download.deferredInstallPrompt ? (
+        <>
+          <Notice>
+            <p>앱 다운로드</p>
+            <h4 onClick={download.userClickedAddToHome}>
+              <RightArrow className="sm" />
+            </h4>
+          </Notice>
+          <Line />
+        </>
+      ) : null}
+
       <Notice>
         <p>공지사항</p>
         <h4>
-          <RightArrowIcon />
+          <RightArrow className="sm" />
         </h4>
       </Notice>
       <Notice>
         <p>이용약관</p>
         <h4>
-          <RightArrowIcon />
+          <RightArrow className="sm" />
         </h4>
       </Notice>
       <Notice>
         <p>개인정보 처리 방침</p>
         <h4>
-          <RightArrowIcon />
+          <RightArrow className="sm" />
         </h4>
       </Notice>
       <Line />
       <Notice>
-        <p onClick={() => dispatch(__signout())}>로그아웃</p>
+        <p
+          style={{ color: "red" }}
+          onClick={() => {
+            dispatch(__signout());
+            nav("/");
+          }}
+        >
+          로그아웃
+        </p>
       </Notice>
     </Section>
   );
@@ -150,7 +164,6 @@ const Notice = styled.div`
   line-height: 2rem;
 
   & > :last-child {
-    color: red;
     cursor: pointer;
   }
 

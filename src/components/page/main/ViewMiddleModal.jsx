@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Btn, Modal, Pagefield } from "components/common";
-import { LeftArrow } from "assets/icons";
-import { setPlace } from "store/modules/promiseSlice";
 import MiddleMap from "./MiddleMap";
+import { Btn, Modal, PageField } from "components/common";
+import { LeftArrow } from "assets/icons";
+import { setAddData } from "store/modules/promiseSlice";
+import { resetMainState } from "store/modules/mainSlice";
 
 const ViewMiddleModal = ({ locationList, viewToggle, setViewToggle }) => {
   const dispatch = useDispatch();
@@ -19,13 +20,14 @@ const ViewMiddleModal = ({ locationList, viewToggle, setViewToggle }) => {
       address: locationList.middle.address,
       coord: locationList.middle.coord,
     };
-    dispatch(setPlace(place));
+    dispatch(setAddData({ place }));
+    dispatch(resetMainState());
     nav("/promised", { state: { setAddress: true } });
   };
 
   return (
     <CustomModal toggle={viewToggle}>
-      <Pagefield
+      <PageField
         icon={
           <div
             className="btn"
@@ -45,7 +47,7 @@ const ViewMiddleModal = ({ locationList, viewToggle, setViewToggle }) => {
             여기로 약속 잡기
           </Btn>
         </Bottom>
-      </Pagefield>
+      </PageField>
     </CustomModal>
   );
 };
@@ -71,7 +73,6 @@ const Bottom = styled.div`
 
   background: white;
   border-radius: 1.6rem 1.6rem 0 0;
-  box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
 
   .title {
     display: flex;

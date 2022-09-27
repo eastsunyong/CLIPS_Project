@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Map, Calendar, Review, My } from "assets/icons";
+import { Map, CalendarI, Review, My } from "assets/icons";
 
 const Footer = () => {
   const nav = useNavigate();
   const pathname = useLocation().pathname;
   const icons = [
     { path: "/", component: <Map className="lg" /> },
-    { path: "/promised", component: <Calendar className="lg" /> },
+    { path: "/promised", component: <CalendarI className="lg" /> },
     { path: "/review", component: <Review className="lg" /> },
     { path: "/mypage", component: <My className="lg" /> },
   ];

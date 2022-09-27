@@ -32,7 +32,7 @@ export const mainSlice = createSlice({
   name: "PAGE/MAIN",
   initialState,
   reducers: {
-    resetState: () => initialState,
+    resetMainState: () => initialState,
     setSelectedCg: (state, action) => {
       if (state.selectedCg.find((x) => x === action.payload)) {
         state.selectedCg = state.selectedCg.filter((cg) => cg !== action.payload);
@@ -63,5 +63,5 @@ export const mainSlice = createSlice({
   },
 });
 
-export const { resetState, setSelectedCg, setPlaceInfo, moveCenter, infoToggle, middleToggle } = mainSlice.actions;
+export const { resetMainState, setSelectedCg, setPlaceInfo, moveCenter, infoToggle, middleToggle } = mainSlice.actions;
 export default mainSlice.reducer;

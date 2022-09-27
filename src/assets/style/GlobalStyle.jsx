@@ -4,6 +4,10 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-size: 62.5%;
     line-height: 1;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
   }
   * {
     margin: 0;
@@ -25,11 +29,11 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
   
-  input::-webkit-input-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
-  input::-moz-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
-  input:-ms-input-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
-  input:-moz-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
-  input::placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
+  input::-moz-placeholder, textarea::-moz-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
+  input:-ms-input-placeholder, textarea:-ms-input-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
+  input:-moz-placeholder, textarea:-moz-placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
+  input::placeholder, textarea::placeholder { color: ${(props) => props.theme.color.disable}; font-size: 95%; }
 
   // 아이콘 크기
   .lg {

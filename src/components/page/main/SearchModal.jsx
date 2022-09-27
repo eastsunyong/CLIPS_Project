@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import _ from "lodash";
 
-import { Btn, OpacityModal, Pagefield, Textfield } from "components/common";
+import { Btn, OpacityModal, PageField, TextField } from "components/common";
 import { LeftArrow, Location } from "assets/icons";
 import { kakaoMap } from "utils";
 
@@ -78,7 +78,7 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
 
   return (
     <OpacityModal toggle={toggle}>
-      <Pagefield
+      <PageField
         icon={
           <div
             className="btn"
@@ -91,9 +91,9 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
         }
         title="주소 검색"
       >
-        <Textfield>
+        <TextField>
           <input autoComplete="off" placeholder="시/군/구로 검색" {...register("search", registerOpt)} />
-        </Textfield>
+        </TextField>
 
         <List>
           {list.map((location) => {
@@ -109,7 +109,7 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
 
           {list.length === 0 && <Btn onClick={getMyLocation}>내 위치 찾기</Btn>}
         </List>
-      </Pagefield>
+      </PageField>
     </OpacityModal>
   );
 };

@@ -16,11 +16,19 @@ const useXDrag = () => {
 
   const dragMoving = (e) => {
     if (isDrag) {
+      const { scrollWidth, clientWidth, scrollLeft } = container.current;
+
       container.current.scrollLeft = startX - e.pageX;
+
+      if (scrollLeft === 0) {
+        setStartX(e.pageX);
+      } else if (scrollWidth <= clientWidth + scrollLeft) {
+        setStartX(e.pageX + scrollLeft);
+      }
     }
   };
 
-  return [container, dragStart, dragEnd, dragMoving];
+  return [container, dragStart, dragEnd, dragMoving, isDrag];
 };
 
 export default useXDrag;

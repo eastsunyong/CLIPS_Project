@@ -6,8 +6,8 @@ import _ from "lodash";
 
 import { Btn, Card } from "components/common";
 import { Location, OutlineStar, Phone, Time } from "assets/icons";
-import { setPlace } from "store/modules/promiseSlice";
-import { infoToggle } from "store/modules/mainSlice";
+import { setAddData } from "store/modules/promiseSlice";
+import { infoToggle, resetMainState } from "store/modules/mainSlice";
 import { imgLoading, imgNull } from "assets/img";
 import { useXDrag } from "hooks";
 
@@ -24,7 +24,8 @@ const PlaceInfo = ({ placeInfo }) => {
       address: placeInfo.road_address ? placeInfo.road_address : placeInfo.address,
       coord: placeInfo.coord,
     };
-    dispatch(setPlace(place));
+    dispatch(setAddData({ place }));
+    dispatch(resetMainState());
     nav("/promised", { state: { setAddress: true } });
   };
 
@@ -135,6 +136,7 @@ const ImgList = styled.div`
     border-radius: 1.2rem;
     -webkit-user-drag: none;
   }
+
   img:not(:first-child) {
     margin-left: 1.2rem;
   }

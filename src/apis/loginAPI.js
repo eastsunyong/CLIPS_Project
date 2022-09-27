@@ -5,8 +5,8 @@ export const login = async (data) => {
   const answer = { result: true };
   try {
     const res = await axios.default.post("/auth/signin", data);
-    localStorage.setItem("accessToken", res.data.accessToken);
-    localStorage.setItem("refreshToken", res.data.refreshToken);
+    answer.accessToken = res.data.accessToken;
+    answer.refreshToken = res.data.refreshToken;
     answer.msg = res.data.message;
   } catch (err) {
     answer.result = false;

@@ -3,92 +3,87 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Btn, Modal, PageTop, TextBox } from "components/common";
-import { LeftArrowIcon } from "assets/icons";
 import MiddleMap from "./MiddleMap";
-import { setPlace } from "store/modules/promiseSlice";
+import { Btn, Modal, PageField } from "components/common";
+import { LeftArrow } from "assets/icons";
+import { setAddData } from "store/modules/promiseSlice";
+import { resetMainState } from "store/modules/mainSlice";
 
-const ViewMiddleModal = (props) => {
+const ViewMiddleModal = ({ locationList, viewToggle, setViewToggle }) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
   // 전역에 address 등록
   const savePlace = () => {
     const place = {
-      name: props.locationList.middleLocation.address,
-      address: props.locationList.middleLocation.address,
-      coord: props.locationList.middleLocation.coord,
+      name: locationList.middle.address,
+      address: locationList.middle.address,
+      coord: locationList.middle.coord,
     };
-    dispatch(setPlace(place));
+    dispatch(setAddData({ place }));
+    dispatch(resetMainState());
     nav("/promised", { state: { setAddress: true } });
   };
+
   return (
-    <Section toggle={props.toggle}>
-      <Top>
-        <div>
-          <span
-            className="icon"
+    <CustomModal toggle={viewToggle}>
+      <PageField
+        icon={
+          <div
+            className="btn"
             onClick={() => {
-              props.setToggle(!props.toggle);
+              setViewToggle(!viewToggle);
             }}
           >
-            <LeftArrowIcon />
-          </span>
-          <span className="title">우리의 중간 장소 결과보기</span>
-        </div>
-      </Top>
-      <Bottom>
-        <TextBox>
-          <div className="title">{props.locationList?.middleLocation.address}</div>
-        </TextBox>
-        <Btn outLine={true} onClick={savePlace}>
-          여기로 약속 잡기
-        </Btn>
-      </Bottom>
-      <MiddleMap locationList={props.locationList} />
-    </Section>
+            <LeftArrow className="sm" />
+          </div>
+        }
+        title="우리의 중간 장소 결과보기"
+      >
+        <MiddleMap locationList={locationList} />
+        <Bottom>
+          <div className="title">{locationList.middle?.address}</div>
+          <Btn outLine={true} onClick={savePlace}>
+            여기로 약속 잡기
+          </Btn>
+        </Bottom>
+      </PageField>
+    </CustomModal>
   );
 };
 
 export default memo(ViewMiddleModal);
 
-const Section = styled(Modal)`
+const CustomModal = styled(Modal)`
   #subMap {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
+    right: 0;
   }
-`;
-
-const Top = styled(PageTop)`
-  position: absolute;
-  top: 0;
-  z-index: ${(props) => props.theme.level.front.low};
-
-  background: white;
-  box-shadow: 0 1rem 1rem rgba(17, 24, 39, 0.15);
 `;
 
 const Bottom = styled.div`
   position: absolute;
   bottom: 0;
+  left: 0;
   z-index: ${(props) => props.theme.level.front.low};
 
   width: 100%;
-  padding: calc(${(props) => props.theme.size.xs} * 2);
+  padding: 2rem;
 
   background: white;
-  border-radius: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m} 0 0;
-  box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);
+  border-radius: 1.6rem 1.6rem 0 0;
 
   .title {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    font-size: 1.6rem;
+    font-weight: bold;
   }
+
   button {
-    margin: ${(props) => props.theme.size.m} 0;
+    margin: 1.6rem 0;
   }
 `;

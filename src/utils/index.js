@@ -1,5 +1,6 @@
 import * as axios from "./axios";
 import * as sweetalert from "./sweetalert";
-import * as jwt from "./jwt";
+import * as kakaoMap from "./kakaoMap";
+import * as download from "./deferredInstallPrompt";
 
-export { axios, sweetalert, jwt };
+export { axios, sweetalert, kakaoMap, download };

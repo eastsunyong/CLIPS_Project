@@ -1,160 +1,138 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 
-//moment
-import moment from "moment";
+// dayjs
+import dayjs from "dayjs";
 
-import { Card, DropDownMenu, PageTop, TextBox } from "components/common";
-import { DeleteIcon, LocationIcon, PlusIcon } from "assets/icons";
 import { Calendar } from "components/calendar";
-import { promiseAPI } from "apis";
-import { jwt, sweetalert } from "utils";
+import { Card, DropDownMenu, PageField } from "components/common";
+import { My, Plus, CalendarI, Location, Delete } from "assets/icons";
+import { sweetalert } from "utils";
+import { __deletePromise, __getPromise, __getPromiseList } from "store/modules/promiseSlice";
+import { RandingPage } from "pages";
 
-const PromiseList = (props) => {
-  const promise = useSelector((state) => state.promise);
-  const nav = useNavigate();
+const PromiseList = ({ setAddToggle }) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.promise.isLoading);
+  const list = useSelector((state) => state.promise.promiseList);
+  const userId = useSelector((state) => state.login.userId);
 
   const [selectDate, setSelectDate] = useState(null);
-  const [list, setList] = useState([]);
   const [dateList, setDateList] = useState([]);
-
-  const getPromise = async () => {
-    const answer = await promiseAPI.getList();
-
-    const getDateList = [];
-    for (let p of answer.list) {
-      getDateList.push(p.date);
-    }
-
-    setDateList(getDateList);
-    setList(answer.list);
-  };
 
   const deleteHandler = async (promiseId) => {
     const result = await sweetalert.confirm("정말로 삭제하시겠습니까?");
     if (result.isConfirmed) {
-      const answer = await promiseAPI.deletePromise(promiseId);
-      if (answer.result) {
-        sweetalert.successTimerAlert(answer.msg);
-        getPromise();
-      }
+      dispatch(__deletePromise(promiseId));
     }
   };
 
+  // 마운트 시 리스트 호출
   useEffect(() => {
-    getPromise();
-  }, [promise]);
+    dispatch(__getPromiseList());
+  }, []);
+
+  // 리스트 호출 후 캘린더에 전달
+  useEffect(() => {
+    if (list.length) {
+      setDateList(_.map(list, "date"));
+    }
+  }, [list]);
 
   return (
-    <Section>
-      <CustomTop>
-        <div className="title">Calendar</div>
-        <div className="icon" onClick={() => props.setToggle(true)}>
-          <PlusIcon />
-        </div>
-      </CustomTop>
+    <>
+      {isLoading && <RandingPage />}
+      <PageField
+        title="Calendar"
+        right={
+          <div className="btn" onClick={() => setAddToggle(true)}>
+            <Plus className="md" />
+          </div>
+        }
+      >
+        <Container>
+          <Calendar dateList={dateList} setSelectDate={setSelectDate} />
 
-      <Calendar dateList={dateList} setSelectDate={setSelectDate} />
+          <List>
+            {list.map((promise) => {
+              if (dayjs(selectDate).format("YYYY-MM-DD") === dayjs(new Date(promise.date)).format("YYYY-MM-DD")) {
+                return (
+                  <Card
+                    key={promise.promiseId}
+                    onClick={() => {
+                      dispatch(__getPromise(promise.promiseId));
+                    }}
+                  >
+                    <div className="cardTitle">
+                      {promise.title}
 
-      <CardList>
-        {list.map((promise) => {
-          if (moment(selectDate).format("YYYY-MM-DD") === moment(new Date(promise.date)).format("YYYY-MM-DD")) {
-            return (
-              <CustomCard key={promise.promiseId} onClick={() => nav(`/promise/${promise.promiseId}`)}>
-                <TextBox>
-                  <div>
-                    <div className="title">{promise.title}</div>
-                    <div>{promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}</div>
-                    <div className="info">
-                      <span>{promise.date}</span>
-                      <span>
-                        <span className="pin">
-                          <LocationIcon />
-                        </span>
-                        {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
-                      </span>
+                      {promise?.userId === userId && (
+                        <DropDownMenu>
+                          <DeleteBtn
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteHandler(promise.promiseId);
+                            }}
+                          >
+                            <Delete className="md" />
+                          </DeleteBtn>
+                        </DropDownMenu>
+                      )}
                     </div>
-                  </div>
-                </TextBox>
 
-                {promise?.userId === jwt.getUserId() && (
-                  <DropDownMenu>
-                    <DeleteBtn
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteHandler(promise.promiseId);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </DeleteBtn>
-                  </DropDownMenu>
-                )}
-              </CustomCard>
-            );
-          }
-        })}
-      </CardList>
-    </Section>
+                    <div>
+                      <div className="contentIcon">
+                        <My className="sm" />
+                      </div>
+                      {promise.countFriend !== 0 ? `회원님 외 ${promise.countFriend}명` : "자신과의 약속"}
+                    </div>
+
+                    <div>
+                      <div className="contentIcon">
+                        <CalendarI className="sm" />
+                      </div>
+                      {promise.date}
+                    </div>
+
+                    <div>
+                      <div className="contentIcon">
+                        <Location className="sm" />
+                      </div>
+                      {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
+                    </div>
+                  </Card>
+                );
+              }
+            })}
+          </List>
+        </Container>
+      </PageField>
+    </>
   );
 };
 
-const Section = styled.section`
-  position: relative;
+export default PromiseList;
+
+const Container = styled.div`
   display: flex;
   flex-flow: column;
 
   height: 100%;
-  & > *:not(:first-child) {
-    padding: 0 ${(props) => props.theme.size.m};
-  }
 `;
 
-const CustomTop = styled(PageTop)`
-  .icon {
-    fill: ${(props) => props.theme.color.brand};
-  }
-`;
-
-const CardList = styled.div`
+const List = styled.div`
   flex: 1;
   overflow: scroll;
 
-  padding-top: ${(props) => props.theme.size.xl} !important;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  & > * {
-    margin-bottom: ${(props) => props.theme.size.m};
+  padding: 2rem 0.5rem 0.5rem 0.5rem;
+
+  & > *:not(:last-child) {
+    margin-bottom: 1.6rem;
   }
 `;
 
-const CustomCard = styled(Card)`
-  cursor: pointer;
-  display: flex;
-  .info {
-    display: flex;
-    align-items: center;
-    margin-top: ${(props) => props.theme.size.m};
-    & > :last-child {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: ${(props) => props.theme.size.m};
-      .pin {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: calc(${(props) => props.theme.size.xs} / 2);
-        fill: ${(props) => props.theme.color.disable};
-      }
-    }
-  }
+const DeleteBtn = styled.div`
+  color: ${(props) => props.theme.color.error.main};
 `;
-
-const DeleteBtn = styled.li`
-  fill: red;
-`;
-
-export default PromiseList;

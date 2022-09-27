@@ -1,21 +1,25 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
-const ToggleReview = (props) => {
-  const toggleType = ["후기쓰기", "작성한 후기"];
+import { typeToggle } from "store/modules/reviewSlice";
+
+const ToggleReview = ({ type }) => {
+  const dispatch = useDispatch();
+  const titleList = ["후기쓰기", "작성한 후기"];
 
   return (
     <ToggleNav>
-      {toggleType.map((type) => {
+      {titleList.map((title) => {
         return (
           <Toggle
-            key={type}
-            selected={type === "후기쓰기" ? props.selected : !props.selected}
+            key={title}
+            selected={title === "후기쓰기" ? type : !type}
             onClick={() => {
-              props.setSelected(!props.selected);
+              dispatch(typeToggle());
             }}
           >
-            {type}
+            {title}
           </Toggle>
         );
       })}
@@ -30,12 +34,12 @@ const ToggleNav = styled.nav`
   justify-content: center;
   align-items: center;
 
-  height: calc(${(props) => props.theme.size.m} * 2);
-  padding: 0 calc(${(props) => props.theme.size.xs} * 2);
+  height: 3.6rem;
+  padding: 0 2.4rem;
 
-  border-bottom: 0.1rem solid rgba(75, 85, 99, 0.2);
+  border-bottom: 0.1rem solid ${(props) => props.theme.color.disable};
 
-  font-size: ${(props) => props.theme.size.s};
+  font-size: 1.4rem;
 `;
 
 const Toggle = styled.div`

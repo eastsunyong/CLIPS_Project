@@ -1,9 +1,9 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 
-import { Layout, Main, Footer } from "components/mobileLayout";
+import { Mobile, Main, Footer } from "components/Layout";
 import { RandingPage } from "pages";
-import { isLogin } from "store/modules/loginSlice";
+import { setLogin } from "store/modules/loginSlice";
 
 function App() {
   const Router = lazy(() => import("shared/Router"));
@@ -12,18 +12,18 @@ function App() {
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (accessToken) dispatch(isLogin(true));
+    if (accessToken) dispatch(setLogin(accessToken));
   }, []);
 
   return (
-    <Layout>
+    <Mobile>
       <Suspense fallback={<RandingPage />}>
         <Main>
           <Router />
         </Main>
         <Footer />
       </Suspense>
-    </Layout>
+    </Mobile>
   );
 }
 export default App;

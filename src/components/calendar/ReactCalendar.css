@@ -51,7 +51,7 @@
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: none;
 }
 .react-calendar__month-view__weekdays {
   text-align: center;

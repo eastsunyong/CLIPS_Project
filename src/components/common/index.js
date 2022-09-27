@@ -1,7 +1,7 @@
 import Card from "./Card";
-import PageField from "./PageField";
+import PageField from "./Pagefield";
 import FormField from "./FormField";
-import TextField from "./TextField";
+import TextField from "./Textfield";
 import DropDownMenu from "./DropDownMenu";
 
 import Btn from "./button/Btn";

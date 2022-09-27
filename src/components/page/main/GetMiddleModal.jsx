@@ -1,153 +1,164 @@
 import React, { memo, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
-import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { DeleteIcon, LeftArrowIcon } from "assets/icons";
+import { Btn, Modal, PageField, TextField } from "components/common";
 import { SearchModal, ViewMiddleModal } from ".";
-import { localAPI } from "apis";
-import { sweetalert } from "utils";
+import { Delete, LeftArrow, Plus } from "assets/icons";
+import { middleToggle } from "store/modules/mainSlice";
+import { kakaoMap, sweetalert } from "utils";
+import { useSearch } from "hooks";
 
-const GetMiddleModal = (props) => {
-  const { handleSubmit, register, setValue, unregister, reset } = useForm();
-  const [inputIdList, setInputIdList] = useState([]);
+const GetMiddleModal = () => {
+  const dispatch = useDispatch();
+  const middieView = useSelector((state) => state.main.middleView);
 
-  // 주소 검색 넘겨줄 상태
-  const [searchToggle, setSearchToggle] = useState(false);
-  const [target, setTarget] = useState("");
+  // 주소검색 커스텀훅
+  const { register, unregister, getValues, handleSubmit, selectTarget, location, selectLocation, toggle, reset } = useSearch();
+
+  // input 개수 및 숫자 아이디
+  const maxCnt = 10;
+  const [numberId, setNumberId] = useState([0, 1]);
 
   // 결과보기 넘겨줄 상태
-  const [locationList, setLocationList] = useState(null);
-  const [resultToggle, setResultToggle] = useState(false);
+  const [viewToggle, setViewToggle] = useState(false);
+  const [locationList, setLocationList] = useState({ middle: { address: null, coord: { x: null, y: null } }, list: [] });
 
   // 모달 열릴때 초기화
   useEffect(() => {
-    if (props.toggle) {
+    if (middieView) {
+      setNumberId([0, 1]);
+      setLocationList({ middle: { address: null, coord: { x: null, y: null } }, list: [] });
       reset();
-      setInputIdList([0, 1]);
     } else {
-      unregister(`location`);
+      unregister(`point`);
     }
-  }, [props.toggle]);
+  }, [middieView, setNumberId, unregister, reset]);
 
   // input추가
   const addInputHandler = () => {
-    if (inputIdList.length === 12) {
-      const messge = "최대 12개의 장소입니다";
-      sweetalert.failAlert(messge);
+    if (numberId.length === maxCnt) {
+      const msg = `최대 ${maxCnt}개의 장소입니다`;
+      sweetalert.timer(msg);
       return;
     }
-    setInputIdList([...inputIdList, inputIdList[inputIdList.length - 1] + 1]);
+    setNumberId([...numberId, numberId[numberId.length - 1] + 1]);
   };
 
   // input 삭제
-  const deleteInputHandler = (targetId) => {
-    const deleteArr = inputIdList.filter((id) => id !== targetId);
-    setInputIdList(deleteArr);
-    unregister(`location.${targetId}`);
+  const deleteInputHandler = (targetName, targetId) => {
+    setNumberId(numberId.filter((id) => id !== targetId));
+    if (!!getValues(targetName)) {
+      setLocationList({
+        ...locationList,
+        list: _.filter(locationList.list, (v) => {
+          return v.address !== getValues(targetName);
+        }),
+      });
+    }
+    unregister(`point.${targetId}`);
   };
 
-  const searchModalOpen = (e) => {
-    setTarget(e.target.name);
-    setSearchToggle(!searchToggle);
-  };
+  useEffect(() => {
+    if (location.address) {
+      setLocationList({ ...locationList, list: [...locationList.list, location] });
+    }
+  }, [location, setLocationList]);
 
   // 최종 선택 주소 저장 함수
-  const getMiddleLocation = async (data) => {
-    let x = 0;
-    let y = 0;
-    let length = 0;
-    let list = [];
-    for (let address of data.location) {
-      if (address) {
-        const answer = await localAPI.coordTransfer(address);
-        x += answer.x;
-        y += answer.y;
-        list.push({ x: answer.x, y: answer.y });
-        length++;
+  const geocoder = kakaoMap.createGeocoder();
+  const getMiddleLocation = (data) => {
+    // 최종 검색 지역 추출
+    const list = _.filter(locationList.list, (location) => data.point.find((v) => v === location.address));
+
+    // 중간 지역 좌표 추출
+    const middleCoord = _.reduce(
+      list,
+      (result, location, i, list) => {
+        result.x += location.coord.x;
+        result.y += location.coord.y;
+        if (i === list.length - 1) {
+          result.x = result.x / (i + 1);
+          result.y = result.y / (i + 1);
+        }
+        return result;
+      },
+      { x: 0, y: 0 }
+    );
+
+    // 좌표2주소 검색
+    geocoder.coord2Address(middleCoord.x, middleCoord.y, (data, status) => {
+      if (status === "OK") {
+        const middleAddress = data[0].road_address ? data[0].road_address : data[0].address;
+        setLocationList({ middle: { address: middleAddress.address_name, coord: middleCoord }, list });
+        setViewToggle(!viewToggle);
       }
-    }
-    const answer = await localAPI.addressTransfer(x / length, y / length);
-    setLocationList({ list, middleLocation: { address: answer.docs[0].address.address_name, coord: { x: x / length, y: y / length } } });
-    setResultToggle(!resultToggle);
+    });
   };
 
-  const registerOpt = { required: "주소를 입력해주세요" };
   return (
-    <CustomModal toggle={props.toggle}>
-      <PageTop>
-        <div>
-          <span
-            className="icon"
+    <Modal toggle={middieView}>
+      <PageField
+        icon={
+          <div
+            className="btn"
             onClick={() => {
-              props.setToggle(!props.toggle);
+              dispatch(middleToggle());
             }}
           >
-            <LeftArrowIcon />
-          </span>
-          <span className="title">우리의 중간 장소 찾기</span>
-        </div>
-      </PageTop>
-
-      <FormArea onSubmit={handleSubmit(getMiddleLocation)}>
-        <InputArea>
-          {inputIdList.map((id, i) => {
+            <LeftArrow className="sm" />
+          </div>
+        }
+        title="우리의 중간 장소 찾기"
+      >
+        <FormArea onSubmit={handleSubmit(getMiddleLocation)}>
+          {numberId.map((id, i, source) => {
+            const name = `point.${id}`;
             return (
-              <InputDiv key={`location.${id}`}>
-                <input
-                  readOnly
-                  {...register(`location.${id}`, registerOpt)}
-                  placeholder={`${i + 1}. 출발지를 입력해주세요`}
-                  onClick={searchModalOpen}
-                />
-                {id > 1 ? (
-                  <span className="icon" data-input-id={id} onClick={() => deleteInputHandler(id)}>
-                    <DeleteIcon />
-                  </span>
-                ) : null}
-              </InputDiv>
+              <FormInner key={name} onClick={() => selectTarget(name)}>
+                <input readOnly autoComplete="off" placeholder={`${i + 1}. 출발지를 입력해주세요`} {...register(name, { required: true })} />
+                {source.length > 2 && (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteInputHandler(name, id);
+                    }}
+                  >
+                    <Delete className="sm" />
+                  </div>
+                )}
+              </FormInner>
             );
           })}
-        </InputArea>
+          <AddBtn onClick={addInputHandler}>
+            <div>
+              <Plus className="sm" />
+            </div>
+            <div>장소 추가</div>
+          </AddBtn>
 
-        <AddBtn onClick={addInputHandler}>
-          <span className="plus">+</span>
-          <span>장소 추가</span>
-        </AddBtn>
-        <SubmitBtn>중간위치 찾기</SubmitBtn>
-      </FormArea>
+          <Btn>중간 위치 찾기</Btn>
+        </FormArea>
+      </PageField>
 
-      <SearchModal toggle={searchToggle} setToggle={setSearchToggle} target={target} setValue={setValue} />
-      <ViewMiddleModal locationList={locationList} toggle={resultToggle} setToggle={setResultToggle} />
-    </CustomModal>
+      <SearchModal toggle={toggle} selectLocation={selectLocation} selectTarget={selectTarget} />
+      <ViewMiddleModal locationList={locationList} viewToggle={viewToggle} setViewToggle={setViewToggle} />
+    </Modal>
   );
 };
 
 export default memo(GetMiddleModal);
 
-const CustomModal = styled(Modal)`
-  display: flex;
-  flex-flow: column;
-`;
-
 const FormArea = styled.form`
-  flex: 1;
-  overflow: scroll;
-
-  padding: 0 ${(props) => props.theme.size.m};
-
-  &::-webkit-scrollbar {
-    display: none;
+  & > * {
+    margin-bottom: 0.8rem;
   }
 `;
 
-const InputArea = styled.div`
-  & > * {
-    margin-bottom: calc(${(props) => props.theme.size.m} / 2);
-  }
-  .icon {
-    cursor: pointer;
-    fill: ${(props) => props.theme.color.disable};
+const FormInner = styled(TextField)`
+  & > :nth-child(2) {
+    color: ${(props) => props.theme.color.black.light};
   }
 `;
 
@@ -157,20 +168,19 @@ const AddBtn = styled.div`
   justify-content: center;
   align-items: center;
 
-  margin-top: ${(props) => props.theme.size.s};
+  padding: 1.6rem 0.8rem;
 
-  font-size: ${(props) => props.theme.size.s};
-  font-weight: bold;
   color: ${(props) => props.theme.color.brand};
+  font-size: 1.4rem;
+  font-weight: bold;
 
-  .plus {
-    padding: 0 calc(${(props) => props.theme.size.m} / 2);
-
-    font-weight: normal;
-    font-size: calc(${(props) => props.theme.size.s} * 2);
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-`;
 
-const SubmitBtn = styled(Btn)`
-  margin: ${(props) => props.theme.size.s} 0;
+  & > :first-child {
+    margin-right: 0.8rem;
+  }
 `;

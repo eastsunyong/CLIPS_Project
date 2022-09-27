@@ -5,8 +5,8 @@ export const login = async (data) => {
   const answer = { result: true };
   try {
     const res = await axios.default.post("/auth/signin", data);
-    localStorage.setItem("accessToken", res.data.accessToken);
-    localStorage.setItem("refreshToken", res.data.refreshToken);
+    answer.accessToken = res.data.accessToken;
+    answer.refreshToken = res.data.refreshToken;
     answer.msg = res.data.message;
   } catch (err) {
     answer.result = false;
@@ -41,17 +41,16 @@ export const dupCheck = async (data) => {
   return answer;
 };
 
-//로그아웃 
+//로그아웃
 export const logout = async (refreshToken) => {
   const answer = { result: true };
   try {
-    const res = await axios.default.delete("/auth/signout", {
+    await axios.default.delete("/auth/signout", {
       data: {
-        refreshToken
-      }
+        refreshToken,
+      },
     });
-    console.log(res)
-    localStorage.clear()
+    localStorage.clear();
   } catch (err) {
     answer.result = false;
     answer.msg = err.response;

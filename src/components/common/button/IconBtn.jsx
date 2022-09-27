@@ -5,19 +5,13 @@ const IconBtn = styled.button`
   justify-content: center;
   align-items: center;
 
-  width: calc(${(props) => props.theme.size.m} * 3);
-  height: calc(${(props) => props.theme.size.m} * 3);
-  padding: ${(props) => props.theme.size.xs};
+  width: max-content;
+  padding: 1.2rem;
 
   background: white;
   border: none;
   border-radius: 50%;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-
-  svg {
-    width: ${(props) => props.theme.size.xl};
-    height: ${(props) => props.theme.size.xl};
-  }
+  box-shadow: 0 0.2rem 1.2rem rgba(17, 24, 39, 0.25);
 `;
 
 export default IconBtn;

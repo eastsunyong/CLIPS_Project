@@ -1,32 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, memo } from "react";
 import styled from "styled-components";
 
-//React-Calendar
+// React-Calendar
 import Calendar from "react-calendar";
 import "./ReactCalendar.css";
 
-//moment
-import moment from "moment";
-import { useEffect } from "react";
+// dayjs
+import dayjs from "dayjs";
 
-const CustomCalendar = (props) => {
-  //리액트 캘린더 날짜 받아오기
+const CustomCalendar = ({ dateList, setSelectDate }) => {
+  //리액트 캘린더 선택 날짜 저장
   const [value, onChange] = useState(new Date());
 
+  // 선택날짜 상위 컴포넌트 저장
   useEffect(() => {
-    if (props.setSelectDate) {
-      props.setSelectDate(value);
+    if (setSelectDate) {
+      setSelectDate(value);
     }
-  }, [value]);
+  }, [value, setSelectDate]);
+
   return (
     <Custom
       minDetail="month"
       calendarType="Hebrew"
-      formatDay={(locale, date) => moment(date).format("D")}
+      formatDay={(locale, date) => dayjs(date).format("D")}
       showNeighboringMonth={false}
+      next2Label={null}
+      prev2Label={null}
       tileContent={(e) => {
-        if (props.dateList) {
-          if (props.dateList.find((x) => moment(new Date(x)).format("YYYY-MM-DD") === moment(e.date).format("YYYY-MM-DD"))) {
+        if (dateList) {
+          if (dateList.find((x) => dayjs(new Date(x)).format("YYYY-MM-DD") === dayjs(e.date).format("YYYY-MM-DD"))) {
             return <Highlight />;
           }
         }
@@ -79,4 +82,4 @@ const Highlight = styled.div`
   background-color: ${(props) => props.theme.color.brand};
 `;
 
-export default CustomCalendar;
+export default memo(CustomCalendar);

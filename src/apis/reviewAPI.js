@@ -1,4 +1,5 @@
 import { axios } from "utils";
+import _ from "lodash";
 
 // 후기 추가
 export const addReview = async (promiseId, data) => {
@@ -9,8 +10,6 @@ export const addReview = async (promiseId, data) => {
     },
   };
   try {
-    // const res = await axios.default.post(`/review/${promiseId}`, data, config);
-    // console.log(res);
     await axios.default.post(`/review/${promiseId}`, data, config);
   } catch (err) {
     answer.result = false;
@@ -23,7 +22,7 @@ export const deleteReview = async (reviewId) => {
   const answer = { result: true };
   try {
     const res = await axios.default.delete(`/review/${reviewId}`);
-    console.log(res);
+    answer.msg = res.data.message;
   } catch (err) {
     answer.result = false;
   }
@@ -36,23 +35,8 @@ export const getList = async () => {
   try {
     const res = await axios.default.get(`/review`);
 
-    let list = [];
-    res.data.reviewImageData.forEach((review, i) => {
-      if (review.length !== 0) {
-        let tmp = {};
-        tmp.reviewId = review[0].reviewId;
-        tmp.image = review[0]["ReviewImages.image"];
-        tmp.content = review[0].content;
-
-        tmp.promiseUserId = res.data.promiseData[i].userId;
-        tmp.promiseId = res.data.promiseData[i].promiseId;
-        tmp.date = res.data.promiseData[i].date;
-        tmp.location = res.data.promiseData[i].location;
-        list.push(tmp);
-      }
-    });
-
-    answer.list = list;
+    // 콘텐츠 있는거만(필수값)
+    answer.list = _.filter(res.data, (review) => review.content);
   } catch (err) {
     answer.result = false;
   }

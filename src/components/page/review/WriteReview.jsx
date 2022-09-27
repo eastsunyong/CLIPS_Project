@@ -1,32 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Btn, Card, InputDiv, Modal, PageTop, TextBox } from "components/common";
-import { DeleteIcon, LeftArrowIcon, LocationIcon, PlusIcon } from "assets/icons";
-import { reviewAPI } from "apis";
-import { useEffect } from "react";
+import { Btn, Card, FormField, Modal, PageField, TextField } from "components/common";
+import { CalendarI, Delete, LeftArrow, Location, My, Plus } from "assets/icons";
+import { endWriteReview, __addReview } from "store/modules/reviewSlice";
 
-const WriteReview = (props) => {
-  const promise = props.writeToggle.promise;
+const WriteReview = () => {
+  const dispatch = useDispatch();
+  const selected = useSelector((state) => state.review.selectPromise);
 
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
-    if (props.writeToggle.toggle) {
+    if (selected.toggle) {
       reset();
       setFileList([]);
       setImgPreview([]);
     }
-  }, [props.writeToggle]);
+  }, [selected.toggle, reset]);
 
   // 멀티 업로드 and 미리보기
   const [fileList, setFileList] = useState([]);
   const [imgPreview, setImgPreview] = useState([]);
-  const maxCnt = 7;
-  const selectMutiFile = (files) => {
+  const maxCnt = 5;
+
+  const selectMutiFile = async (files) => {
     const dt = new DataTransfer();
     const remainCnt = maxCnt - fileList.length;
+
     if (!fileList) {
       if (files.length > maxCnt) alert(`사진은 최대 ${maxCnt}개 가능`);
       Array.from(files)
@@ -38,6 +46,7 @@ const WriteReview = (props) => {
       setFileList(dt.files);
       return;
     }
+
     if (remainCnt < files.length) alert(`사진은 최대 ${maxCnt}개 가능`);
     Array.from(fileList).forEach((file) => dt.items.add(file));
     Array.from(files)
@@ -60,211 +69,170 @@ const WriteReview = (props) => {
     setImgPreview(imgPreview.filter((view, i) => i !== fileIndex));
   };
 
-  // submit후 데이터 세팅 및 결과값
-  const setSendData = async (data) => {
-    const formData = new FormData();
-    formData.append("content", data.content);
-    for (let i = 0; i < fileList.length; i++) {
-      formData.append("image", fileList[i]);
-    }
-
-    const answer = await reviewAPI.addReview(promise.promiseId, formData);
-    if (answer.result) {
-      props.setWriteToggle({ promise, toggle: !props.writeToggle.toggle });
-    }
+  // registerOpt
+  const contentOpt = {
+    required: "후기는 필수 입력입니다",
+    minLength: { value: 1, message: "최소 1글자 이상 입력해주세요" },
   };
 
   return (
-    <CustomModal toggle={props.writeToggle.toggle}>
-      <PageTop>
-        <div>
+    <Modal toggle={selected.toggle}>
+      <PageField
+        icon={
           <div
-            className="icon"
+            className="btn"
             onClick={() => {
-              props.setWriteToggle({ promise, toggle: !props.writeToggle.toggle });
+              dispatch(endWriteReview());
             }}
           >
-            <LeftArrowIcon />
+            <LeftArrow className="md" />
           </div>
-          <div className="title">후기 작성하기</div>
-        </div>
-      </PageTop>
-      <Section>
-        <CustomCard key={promise?.promiseId}>
-          <TextBox>
-            <div>
-              <div className="title">{promise?.title}</div>
-              <div>{promise?.countFriend !== 0 ? `회원님 외 ${promise?.countFriend}명` : "자신과의 약속"}</div>
-              <div className="info">
-                <span>{promise?.date}</span>
-                <span>
-                  <span className="pin">
-                    <LocationIcon />
-                  </span>
-                  {promise?.location ? promise.location : "장소를 불러올 수 없습니다."}
-                </span>
-              </div>
-            </div>
-          </TextBox>
-        </CustomCard>
-        <FormArea onSubmit={handleSubmit(setSendData)}>
-          <div>
-            <p className="title">후기 남기기</p>
-            <InputDiv className="inner">
-              <textarea {...register("content", { required: "후기 내용은 필수입니다.", minLength: 5 })} placeholder="다녀오신 약속은 어땠나요?" />
-            </InputDiv>
-          </div>
+        }
+        title="후기 작성하기"
+      >
+        <Container>
+          <Card key={selected.promise?.promiseId}>
+            <div className="cardTitle">{selected.promise?.title}</div>
 
-          <div>
-            <p className="title">사진 추가</p>
-            <ImgArea>
-              <FileAddBtn htmlFor="file">
-                <PlusIcon />
-              </FileAddBtn>
-              {imgPreview.map((image, i) => {
-                return (
-                  <PreviewImg key={i}>
-                    <img src={image} alt={`프리뷰${i}`} />
-                    <div
-                      onClick={() => {
-                        cancelSelected(i);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </div>
-                  </PreviewImg>
-                );
-              })}
-            </ImgArea>
-            <input
-              {...register("image")}
-              hidden
-              id="file"
-              type="file"
-              accept=".jpg, .png"
-              multiple
-              onChange={(e) => selectMutiFile(e.target.files)}
-            />
-          </div>
-          <Btn>저장하기</Btn>
-        </FormArea>
-      </Section>
-    </CustomModal>
+            <div>
+              <div className="contentIcon">
+                <My className="sm" />
+              </div>
+              {selected.promise && selected.promise.countFriend !== 0 ? `회원님 외 ${selected.promise.countFriend}명` : "자신과의 약속"}
+            </div>
+
+            <div>
+              <div className="contentIcon">
+                <CalendarI className="sm" />
+              </div>
+              {selected.promise?.date}
+            </div>
+
+            <div>
+              <div className="contentIcon">
+                <Location className="sm" />
+              </div>
+              {selected.promise?.location ? selected.promise.location : "장소를 불러올 수 없습니다."}
+            </div>
+          </Card>
+
+          <FormField
+            onSubmit={handleSubmit((data) => {
+              dispatch(__addReview({ promiseId: selected.promise.promiseId, data }));
+            })}
+          >
+            <div className="inputArea">
+              <div>
+                <p className="titie">후기 남기기</p>
+                <TextField bdColor={!!errors.content?.message}>
+                  <textarea autoComplete="off" placeholder="다녀오신 약속은 어땠나요?" {...register("content", contentOpt)} />
+                </TextField>
+                <p className="error">{errors.content?.message}</p>
+              </div>
+
+              <div>
+                <p className="titie">사진 추가</p>
+                <ImgPreviewArea>
+                  <ImgAddBtn htmlFor="file">
+                    <Plus className="md" />
+                  </ImgAddBtn>
+
+                  {imgPreview.map((blob, i) => {
+                    return (
+                      <ImgPreview key={blob + i}>
+                        <img src={blob} alt="미리보기" />
+                        <div
+                          className="deleteBtn"
+                          onClick={() => {
+                            cancelSelected(i);
+                          }}
+                        >
+                          <Delete className="md" />
+                        </div>
+                      </ImgPreview>
+                    );
+                  })}
+                </ImgPreviewArea>
+              </div>
+
+              <input
+                {...register("image", { onChange: (e) => selectMutiFile(e.target.files), value: fileList })}
+                hidden
+                id="file"
+                type="file"
+                accept=".jpg, .png"
+                multiple
+              />
+            </div>
+
+            <Btn>저장하기</Btn>
+          </FormField>
+        </Container>
+      </PageField>
+    </Modal>
   );
 };
 
 export default WriteReview;
 
-const CustomModal = styled(Modal)`
+const Container = styled.div`
   display: flex;
   flex-flow: column;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 1.6rem 0.5rem 0 0.5rem;
 `;
 
-const Section = styled.div`
-  flex: 1;
-  overflow: scroll;
-
-  padding: ${(props) => props.theme.size.m};
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const CustomCard = styled(Card)`
-  cursor: pointer;
+const ImgPreviewArea = styled.div`
   display: flex;
-
-  margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
-
-  .info {
-    display: flex;
-    align-items: center;
-    margin: ${(props) => props.theme.size.m} 0;
-    & > :last-child {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-left: ${(props) => props.theme.size.m};
-      .pin {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: calc(${(props) => props.theme.size.xs} / 2);
-        fill: ${(props) => props.theme.color.disable};
-      }
-    }
-  }
-  .icon {
-    cursor: pointer;
-    width: ${(props) => props.theme.size.xl};
-    height: ${(props) => props.theme.size.xl};
-    display: flex;
-    justify-content: center;
-  }
-`;
-
-const FormArea = styled.form`
-  & > * {
-    margin-bottom: ${(props) => props.theme.size.m};
-  }
-  .title {
-    margin-bottom: calc(${(props) => props.theme.size.m} / 2);
-    font-size: ${(props) => props.theme.size.s};
-    font-weight: bold;
-  }
-  .inner {
-    height: 16rem;
-  }
-`;
-
-const ImgArea = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  flex-flow: wrap;
 
   & > * {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    overflow: hidden;
 
-    width: 8.2rem;
-    height: 8.2rem;
+    width: calc(25% - 0.5rem);
+    padding-bottom: calc(25% - 0.5rem);
+    margin: 0 0.5rem 0.5rem 0;
 
-    border-radius: ${(props) => props.theme.size.xs};
-    margin-top: calc(${(props) => props.theme.size.xs} / 3);
-  }
-  & > *:not(:first-child, :nth-child(5)) {
-    margin-left: calc(${(props) => props.theme.size.xs} / 3);
+    border-radius: 0.8rem;
   }
 `;
 
-const FileAddBtn = styled.label`
-  background: rgba(75, 85, 99, 0.1);
-  fill: rgba(75, 85, 99, 0.2);
+const ImgAddBtn = styled.label`
+  border: 0.1rem solid ${(props) => props.theme.color.disable};
+  background: ${(props) => props.theme.color.disable};
+  color: ${(props) => props.theme.color.black.light};
+
+  & > svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
 `;
 
-const PreviewImg = styled.div`
-  position: relative;
-  overflow: hidden;
+const ImgPreview = styled.div`
+  border: 0.1rem solid ${(props) => props.theme.color.disable};
+
+  & > * {
+    position: absolute;
+  }
+
   img {
     width: 100%;
     height: 100%;
   }
 
-  div {
-    position: absolute;
+  .deleteBtn {
+    color: ${(props) => props.theme.color.black.dark};
+    padding: 0.5rem;
+
     top: 0;
     right: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin: calc(${(props) => props.theme.size.xs} / 2);
-
-    border-radius: 50%;
-
-    fill: #4b5563;
-    background: white;
   }
 `;

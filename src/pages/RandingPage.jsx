@@ -1,29 +1,34 @@
 import React from "react";
 import styled from "styled-components";
 
-import brandLogo from "assets/img/brandLogo.png";
-
 const RandingPage = () => {
   return (
-    <Section>
-      <img src={brandLogo} alt="로고" />
-      <span>CLIPs</span>
-    </Section>
+    <Container>
+      <p>우리의 약속,</p>
+      <p>이것으로 끝.</p>
+      <p className="brand">CLIPs</p>
+    </Container>
   );
 };
 
 export default RandingPage;
 
-const Section = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+const Container = styled.div`
   height: 100%;
+  padding: 4.8rem 2.4rem;
 
-  background: ${(props) => props.theme.color.brand};
+  background: #1a1b1f;
 
   color: white;
-  font-size: calc(${(props) => props.theme.size.xs} * 4);
+  font-size: 3.2rem;
   font-weight: bold;
+
+  p {
+    margin-bottom: 0.6rem;
+  }
+
+  .brand {
+    color: ${(props) => props.theme.color.brand};
+    font-size: 5.6rem;
+  }
 `;

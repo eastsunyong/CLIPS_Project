@@ -1,11 +1,9 @@
-import Indroduce from "./Introduce";
-import LoginPage from "./LoginPage";
-import SignUpPage2 from "./SignUpPage2";
-import SignUpPage3 from "./SignUpPage3";
-import Choice from "./Choice";
-import FindPassword from "./FindPassword";
-import FindId from "./FindId";
-import Line from "./Line";
-import SignUpPage from "./SignUpPage";
+import Intro from "./Intro";
+import TypePage from "./TypePage";
+import Signin from "./Signin";
+import Signup from "./Signup";
+import SignupStep1 from "./SignupStep1";
+import SignupStep2 from "./SignupStep2";
+import WelcomePage from "./WelcomePage";
 
-export { Indroduce, LoginPage, SignUpPage, SignUpPage3, Choice, FindId, FindPassword, Line, SignUpPage2 };
+export { Intro, TypePage, Signin, Signup, SignupStep1, SignupStep2, WelcomePage };

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 
-import { Btn, Modal, Pagefield, Textfield } from "components/common";
+import { Btn, Modal, PageField, TextField } from "components/common";
 import { SearchModal, ViewMiddleModal } from ".";
 import { Delete, LeftArrow, Plus } from "assets/icons";
 import { middleToggle } from "store/modules/mainSlice";
@@ -99,7 +99,7 @@ const GetMiddleModal = () => {
 
   return (
     <Modal toggle={middieView}>
-      <Pagefield
+      <PageField
         icon={
           <div
             className="btn"
@@ -140,7 +140,7 @@ const GetMiddleModal = () => {
 
           <Btn>중간 위치 찾기</Btn>
         </FormArea>
-      </Pagefield>
+      </PageField>
 
       <SearchModal toggle={toggle} selectLocation={selectLocation} selectTarget={selectTarget} />
       <ViewMiddleModal locationList={locationList} viewToggle={viewToggle} setViewToggle={setViewToggle} />
@@ -156,7 +156,7 @@ const FormArea = styled.form`
   }
 `;
 
-const FormInner = styled(Textfield)`
+const FormInner = styled(TextField)`
   & > :nth-child(2) {
     color: ${(props) => props.theme.color.black.light};
   }

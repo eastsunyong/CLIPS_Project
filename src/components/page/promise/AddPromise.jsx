@@ -1,10 +1,8 @@
 import React, { useState, useEffect, memo } from "react";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 // 데이트 픽커 캘린더
 import DatePicker from "react-datepicker";
@@ -13,268 +11,208 @@ import "./DatePicker.css";
 // 데이트 픽커 한국어
 import { ko } from "date-fns/esm/locale";
 
-import { Btn, InputDiv, Modal, PageTop } from "components/common";
-import { LeftArrowIcon } from "assets/iconList";
-import { promiseAPI } from "apis";
 import { FindFriend } from ".";
-import { resetState, setTemporaryStorage } from "store/modules/promiseSlice";
-import { sweetalert } from "utils";
+import { Btn, FormField, Modal, PageField, TextField } from "components/common";
+import { LeftArrow } from "assets/icons";
+import { resetAddData, setAddData, __addPromise } from "store/modules/promiseSlice";
+import { useSearch } from "hooks";
 
-const AddPromise = (props) => {
+const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
 
-  const place = useSelector((state) => state.promise.place);
-  const ts = useSelector((state) => state.promise.ts);
+  const { register, handleSubmit, selectTarget, setTargetData, toggle, getValues, setValue, reset, errors } = useSearch();
 
-  // 친구 찾기 모달
-  const [toggle, setToggle] = useState(false);
   // 데이트 픽커 날짜
   const today = new Date().toLocaleDateString("ko-KR");
   const [startDate, setStartDate] = useState(new Date(today));
 
   useEffect(() => {
-    if (props.toggle) {
-      reset();
-      ts ? setStartDate(new Date(ts.date)) : setStartDate(new Date(today));
-    }
-  }, [props.toggle]);
+    addData.date ? setStartDate(new Date(addData.date)) : setStartDate(new Date(today));
+  }, [addData.date, setStartDate, today]);
 
   // 피커 날짜 바뀔때마다 시간 조정
   useEffect(() => {
-    setValue("day", moment(startDate).format("YYYY.MM.DD"));
-    setValue("time", moment(startDate).format("HH:mm"));
-  }, [startDate]);
+    setValue("day", dayjs(startDate).format("YYYY.MM.DD"));
+    setValue("time", dayjs(startDate).format("HH:mm"));
+  }, [startDate, setValue]);
 
   // 뒤로가기 버튼
   const goBack = () => {
-    if (ts || place) {
-      const type = ts ? "정보" : "장소";
-      const messge = `입력하신 ${type}가 초기화 됩니다.`;
-      sweetalert.corfirmAlert(messge).then((selected) => {
-        if (selected.isConfirmed) {
-          dispatch(resetState());
-          props.setToggle(false);
-        }
-      });
-    } else {
-      props.setToggle(false);
-    }
+    dispatch(resetAddData());
+    setAddToggle(!addToggle);
+    reset();
   };
 
-  // 장소 선택 버튼
+  // 장소 선택 버튼 => 임시저장
   const goMap = () => {
-    if (!place) {
+    if (!addData.place.name) {
       const data = getValues();
       Object.keys(data).forEach((key) => {
         if (key === "day" || key === "time") delete data[key];
       });
       data.date = startDate.getTime();
-      dispatch(setTemporaryStorage(data));
+      dispatch(setAddData(data));
       nav("/");
     }
   };
 
+  // 문자열을 콜렉션으로 변환
+  const string2arr = (friendList) => {
+    let arr = [];
+    if (!friendList) return arr;
+
+    friendList.split(", ").forEach((nickname) => {
+      arr.push({ nickname });
+    });
+    return arr;
+  };
+
   // submit후 데이터 세팅
   const submitHandler = async (data) => {
-    const friendList = [];
-    if (data.friendList) {
-      data.friendList.split(", ").forEach((nickname) => {
-        friendList.push({ nickname });
-      });
-    }
+    let friendList = string2arr(data.friendList);
 
     const date = data.day + " " + data.time;
 
-    let sendData = {
+    const sendData = {
       title: data.title,
       penalty: data.penalty,
-      location: place.name,
-      x: Number(place.coord.lat ? place.coord.lat : place.coord.y),
-      y: Number(place.coord.lng ? place.coord.lng : place.coord.x),
+      location: addData.place.name,
+      x: addData.place.coord.x,
+      y: addData.place.coord.y,
       date,
       friendList,
     };
 
-    const answer = await promiseAPI.addList(sendData);
-    if (answer.result) {
-      const selected = await sweetalert.successAlert(answer.msg);
-
-      if (selected.isConfirmed || selected.isDismissed) {
-        props.setToggle(false);
-        reset();
-        dispatch(resetState());
-      }
-    }
+    dispatch(__addPromise(sendData));
+    setAddToggle(!addToggle);
+    reset();
   };
 
   return (
-    <CustomModal toggle={props.toggle}>
-      <PageTop>
-        <div>
-          <div className="icon" onClick={goBack}>
-            <LeftArrowIcon />
+    <Modal toggle={addToggle}>
+      <PageField
+        icon={
+          <div className="btn" onClick={goBack}>
+            <LeftArrow className="md" />
           </div>
-          <div className="title">약속 만들기</div>
-        </div>
-      </PageTop>
+        }
+        title="약속 만들기"
+      >
+        <FormField onSubmit={handleSubmit(submitHandler)}>
+          <div className="inputArea">
+            <div>
+              <p className="titie">약속 이름</p>
+              <TextField bdColor={!!errors.title?.message}>
+                <input
+                  autoComplete="off"
+                  placeholder="이름을 작성해보세요"
+                  {...register("title", {
+                    required: "약속 이름은 꼭 정해주세요",
+                    maxLength: { value: 30, message: "30자 이하로 정해주세요" },
+                  })}
+                  defaultValue={addData.title ? addData.title : ""}
+                />
+              </TextField>
+              <p className="error">{errors.title?.message}</p>
+            </div>
 
-      <Section onSubmit={handleSubmit(submitHandler)}>
-        <div className="inner">
-          <p>약속 이름</p>
-          <InputDiv className={errors.title && "errorInput"}>
-            <input
-              {...register("title", {
-                required: "약속 이름은 꼭 정해주세요",
-                maxLength: { value: 30, message: "30자 이하로 정해주세요" },
-              })}
-              placeholder="이름을 작성해보세요"
-              autoComplete="off"
-              defaultValue={ts?.title ? ts?.title : ""}
-            />
-          </InputDiv>
-          {errors?.title?.message && <h3>{errors.title.message}</h3>}
-        </div>
+            <div>
+              <p className="titie">참석자</p>
+              <TextField>
+                <input
+                  autoComplete="off"
+                  placeholder="홍길동, 우영우"
+                  {...register("friendList")}
+                  onClick={() => {
+                    selectTarget("friendList");
+                  }}
+                  readOnly
+                  defaultValue={addData.friendList ? addData.friendList : ""}
+                />
+              </TextField>
+            </div>
 
-        <div className="inner">
-          <p>참석자</p>
-          <InputDiv>
-            <input
-              {...register("friendList")}
-              onClick={() => {
-                setToggle(true);
-              }}
-              readOnly
-              placeholder="친구1, 친구2"
-              autoComplete="off"
-              defaultValue={ts?.friendList ? ts?.friendList : ""}
-            />
-          </InputDiv>
-        </div>
+            <div>
+              <p className="titie">약속 날짜</p>
+              <TextField>
+                <DatePicker
+                  {...register("day")}
+                  placeholderText="날짜를 선택해주세요"
+                  selected={startDate}
+                  onChange={setStartDate}
+                  showPopperArrow={false}
+                  locale={ko} // 한글로 변경
+                  dateFormat="yyyy.MM.dd" // 시간 포맷 변경
+                  minDate={new Date()}
+                  autoComplete="off"
+                />
+              </TextField>
+            </div>
 
-        <div className="inner">
-          <p>약속 날짜</p>
-          <InputDiv>
-            <DatePicker
-              {...register("day")}
-              placeholderText="날짜를 선택해주세요"
-              selected={startDate}
-              onChange={setStartDate}
-              showPopperArrow={false}
-              locale={ko} // 한글로 변경
-              dateFormat="yyyy.MM.dd" // 시간 포맷 변경
-              minDate={new Date()}
-              autoComplete="off"
-            />
-          </InputDiv>
-        </div>
+            <div>
+              <p className="titie">약속 시간</p>
+              <TextField>
+                <DatePicker
+                  {...register("time")}
+                  placeholderText="시간을 선택해주세요"
+                  selected={startDate}
+                  locale={ko}
+                  onChange={setStartDate}
+                  showPopperArrow={false}
+                  timeIntervals={60}
+                  dateFormat="HH:mm"
+                  showTimeSelect
+                  showTimeSelectOnly
+                  autoComplete="off"
+                  // 지난 시간 선택못하게
+                  filterTime={(time) => {
+                    const currentDate = new Date();
+                    const selectedDate = new Date(time);
+                    return currentDate.getTime() < selectedDate.getTime();
+                  }}
+                />
+              </TextField>
+            </div>
 
-        <div className="inner">
-          <p>약속 시간</p>
-          <InputDiv>
-            <DatePicker
-              {...register("time")}
-              placeholderText="시간을 선택해주세요"
-              selected={startDate}
-              locale={ko}
-              onChange={setStartDate}
-              showPopperArrow={false}
-              dateFormat="HH:mm"
-              showTimeSelect
-              showTimeSelectOnly
-              autoComplete="off"
-            />
-          </InputDiv>
-        </div>
+            <div>
+              <p className="titie">약속 장소</p>
+              <TextField bdColor={!!errors.place?.message}>
+                <input
+                  autoComplete="off"
+                  placeholder="약속장소를 선택해주세요"
+                  readOnly
+                  {...register("place", {
+                    required: "장소는 꼭 정해주세요",
+                  })}
+                  onClick={goMap}
+                  defaultValue={addData.place.name ? addData.place.name : ""}
+                />
+              </TextField>
+              <p className="error">{errors.place?.message}</p>
+            </div>
 
-        <div className="inner">
-          <p>약속 장소</p>
-          <InputDiv className={errors.place && "errorInput"}>
-            <input
-              {...register("place", {
-                required: "장소는 꼭 정해주세요",
-              })}
-              readOnly
-              onClick={goMap}
-              placeholder="약속장소를 선택해보세요"
-              autoComplete="off"
-              defaultValue={place?.address ? place?.address : ""}
-            />
-          </InputDiv>
-          {errors?.place?.message && <h3>{errors.place.message}</h3>}
-        </div>
+            <div>
+              <p className="titie">메모</p>
+              <TextField bdColor={!!errors.penalty?.message}>
+                <textarea
+                  autoComplete="off"
+                  placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+                  {...register("penalty")}
+                  defaultValue={addData.penalty ? addData.penalty : ""}
+                />
+              </TextField>
+              <p className="error">{errors.penalty?.message}</p>
+            </div>
+          </div>
 
-        <div className="inner largeInner">
-          <p>메모</p>
-          <InputDiv>
-            <textarea {...register("penalty")} placeholder="메모를 작성해보세요 ex) 늦게오면 5만원" defaultValue={ts?.penalty ? ts?.penalty : ""} />
-          </InputDiv>
-        </div>
-        <CustomBtn>저장하기</CustomBtn>
-      </Section>
+          <Btn>저장하기</Btn>
+        </FormField>
+      </PageField>
 
-      <FindFriend toggle={toggle} setToggle={setToggle} friendList={getValues("friendList")} setValue={setValue} />
-    </CustomModal>
+      <FindFriend toggle={toggle} selectTarget={selectTarget} setTargetData={setTargetData} friendList={string2arr(getValues("friendList"))} />
+    </Modal>
   );
 };
-
-const CustomModal = styled(Modal)`
-  display: flex;
-  flex-flow: column;
-`;
-
-const Section = styled.form`
-  flex: 1;
-  overflow: scroll;
-
-  display: flex;
-  flex-flow: column;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  padding: 0 ${(props) => props.theme.size.m};
-  & > *:not(:last-child) {
-    margin-bottom: calc(${(props) => props.theme.size.xs} * 2);
-  }
-
-  .inner p {
-    font-size: ${(props) => props.theme.size.s};
-    font-weight: bold;
-    margin-bottom: calc(${(props) => props.theme.size.m} / 2);
-  }
-  .largeInner {
-    flex: 0.7;
-    div {
-      height: 100%;
-    }
-  }
-  h3 {
-    font-family: "SUIT";
-    font-style: normal;
-    font-weight: 400;
-    font-size: ${(props) => props.theme.size.xs};
-    line-height: 130%;
-    color: #df0c0c;
-    margin-top: calc(${(props) => props.theme.size.xs} / 3);
-  }
-
-  .errorInput {
-    border: 1px solid #df0c0c;
-  }
-`;
-
-const CustomBtn = styled(Btn)`
-  margin: calc(${(props) => props.theme.size.xs} * 2) 0;
-`;
 
 export default memo(AddPromise);

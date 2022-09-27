@@ -1,4 +1,4 @@
-import Calendar from "./Calendar";
+import CalendarI from "./CalendarI";
 import Camera from "./Camera";
 import Close from "./Close";
 import Delete from "./Delete";
@@ -21,7 +21,7 @@ import OutlineStar from "./OutlineStar";
 import Review from "./Review";
 
 export {
-  Calendar,
+  CalendarI,
   Camera,
   Close,
   Delete,

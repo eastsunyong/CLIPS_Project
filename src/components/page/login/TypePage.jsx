@@ -1,15 +1,13 @@
-import React, { memo, useState } from "react";
-import styled from "styled-components";
+import React, { memo, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
-import { Modal, Pagefield } from "components/common";
+import { FormField, Modal, PageField } from "components/common";
 import { LeftArrow } from "assets/icons";
 import { Signin, Signup, WelcomePage } from ".";
 import { __signin } from "store/modules/loginSlice";
 import { loginAPI } from "apis";
 import { sweetalert } from "utils";
-import { useEffect } from "react";
 
 const TypePage = ({ choice, setChoice }) => {
   const dispatch = useDispatch();
@@ -55,7 +53,7 @@ const TypePage = ({ choice, setChoice }) => {
   return (
     <>
       <Modal toggle={choice.toggle}>
-        <Pagefield
+        <PageField
           icon={
             <div
               className="btn"
@@ -68,14 +66,14 @@ const TypePage = ({ choice, setChoice }) => {
           }
           title={`${choice.type}`}
         >
-          <FormArea onSubmit={handleSubmit(typeSubmit)}>
+          <FormField onSubmit={handleSubmit(typeSubmit)}>
             {choice.type === "회원가입" ? (
               <Signup choice={choice} register={register} getValues={getValues} watch={watch} setError={setError} errors={errors} />
             ) : (
               <Signin register={register} errors={errors} />
             )}
-          </FormArea>
-        </Pagefield>
+          </FormField>
+        </PageField>
       </Modal>
       <WelcomePage welcome={welcome} signin={signin} />
     </>
@@ -83,35 +81,3 @@ const TypePage = ({ choice, setChoice }) => {
 };
 
 export default memo(TypePage);
-
-const FormArea = styled.form`
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  width: 100%;
-
-  padding-top: 1.6rem;
-
-  .inputArea {
-    flex: 1;
-    overflow: scroll;
-  }
-
-  .inputArea > *:not(:last-child) {
-    margin-bottom: 1.6rem;
-  }
-
-  .titie {
-    margin-bottom: 0.8rem;
-
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-
-  .error {
-    margin-top: 0.8rem;
-
-    color: ${(props) => props.theme.color.error.main};
-    font-size: 1.2rem;
-  }
-`;

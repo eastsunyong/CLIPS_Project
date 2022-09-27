@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
+import { RandingPage } from ".";
 import { ToggleReview, WriteList, WriteReview, ReviewList } from "components/page/review";
 
 const Review = () => {
-  const [selected, setSelected] = useState(true);
-  const [writeToggle, setWriteToggle] = useState({ promise: null, toggle: false });
+  const isLoading = useSelector((state) => state.review.isLoading);
+  const type = useSelector((state) => state.review.type);
 
   return (
     <>
+      {isLoading && <RandingPage />}
       <Section>
-        <ToggleReview selected={selected} setSelected={setSelected} />
-        {selected ? <WriteList writeToggle={writeToggle} setWriteToggle={setWriteToggle} /> : <ReviewList />}
+        <ToggleReview type={type} />
+        <Article>{type ? <WriteList /> : <ReviewList />}</Article>
       </Section>
-      <WriteReview writeToggle={writeToggle} setWriteToggle={setWriteToggle} />
+      <WriteReview />
     </>
   );
 };
@@ -25,5 +28,16 @@ const Section = styled.section`
   flex-flow: column;
 
   height: 100%;
-  padding-top: calc(${(props) => props.theme.size.xs} * 2);
+  padding-top: 2.4rem;
+`;
+
+const Article = styled.article`
+  flex: 1;
+  overflow: scroll;
+
+  padding: ${(props) => props.theme.size.m};
+
+  & > *:not(:last-child) {
+    margin-bottom: 1.6rem;
+  }
 `;

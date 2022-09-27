@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Textfield } from "components/common";
+import { TextField } from "components/common";
 import { BottomModal, CategoryList, MainMap, GetMiddleModal, SearchModal } from "components/page/main";
 import { Search } from "assets/icons";
+import { resetMainState } from "store/modules/mainSlice";
 import { useSearch } from "hooks";
 
 const Main = () => {
+  const dispatch = useDispatch();
+
   const infoView = useSelector((state) => state.main.infoView);
 
   // 주소검색 커스텀훅
   const { register, selectTarget, location, selectLocation, toggle } = useSearch();
+
+  // 마운트시 초기화
+  useEffect(() => {
+    dispatch(resetMainState());
+  }, []);
 
   return (
     <>
@@ -60,7 +68,7 @@ const Section = styled.section`
   }
 `;
 
-const SearchBar = styled(Textfield)`
+const SearchBar = styled(TextField)`
   cursor: pointer;
 
   padding: 1rem 1.8rem;

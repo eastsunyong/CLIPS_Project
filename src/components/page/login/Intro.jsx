@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 import { TypePage } from ".";
-import { Btn, OpacityModal, Pagefield } from "components/common";
+import { Btn, OpacityModal, PageField } from "components/common";
 import { Close, Kakao } from "assets/icons";
 
 const Intro = ({ toggle, setToggle }) => {
@@ -12,7 +12,7 @@ const Intro = ({ toggle, setToggle }) => {
 
   return (
     <OpacityModal toggle={toggle}>
-      <Pagefield
+      <PageField
         icon={
           <div
             className="btn"
@@ -57,7 +57,7 @@ const Intro = ({ toggle, setToggle }) => {
             CLIPs ID로 로그인
           </p>
         </ChoiceBtns>
-      </Pagefield>
+      </PageField>
       <TypePage choice={choice} setChoice={setChoice} />
     </OpacityModal>
   );

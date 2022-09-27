@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const Textfield = styled.div`
+const TextField = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   padding: 0.6rem 1.2rem;
@@ -10,12 +10,6 @@ const Textfield = styled.div`
   background: white;
   border: 0.1rem solid ${(props) => (props.bdColor ? props.theme.color.error.main : props.theme.color.disable)};
   border-radius: 0.8rem;
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
   input,
   textarea {
@@ -27,7 +21,8 @@ const Textfield = styled.div`
   }
   textarea {
     resize: none;
+    min-height: 10rem;
   }
 `;
 
-export default Textfield;
+export default TextField;

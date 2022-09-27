@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginAPI } from "apis";
 import { decodeToken } from "react-jwt";
+
+import { loginAPI } from "apis";
 import { sweetalert } from "utils";
+import { resetPromiseState } from "./promiseSlice";
+import { resetReviewState } from "./reviewSlice";
 
 const initialState = {
   userId: null,
@@ -28,18 +31,19 @@ export const __signout = createAsyncThunk("__signout", async (payload, api) => {
 
   if (answer.result) {
     localStorage.clear();
-
-    api.dispatch(resetState());
+    api.dispatch(resetLoginState());
+    api.dispatch(resetReviewState());
+    api.dispatch(resetPromiseState());
   } else {
     sweetalert.timer("이미 로그아웃된 상태입니다", "error");
   }
 });
 
 export const loginSlice = createSlice({
-  name: "LOGIN",
+  name: "PAGE/LOGIN",
   initialState,
   reducers: {
-    resetState: () => initialState,
+    resetLoginState: () => initialState,
     setLogin: (state, action) => {
       state.userId = decodeToken(action.payload).userId;
     },
@@ -47,5 +51,5 @@ export const loginSlice = createSlice({
   extraReducers: {},
 });
 
-export const { setLogin, resetState } = loginSlice.actions;
+export const { setLogin, resetLoginState } = loginSlice.actions;
 export default loginSlice.reducer;

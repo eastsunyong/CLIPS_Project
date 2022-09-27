@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Btn, Textfield } from "components/common";
+import { Btn, TextField } from "components/common";
 
 const Signin = ({ register, errors }) => {
   // registerOpt
@@ -25,17 +25,17 @@ const Signin = ({ register, errors }) => {
       <div className="inputArea">
         <div>
           <p className="titie">아이디</p>
-          <Textfield bdColor={!!errors.email?.message}>
+          <TextField bdColor={!!errors.email?.message}>
             <input autoComplete="off" placeholder="이메일을 입력해주세요" {...register("email", emailOpt)} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.email?.message}</p>
         </div>
 
         <div>
           <p className="titie">비밀번호</p>
-          <Textfield bdColor={!!errors.password?.message}>
+          <TextField bdColor={!!errors.password?.message}>
             <input type="password" autoComplete="off" placeholder="비밀번호를 입력해주세요" {...register("password", pwOpt)} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.password?.message}</p>
         </div>
         <Btn>로그인</Btn>

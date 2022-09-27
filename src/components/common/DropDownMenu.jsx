@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { MenuIcon } from "assets/iconList";
+import { Menu } from "assets/icons";
 
-const DropDownMenu = (props) => {
+const DropDownMenu = ({ children }) => {
   const [toggle, setToggle] = useState(false);
   return (
     <Box>
@@ -13,9 +13,9 @@ const DropDownMenu = (props) => {
           setToggle(!toggle);
         }}
       >
-        <MenuIcon />
+        <Menu className="sm" />
       </ThreeDot>
-      <Menu toggle={toggle}>{props.children}</Menu>
+      <MenuList toggle={toggle}>{children}</MenuList>
     </Box>
   );
 };
@@ -23,28 +23,31 @@ const DropDownMenu = (props) => {
 const Box = styled.div`
   position: relative;
   height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ThreeDot = styled.div`
   cursor: pointer;
 
   display: flex;
-  justify-content: center;
+  justify-content: center !important;
+  align-items: center;
 
-  width: ${(props) => props.theme.size.xl};
-  height: ${(props) => props.theme.size.xl};
+  width: 2rem;
+  height: 2rem;
 `;
 
-const Menu = styled.ul`
+const MenuList = styled.ul`
   position: absolute;
-  bottom: ${(props) => (props.toggle ? "-100%" : 0)};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  left: ${(props) => (props.toggle ? "-100%" : 0)};
   visibility: ${(props) => (props.toggle ? "visible" : "hidden")};
   transition-duration: 0.4s;
 
+  width: 100%;
   height: 100%;
 
   background: white;

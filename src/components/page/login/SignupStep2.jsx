@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Btn, Textfield } from "components/common";
+import { Btn, TextField } from "components/common";
 import { loginAPI } from "apis";
 import { sweetalert } from "utils";
 import { UserDefaultImg } from "assets/img";
@@ -117,9 +117,9 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
         <div>
           <p className="titie">닉네임</p>
           <WithBtn>
-            <Textfield bdColor={!!errors.nickname?.message}>
+            <TextField bdColor={!!errors.nickname?.message}>
               <input autoComplete="off" placeholder="닉네임을 입력해주세요" {...register("nickname", nicknameOpt)} />
-            </Textfield>
+            </TextField>
             <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
               중복확인
             </Btn>
@@ -130,9 +130,9 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
         <div>
           <p className="titie">아이디</p>
           <WithBtn>
-            <Textfield bdColor={!!errors.email?.message}>
+            <TextField bdColor={!!errors.email?.message}>
               <input autoComplete="off" placeholder="이메일을 입력해주세요" {...register("email", emailOpt)} />
-            </Textfield>
+            </TextField>
             <Btn outLine={true} onClick={(e) => onCheck(e, "email")} disabled={emailCheck}>
               중복확인
             </Btn>
@@ -142,33 +142,33 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
 
         <div>
           <p className="titie">비밀번호</p>
-          <Textfield bdColor={!!errors.password?.message}>
+          <TextField bdColor={!!errors.password?.message}>
             <input type="password" autoComplete="off" placeholder="비밀번호를 입력해주세요" {...register("password", pwOpt)} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.password?.message}</p>
         </div>
 
         <div>
           <p className="titie">비밀번호 확인</p>
-          <Textfield bdColor={!!errors.confirm?.message}>
+          <TextField bdColor={!!errors.confirm?.message}>
             <input type="password" autoComplete="off" placeholder="비밀번호를 한번 더 입력해주세요" {...register("confirm", confirmOpt)} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.confirm?.message}</p>
         </div>
 
         <div>
           <p className="titie">휴대폰 번호</p>
-          <Textfield bdColor={!!errors.phone?.message}>
+          <TextField bdColor={!!errors.phone?.message}>
             <input autoComplete="off" placeholder="01012345678" {...register("phone", phoneOpt)} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.phone?.message}</p>
         </div>
 
         <div>
           <p className="titie">이름</p>
-          <Textfield bdColor={!!errors.name?.message}>
+          <TextField bdColor={!!errors.name?.message}>
             <input autoComplete="off" maxLength="9" placeholder="이름을 입력해주세요" {...register("name", { required: "이름은 필수 입력입니다" })} />
-          </Textfield>
+          </TextField>
           <p className="error">{errors.name?.message}</p>
         </div>
 

@@ -13,7 +13,7 @@ import { Privacy } from "../login";
 const User = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [toggle, setToggle] = useState(false);
 
   const getMypage = async () => {
@@ -27,16 +27,16 @@ const User = () => {
 
   return (
     <Section>
-      <UserInfo key={user[0].userId}>
+      <UserInfo key={user && user[0].userId}>
         <Sort>
           <Profile>
             <img src={defaultImg} />
           </Profile>
           <Info>
             <NickName>
-              <span>{user[0].nickname}</span>님
+              <span>{user && user[0].nickname}</span>님
             </NickName>
-            <Phone>{user[0].phone}</Phone>
+            <Phone>{user && user[0].phone}</Phone>
           </Info>
         </Sort>
         {/* <div>

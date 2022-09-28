@@ -12,10 +12,9 @@ const Mobile = (props) => {
   };
 
   useEffect(() => {
-    window.addEventListener("load", setScreenSize);
+    setScreenSize();
     window.addEventListener("resize", setScreenSize);
     return () => {
-      window.removeEventListener("load", setScreenSize);
       window.removeEventListener("resize", setScreenSize);
     };
   }, []);

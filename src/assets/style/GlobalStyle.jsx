@@ -1,14 +1,25 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+  /* :root {
+    --vh: 100%;
+  }
+
+  html,body {
+    height: 100vh;
+    height: var(--vh);
+  } */
+  
   html {
     font-size: 62.5%;
     line-height: 1;
+
     -webkit-user-select:none;
     -moz-user-select:none;
     -ms-user-select:none;
     user-select:none
   }
+
   * {
     margin: 0;
     padding: 0;

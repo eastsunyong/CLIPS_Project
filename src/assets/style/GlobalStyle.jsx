@@ -25,6 +25,11 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   button {
     cursor: pointer;
   }

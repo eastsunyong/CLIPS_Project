@@ -25,7 +25,7 @@ const KaKaoLogin = () => {
     if (search) {
       const params = new URLSearchParams(search);
       const accessToken = params.get("accesstoken");
-      const refreshToken = params.get("refreshtoken");
+      const refreshToken = params.get("refreshToken");
       if (jwtValide({ accessToken }) && jwtValide({ refreshToken })) {
         dispatch(setLogin(accessToken));
       }

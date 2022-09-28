@@ -3,10 +3,9 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Btn } from "components/common";
 import defaultImg from "assets/img/UserDefaultImg.png";
 import { RightArrow } from "assets/icons";
-import { sweetalert, download } from "utils";
+import { download } from "utils";
 import { myPageAPI } from "apis";
 import { __signout } from "store/modules/loginSlice";
 import { Privacy } from "../login";
@@ -14,7 +13,7 @@ import { Privacy } from "../login";
 const User = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [toggle, setToggle] = useState(false);
 
   const getMypage = async () => {
@@ -28,21 +27,19 @@ const User = () => {
 
   return (
     <Section>
-      {user?.map((a) => {
-        return (
-          <div key={a.userId}>
-            <Sort>
-              <Profile>
-                <img src={defaultImg} />
-              </Profile>
-              <Info>
-                <NickName>
-                  <span>{a.name}</span>님
-                </NickName>
-                <Phone>{a.phone}</Phone>
-              </Info>
-            </Sort>
-            <div>
+      <UserInfo key={user && user[0].userId}>
+        <Sort>
+          <Profile>
+            <img src={defaultImg} />
+          </Profile>
+          <Info>
+            <NickName>
+              <span>{user && user[0].nickname}</span>님
+            </NickName>
+            <Phone>{user && user[0].phone}</Phone>
+          </Info>
+        </Sort>
+        {/* <div>
               <OutBtn
                 className="fcc"
                 onClick={() => {
@@ -51,10 +48,8 @@ const User = () => {
               >
                 프로필 편집
               </OutBtn>
-            </div>
-          </div>
-        );
-      })}
+            </div> */}
+      </UserInfo>
 
       {download.deferredInstallPrompt ? (
         <>
@@ -117,6 +112,10 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const UserInfo = styled.div`
+  margin-bottom: 2rem;
+`;
 const Profile = styled.div`
   width: 4.8rem;
   height: 4.8rem;
@@ -148,19 +147,19 @@ const Sort = styled.div`
   align-items: center;
 `;
 
-const OutBtn = styled(Btn)`
-  background-color: white;
-  border: 1px solid #d9d9d9;
-  color: #333333;
-  font-family: "SUIT";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
-  margin-top: 1.2rem;
-  height: 3.1rem;
-  margin-bottom: 2.4rem;
-`;
+// const OutBtn = styled(Btn)`
+//   background-color: white;
+//   border: 1px solid #d9d9d9;
+//   color: #333333;
+//   font-family: "SUIT";
+//   font-style: normal;
+//   font-weight: 600;
+//   font-size: 1.2rem;
+//   line-height: 1.5rem;
+//   margin-top: 1.2rem;
+//   height: 3.1rem;
+//   margin-bottom: 2.4rem;
+// `;
 
 const Notice = styled.div`
   height: 4.4rem;

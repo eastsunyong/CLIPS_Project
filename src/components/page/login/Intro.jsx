@@ -30,12 +30,12 @@ const Intro = ({ toggle, setToggle }) => {
           <p className="logo">CLIPs</p>
         </Info>
 
-        {/* <a href={`${process.env.REACT_APP_SERVER}/auth/kakao`}> */}
-        <KakaoBtn>
-          <Kakao className="md" />
-          <p>카카오로 빠르게 시작하기</p>
-        </KakaoBtn>
-        {/* </a> */}
+        <a href={`${process.env.REACT_APP_SERVER}/auth/kakao`}>
+          <KakaoBtn>
+            <Kakao className="md" />
+            <p>카카오로 빠르게 시작하기</p>
+          </KakaoBtn>
+        </a>
 
         <Dash>
           <p>또는</p>

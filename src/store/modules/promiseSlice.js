@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import _ from "lodash";
 
 import { promiseAPI } from "apis";
 
@@ -33,6 +32,7 @@ export const __addPromise = createAsyncThunk("__addPromise", async (payload, api
 
   if (answer.result) {
     api.dispatch(__getPromiseList());
+    return api.fulfillWithValue();
   } else {
     return api.rejectWithValue();
   }
@@ -44,6 +44,7 @@ export const __deletePromise = createAsyncThunk("__deletePromise", async (payloa
 
   if (answer.result) {
     api.dispatch(__getPromiseList());
+    return api.fulfillWithValue();
   } else {
     return api.rejectWithValue();
   }
@@ -83,16 +84,15 @@ export const promiseSlice = createSlice({
       state.isLoading = false;
     },
 
-    // 오히려 깜빡임 있어보임
     [__getPromise.pending]: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
     [__getPromise.fulfilled]: (state, action) => {
-      // state.isLoading = false;
+      state.isLoading = false;
       state.selectPromise = { promise: action.payload, toggle: true };
     },
     [__getPromise.rejected]: (state) => {
-      // state.isLoading = false;
+      state.isLoading = false;
     },
 
     [__addPromise.pending]: (state) => {

@@ -24,12 +24,11 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const { register, handleSubmit, selectTarget, setTargetData, toggle, getValues, setValue, reset, errors } = useSearch();
 
   // 데이트 픽커 날짜
-  const today = new Date().toLocaleDateString("ko-KR");
-  const [startDate, setStartDate] = useState(new Date(today));
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    addData.date ? setStartDate(new Date(addData.date)) : setStartDate(new Date(today));
-  }, [addData.date, setStartDate, today]);
+    addData.date ? setStartDate(dayjs(addData.date)) : setStartDate(new Date());
+  }, [addData.date, setStartDate]);
 
   // 피커 날짜 바뀔때마다 시간 조정
   useEffect(() => {
@@ -87,6 +86,13 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
     dispatch(__addPromise(sendData));
     setAddToggle(!addToggle);
     reset();
+  };
+
+  // 지난 시간 선택못하게
+  const possibleTime = (time) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
+    return currentDate.getTime() < selectedDate.getTime();
   };
 
   return (
@@ -165,12 +171,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
                   showTimeSelect
                   showTimeSelectOnly
                   autoComplete="off"
-                  // 지난 시간 선택못하게
-                  filterTime={(time) => {
-                    const currentDate = new Date();
-                    const selectedDate = new Date(time);
-                    return currentDate.getTime() < selectedDate.getTime();
-                  }}
+                  filterTime={possibleTime}
                 />
               </TextField>
             </div>

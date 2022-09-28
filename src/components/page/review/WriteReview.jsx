@@ -160,7 +160,7 @@ const WriteReview = () => {
                 hidden
                 id="file"
                 type="file"
-                accept=".jpg, .png"
+                accept="image/*"
                 multiple
               />
             </div>

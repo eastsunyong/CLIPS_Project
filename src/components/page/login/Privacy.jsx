@@ -5,6 +5,7 @@ import { OpacityModal } from "components/common";
 
 const Privacy = (props) => {
     return (
+        <RenewalModal toggle={props.toggle}>
         <Box>
             <Header>
                 <h2>개인정보 수집•이용동의 (필수)</h2>
@@ -74,6 +75,7 @@ const Privacy = (props) => {
                 <p onClick={()=> {props.setToggle(false)}}>확인</p>
             </End>
         </Box>
+        </RenewalModal>
     )
 }
 
@@ -133,6 +135,13 @@ const End = styled.div`
         padding-right: 1.1rem;
         cursor: pointer;
     }
+`
+
+const RenewalModal = styled(OpacityModal)`
+  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 

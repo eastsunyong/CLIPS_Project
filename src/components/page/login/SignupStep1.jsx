@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { Btn } from "components/common";
 import { RightArrow } from "assets/icons";
-import { OpacityModal } from "components/common";
 import { Privacy } from ".";
 
 const SignupStep1 = ({ setNext }) => {

@@ -107,10 +107,10 @@ const Mypage = () => {
 };
 
 const Section = styled.div`
-  justify-content: flex-start !important;
-  padding: 3.2rem 1.6rem;
   display: flex;
+  justify-content: flex-start !important;
   flex-direction: column;
+  padding: 3.2rem 1.6rem;
 `;
 
 const UserInfo = styled.div`

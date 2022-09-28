@@ -14,7 +14,11 @@ const RandingPage = () => {
 export default RandingPage;
 
 const Container = styled.div`
+  position: absolute;
+  z-index: 10000;
+
   height: 100%;
+  width: 100%;
   padding: 4.8rem 2.4rem;
 
   background: #1a1b1f;

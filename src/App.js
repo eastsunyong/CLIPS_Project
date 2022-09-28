@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, lazy } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Mobile, Main, Footer } from "components/Layout";
 import { RandingPage } from "pages";
@@ -11,6 +11,9 @@ function App() {
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem("accessToken");
 
+  const promiseLoading = useSelector((state) => state.promise.isLoading);
+  const reviewLoading = useSelector((state) => state.review.isLoading);
+
   useEffect(() => {
     if (accessToken) dispatch(setLogin(accessToken));
   }, []);
@@ -18,6 +21,7 @@ function App() {
   return (
     <Mobile>
       <Suspense fallback={<RandingPage />}>
+        {(promiseLoading || reviewLoading) && <RandingPage />}
         <Main>
           <Router />
         </Main>

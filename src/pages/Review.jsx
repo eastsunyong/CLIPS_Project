@@ -2,16 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { RandingPage } from ".";
 import { ToggleReview, WriteList, WriteReview, ReviewList } from "components/page/review";
 
 const Review = () => {
-  const isLoading = useSelector((state) => state.review.isLoading);
   const type = useSelector((state) => state.review.type);
 
   return (
     <>
-      {isLoading && <RandingPage />}
       <Section>
         <ToggleReview type={type} />
         <Article>{type ? <WriteList /> : <ReviewList />}</Article>

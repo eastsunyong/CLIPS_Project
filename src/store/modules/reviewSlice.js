@@ -47,6 +47,7 @@ export const __deleteReview = createAsyncThunk("__deleteReview", async (payload,
   if (answer.result) {
     api.dispatch(__getPromiseList());
     api.dispatch(__getReviewList());
+    return api.fulfillWithValue();
   } else {
     return api.rejectWithValue();
   }
@@ -86,27 +87,17 @@ export const reviewSlice = createSlice({
       state.isLoading = false;
     },
 
-    // 오히려 깜빡임 있어보임
     [__addReview.pending]: (state) => {
       state.isLoading = true;
     },
     [__addReview.fulfilled]: (state) => {
       state.isLoading = false;
       state.selectPromise = { ...state.selectPromise, toggle: false };
-      state.type = !state.type;
+      // state.type = !state.type;
     },
     [__addReview.rejected]: (state) => {
       state.isLoading = false;
     },
-    // [__addPromise.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__addPromise.fulfilled]: (state) => {
-    //   state.isLoading = false;
-    // },
-    // [__addPromise.rejected]: (state) => {
-    //   state.isLoading = false;
-    // },
 
     [__deleteReview.pending]: (state) => {
       state.isLoading = true;

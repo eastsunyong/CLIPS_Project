@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 import { Btn, Card, FormField, Modal, PageField, TextField } from "components/common";
 import { CalendarI, Delete, LeftArrow, Location, My, Plus } from "assets/icons";
@@ -73,6 +74,7 @@ const WriteReview = () => {
   const contentOpt = {
     required: "후기는 필수 입력입니다",
     minLength: { value: 1, message: "최소 1글자 이상 입력해주세요" },
+    maxLength: { value: 100, message: "100 글자 이하로 입력해주세요" },
   };
 
   return (
@@ -105,7 +107,7 @@ const WriteReview = () => {
               <div className="contentIcon">
                 <CalendarI className="sm" />
               </div>
-              {selected.promise?.date}
+              {selected.promise ? dayjs(selected.promise.date).format("YYYY.MM.DD HH:mm") : null}
             </div>
 
             <div>

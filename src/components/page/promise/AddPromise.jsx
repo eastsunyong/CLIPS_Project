@@ -88,6 +88,13 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
     reset();
   };
 
+  // 지난 시간 선택못하게
+  const possibleTime = (time) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
+    return currentDate.getTime() < selectedDate.getTime();
+  };
+
   return (
     <Modal toggle={addToggle}>
       <PageField
@@ -164,12 +171,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
                   showTimeSelect
                   showTimeSelectOnly
                   autoComplete="off"
-                  // 지난 시간 선택못하게
-                  // filterTime={(time) => {
-                  //   const currentDate = new Date();
-                  //   const selectedDate = new Date(time);
-                  //   return currentDate.getTime() < selectedDate.getTime();
-                  // }}
+                  filterTime={possibleTime}
                 />
               </TextField>
             </div>

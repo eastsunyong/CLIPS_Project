@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Btn } from "components/common";
 import { RightArrow } from "assets/icons";
+import { Privacy } from ".";
 
 const SignupStep1 = ({ setNext }) => {
   const privacySelect = [
@@ -12,6 +13,9 @@ const SignupStep1 = ({ setNext }) => {
 
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
+
+  //정보 동의 얻는 모달창
+  const [toggle, setToggle] = useState(false)
 
   // 체크박스 단일 선택
   const handleSingleCheck = (checked, id) => {
@@ -63,7 +67,7 @@ const SignupStep1 = ({ setNext }) => {
                   />
                   <p>{data.title}</p>
                 </div>
-                <div className="icon">
+                <div onClick={()=> {setToggle(true)}} className="icon">
                   <RightArrow className="sm" />
                 </div>
               </RightGo>
@@ -83,6 +87,10 @@ const SignupStep1 = ({ setNext }) => {
       ) : (
         <DisableBtn>다음</DisableBtn>
       )}
+      
+      {
+        toggle === true ? <Privacy toggle={toggle} setToggle={setToggle}/> : null
+      }
     </>
   );
 };

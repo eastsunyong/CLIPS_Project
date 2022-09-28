@@ -4,12 +4,10 @@ import { useSelector } from "react-redux";
 
 import { PromiseList, AddPromise } from "components/page/promise";
 import DetailPromise from "../components/page/promise/DetailPromise";
-import { RandingPage } from ".";
 
 const Promised = () => {
   const location = useLocation();
   const addData = useSelector((state) => state.promise.addData);
-  const isLoading = useSelector((state) => state.review.isLoading);
 
   const [addToggle, setAddToggle] = useState(false);
 
@@ -24,7 +22,6 @@ const Promised = () => {
 
   return (
     <>
-      {isLoading && <RandingPage />}
       <PromiseList setAddToggle={setAddToggle} />
       <AddPromise addData={addData} addToggle={addToggle} setAddToggle={setAddToggle} />
       <DetailPromise />

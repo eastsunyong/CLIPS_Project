@@ -27,7 +27,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
-    addData.date ? setStartDate(dayjs(addData.date)) : setStartDate(new Date());
+    addData.date ? setStartDate(dayjs(addData.date).toDate()) : setStartDate(new Date());
   }, [addData.date, setStartDate]);
 
   // 피커 날짜 바뀔때마다 시간 조정
@@ -39,6 +39,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   // 뒤로가기 버튼
   const goBack = () => {
     dispatch(resetAddData());
+    setStartDate(new Date());
     setAddToggle(!addToggle);
     reset();
   };

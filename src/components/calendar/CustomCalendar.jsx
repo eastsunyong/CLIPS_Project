@@ -28,10 +28,8 @@ const CustomCalendar = ({ dateList, setSelectDate }) => {
       next2Label={null}
       prev2Label={null}
       tileContent={(e) => {
-        if (dateList) {
-          if (dateList.find((x) => dayjs(x).format("YYYY-MM-DD") === dayjs(e.date).format("YYYY-MM-DD"))) {
-            return <Highlight />;
-          }
+        if (dateList && dateList.find((x) => dayjs(x).format("YYYY/MM/DD") === dayjs(e.date).format("YYYY/MM/DD"))) {
+          return <Highlight />;
         }
       }}
       onChange={onChange}

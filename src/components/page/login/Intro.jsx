@@ -30,10 +30,12 @@ const Intro = ({ toggle, setToggle }) => {
           <p className="logo">CLIPs</p>
         </Info>
 
+        {/* <a href={`${process.env.REACT_APP_SERVER}/auth/kakao`}> */}
         <KakaoBtn>
           <Kakao className="md" />
           <p>카카오로 빠르게 시작하기</p>
         </KakaoBtn>
+        {/* </a> */}
 
         <Dash>
           <p>또는</p>
@@ -114,6 +116,9 @@ const KakaoBtn = styled(Btn)`
   justify-content: flex-start;
   align-items: center;
 
+  padding: 1rem 1.6rem;
+
+  border-radius: 1.2rem;
   border-color: #fee500;
   background: #fee500;
 

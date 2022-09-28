@@ -68,21 +68,29 @@ const User = () => {
         </>
       ) : null}
 
-      <Notice>
+      {/* <Notice>
         <p>공지사항</p>
         <h4>
           <RightArrow className="sm" />
         </h4>
-      </Notice>
+      </Notice> */}
       <Notice>
         <p>이용약관</p>
-        <h4 onClick={()=> {setToggle(true)}}>
+        <h4
+          onClick={() => {
+            setToggle(true);
+          }}
+        >
           <RightArrow className="sm" />
         </h4>
       </Notice>
       <Notice>
         <p>개인정보 처리 방침</p>
-        <h4 onClick={()=> {setToggle(true)}}>
+        <h4
+          onClick={() => {
+            setToggle(true);
+          }}
+        >
           <RightArrow className="sm" />
         </h4>
       </Notice>
@@ -98,9 +106,7 @@ const User = () => {
           로그아웃
         </p>
       </Notice>
-          {
-            toggle === true ? <Privacy toggle={toggle} setToggle={setToggle}/> :null
-          }
+      {toggle === true ? <Privacy toggle={toggle} setToggle={setToggle} /> : null}
     </Section>
   );
 };

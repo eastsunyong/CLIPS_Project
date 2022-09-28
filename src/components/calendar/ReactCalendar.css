@@ -69,6 +69,7 @@
   font-size: 2rem;
   font-weight: bold;
 }
+.react-calendar__month-view__days__day,
 .react-calendar__month-view__days__day--weekend {
   color: black;
 }

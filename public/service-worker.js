@@ -8,7 +8,7 @@ const FILES_TO_CACHE = ["offline.html"];
 self.addEventListener("install", (evt) => {
   evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("install");
+      // console.log("install");
       return cache.addAll(FILES_TO_CACHE);
     })
   );
@@ -22,7 +22,7 @@ self.addEventListener("activate", (evt) => {
       return Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log("Removing old cache", key);
+            // console.log("Removing old cache", key);
             return caches.delete(key);
           }
         })

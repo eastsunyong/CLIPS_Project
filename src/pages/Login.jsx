@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 import { Intro } from "components/page/login";
 import { Btn } from "components/common";
-import { RandingPage } from ".";
 
 const Login = () => {
   const [toggle, setToggle] = useState();
-  const isLoading = useSelector((state) => state.review.isLoading);
 
   return (
     <>
-     {isLoading && <RandingPage />}
       <Section>
         <p>로그인하고</p>
         <p>더 많은 기능을 만나보세요!</p>

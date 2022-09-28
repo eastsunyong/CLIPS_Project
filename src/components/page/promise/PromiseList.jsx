@@ -11,11 +11,9 @@ import { Card, DropDownMenu, PageField } from "components/common";
 import { My, Plus, CalendarI, Location, Delete } from "assets/icons";
 import { sweetalert } from "utils";
 import { __deletePromise, __getPromise, __getPromiseList } from "store/modules/promiseSlice";
-import { RandingPage } from "pages";
 
 const PromiseList = ({ setAddToggle }) => {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.promise.isLoading);
   const list = useSelector((state) => state.promise.promiseList);
   const userId = useSelector((state) => state.login.userId);
 
@@ -43,7 +41,6 @@ const PromiseList = ({ setAddToggle }) => {
 
   return (
     <>
-      {isLoading && <RandingPage />}
       <PageField
         title="Calendar"
         right={
@@ -57,7 +54,7 @@ const PromiseList = ({ setAddToggle }) => {
 
           <List>
             {list.map((promise) => {
-              if (dayjs(selectDate).format("YYYY-MM-DD") === dayjs(new Date(promise.date)).format("YYYY-MM-DD")) {
+              if (dayjs(selectDate).format("YYYY-MM-DD") === dayjs(promise.date).format("YYYY-MM-DD")) {
                 return (
                   <Card
                     key={promise.promiseId}

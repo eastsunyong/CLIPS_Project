@@ -39,17 +39,16 @@ const DetailPromise = () => {
           <div>{item?.date}</div>
         </Content>
 
-        <Content>
-          <div className="subTitle">멤버</div>
-          <div className="list">
-            <FriendDiv>{item?.username}</FriendDiv>
-            {item?.countFriend > 0
-              ? item?.friendList.map((friend, i) => {
-                  return <FriendDiv key={friend.name + i}>{friend.name}</FriendDiv>;
-                })
-              : null}
-          </div>
-        </Content>
+        {item?.countFriend > 0 ? (
+          <Content>
+            <div className="subTitle">멤버</div>
+            <div className="list">
+              {item.friendList.map((friend, i) => {
+                return <FriendDiv key={friend.nickname + i}>{friend.nickname}</FriendDiv>;
+              })}
+            </div>
+          </Content>
+        ) : null}
 
         {item?.penalty && (
           <Content>

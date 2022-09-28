@@ -35,7 +35,10 @@ export const __signout = createAsyncThunk("__signout", async (payload, api) => {
     api.dispatch(resetReviewState());
     api.dispatch(resetPromiseState());
   } else {
-    sweetalert.timer("이미 로그아웃된 상태입니다", "error");
+    localStorage.clear();
+    api.dispatch(resetLoginState());
+    api.dispatch(resetReviewState());
+    api.dispatch(resetPromiseState());
   }
 });
 

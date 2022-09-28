@@ -6,11 +6,11 @@ import { mobileFrame } from "assets/img";
 const Web = ({ children }) => {
   return (
     <Section>
-      <Logo>CLIP</Logo>
+      <Logo>CLIPs</Logo>
 
       <Container>
         <Comment>
-          <p>WE ARE</p>
+          <p>WE HATE</p>
           <p>Chronically</p>
           <p>Late - </p>
           <p>Insane</p>
@@ -83,7 +83,7 @@ const Content = styled.div`
   display: flex;
   flex-flow: column;
 
-  min-width: 42.5rem;
+  width: 42.5rem;
   height: 85rem;
   padding: 2.6rem 2.85rem 2.4rem 2.7rem;
 `;

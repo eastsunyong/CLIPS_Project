@@ -54,7 +54,7 @@ const PromiseList = ({ setAddToggle }) => {
 
           <List>
             {list.map((promise) => {
-              if (dayjs(selectDate).format("YYYY-MM-DD") === dayjs(promise.date).format("YYYY-MM-DD")) {
+              if (dayjs(selectDate).format("YYYY/MM/DD") === dayjs(promise.date).format("YYYY/MM/DD")) {
                 return (
                   <Card
                     key={promise.promiseId}
@@ -90,7 +90,7 @@ const PromiseList = ({ setAddToggle }) => {
                       <div className="contentIcon">
                         <CalendarI className="sm" />
                       </div>
-                      {promise.date}
+                      {promise.date.replaceAll("/", ".")}
                     </div>
 
                     <div>

@@ -1,11 +1,17 @@
 import { axios } from "utils";
+import _ from "lodash";
 
 // 리스트 조회
 export const getList = async () => {
   const answer = { result: true };
   try {
     const res = await axios.default.get("/promise");
-    answer.list = res.data;
+
+    // ios 크로스 브라우징 이슈 해결
+    answer.list = _.map(res.data, (p) => {
+      p.date = p.date.replaceAll(".", "/");
+      return p;
+    });
   } catch (err) {
     answer.result = false;
   }

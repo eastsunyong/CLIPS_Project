@@ -1,5 +1,6 @@
 import React, { memo, useState } from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 
 import { Chip } from "components/common";
 import { setSelectedCg } from "store/modules/mainSlice";
@@ -15,10 +16,15 @@ const CategoryChip = ({ category }) => {
   };
 
   return (
-    <Chip size="sm" selected={selected} onClick={clickHandler}>
+    <CustomChip size="sm" selected={selected} onClick={clickHandler}>
       {category}
-    </Chip>
+    </CustomChip>
   );
 };
 
 export default memo(CategoryChip);
+
+const CustomChip = styled(Chip)`
+  flex: 1;
+  border-radius: 0.4rem;
+`;

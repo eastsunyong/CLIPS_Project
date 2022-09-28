@@ -1,7 +1,8 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { BrowserView, MobileView } from "react-device-detect";
 
-import { Mobile, Main, Footer } from "components/Layout";
+import { Web, Mobile, Main, Footer } from "components/Layout";
 import { RandingPage } from "pages";
 import { setLogin } from "store/modules/loginSlice";
 
@@ -19,15 +20,31 @@ function App() {
   }, []);
 
   return (
-    <Mobile>
-      <Suspense fallback={<RandingPage />}>
-        {(promiseLoading || reviewLoading) && <RandingPage />}
-        <Main>
-          <Router />
-        </Main>
-        <Footer />
-      </Suspense>
-    </Mobile>
+    <>
+      <BrowserView>
+        <Web>
+          <Suspense fallback={<RandingPage />}>
+            {(promiseLoading || reviewLoading) && <RandingPage />}
+            <Main>
+              <Router />
+            </Main>
+            <Footer />
+          </Suspense>
+        </Web>
+      </BrowserView>
+
+      <MobileView>
+        <Mobile>
+          <Suspense fallback={<RandingPage />}>
+            {(promiseLoading || reviewLoading) && <RandingPage />}
+            <Main>
+              <Router />
+            </Main>
+            <Footer />
+          </Suspense>
+        </Mobile>
+      </MobileView>
+    </>
   );
 }
 

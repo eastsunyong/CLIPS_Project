@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
 
 import { Card, DropDownMenu, OpacityModal, PageField } from "components/common";
 import { CalendarI, Close, Delete, Location } from "assets/icons";

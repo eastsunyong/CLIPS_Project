@@ -9,7 +9,8 @@ export const getList = async () => {
 
     // ios 크로스 브라우징 이슈 해결
     answer.list = _.map(res.data, (p) => {
-      p.date = p.date.replaceAll(".", "/");
+      const iosDate = p.date.replaceAll(".", "/") + ":00";
+      p.date = new Date(iosDate).getTime();
       return p;
     });
   } catch (err) {

@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Btn, TextField } from "components/common";
 import { loginAPI } from "apis";
 import { sweetalert } from "utils";
-// import { UserDefaultImg } from "assets/img";
-// import { Camera } from "assets/icons";
+import { UserDefaultImg } from "assets/img";
+import { Camera } from "assets/icons";
 
 const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   const [emailCheck, setEmailCheck] = useState(false);
   const [nickCheck, setNickCheck] = useState(false);
   //이미지 미리보기 저장하는  곳
-  // const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState();
 
   // 유효성 체크 함수
   const regPass = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
@@ -82,40 +82,37 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
     pattern: { value: /^01[0-1, 7][0-9]{7,8}$/, message: "휴대전화가 아닙니다" },
   };
 
-  // //사진 미리보기
-  // const previewImg = (file) => {
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file[0]);
-  //   reader.onloadend = (finishiedEvent) => {
-  //     const {
-  //       currentTarget: { result },
-  //     } = finishiedEvent;
-  //     setAttachment(result);
-  //   };
-  // };
+  //사진 미리보기
+  const previewImg = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file[0]);
+    reader.onloadend = (finishiedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishiedEvent;
+      setAttachment(result);
+    };
+  };
 
-  // // 파일 업로드 감시
-  // const selectImg = watch("image");
-  // useEffect(() => {
-  //   if (selectImg?.length) {
-  //     previewImg(selectImg);
-  //   }
-  // }, [selectImg]);
+  // 파일 업로드 감시
+  const selectImg = watch("image");
+  useEffect(() => {
+    if (selectImg?.length) {
+      previewImg(selectImg);
+    }
+  }, [selectImg]);
 
   return (
     <>
       <div className="inputArea">
-        {/*         
         <UserImage className="fcc">
           <div>
             <img src={attachment ? attachment : UserDefaultImg} alt="업로드할 이미지" />
-            {/* <ImgBtn htmlFor="file">
-            <ImgBtn onClick={() => sweetalert.avatarAlert()}>
+            <ImgBtn htmlFor="file">
               <Camera className="md" />
             </ImgBtn>
           </div>
-        </UserImage> */}
-
+        </UserImage>
         <div>
           <p className="titie">닉네임</p>
           <WithBtn>
@@ -174,7 +171,7 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
           <p className="error">{errors.name?.message}</p>
         </div>
 
-        {/* <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden /> */}
+        <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden />
       </div>
       <Btn>가입 완료</Btn>
     </>
@@ -183,43 +180,43 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
 
 export default SignupStep2;
 
-// const UserImage = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
+const UserImage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-//   margin-bottom: 2rem;
-//   & > div {
-//     position: relative;
-//     width: 9rem;
-//     height: 9rem;
-//   }
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     border-radius: 50%;
-//   }
-// `;
+  margin-bottom: 2rem;
+  & > div {
+    position: relative;
+    width: 9rem;
+    height: 9rem;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
 
-// const ImgBtn = styled.label`
-//   cursor: pointer;
-//   position: absolute;
-//   bottom: 0;
-//   right: 0;
+const ImgBtn = styled.label`
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-//   width: 3.6rem;
-//   height: 3.6rem;
-//   padding: 1rem;
+  width: 3.6rem;
+  height: 3.6rem;
+  padding: 1rem;
 
-//   background: white;
-//   border: none;
-//   border-radius: 50%;
-//   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-// `;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+`;
 
 const WithBtn = styled.div`
   display: flex;

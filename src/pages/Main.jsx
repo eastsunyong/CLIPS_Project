@@ -75,7 +75,7 @@ const SearchBar = styled(TextField)`
   margin: 0 1.6rem;
 
   border: none;
-  box-shadow: 0px 2px 10px rgba(17, 24, 39, 0.15);
+  box-shadow: 0px 0.2rem 1rem rgba(17, 24, 39, 0.15);
   input {
     cursor: pointer;
   }

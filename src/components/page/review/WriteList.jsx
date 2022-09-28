@@ -1,5 +1,6 @@
 import React, { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 import { Btn, Card } from "components/common";
 import { CalendarI, Location, My } from "assets/icons";
@@ -37,7 +38,7 @@ const WriteList = () => {
                 <div className="contentIcon">
                   <CalendarI className="sm" />
                 </div>
-                {promise.date}
+                {dayjs(promise.date).format("YYYY.MM.DD HH:mm")}
               </div>
 
               <div>

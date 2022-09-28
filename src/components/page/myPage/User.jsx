@@ -9,11 +9,13 @@ import { RightArrow } from "assets/icons";
 import { sweetalert, download } from "utils";
 import { myPageAPI } from "apis";
 import { __signout } from "store/modules/loginSlice";
+import { Privacy } from "../login";
 
 const User = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const [user, setUser] = useState();
+  const [toggle, setToggle] = useState(false);
 
   const getMypage = async () => {
     const answer = await myPageAPI.getUser();
@@ -74,13 +76,13 @@ const User = () => {
       </Notice>
       <Notice>
         <p>이용약관</p>
-        <h4>
+        <h4 onClick={()=> {setToggle(true)}}>
           <RightArrow className="sm" />
         </h4>
       </Notice>
       <Notice>
         <p>개인정보 처리 방침</p>
-        <h4>
+        <h4 onClick={()=> {setToggle(true)}}>
           <RightArrow className="sm" />
         </h4>
       </Notice>
@@ -96,6 +98,9 @@ const User = () => {
           로그아웃
         </p>
       </Notice>
+          {
+            toggle === true ? <Privacy toggle={toggle} setToggle={setToggle}/> :null
+          }
     </Section>
   );
 };

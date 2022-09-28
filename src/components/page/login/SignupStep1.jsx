@@ -88,9 +88,10 @@ const SignupStep1 = ({ setNext }) => {
       ) : (
         <DisableBtn>다음</DisableBtn>
       )}
-      <RenewalModal toggle={toggle}>
-          <Privacy setToggle={setToggle}/>
-      </RenewalModal>
+      
+      {
+        toggle === true ? <Privacy toggle={toggle} setToggle={setToggle}/> : null
+      }
     </>
   );
 };
@@ -154,10 +155,3 @@ const RightGo = styled.div`
 const DisableBtn = styled(Btn)`
   opacity: 0.5;
 `;
-
-const RenewalModal = styled(OpacityModal)`
-  background: rgba(17, 24, 39, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`

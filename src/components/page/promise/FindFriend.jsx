@@ -10,7 +10,7 @@ import { promiseAPI } from "apis";
 import { sweetalert } from "utils";
 import { useXDrag } from "hooks";
 
-const FindFriend = ({ toggle, selectTarget, setTargetData, friendList }) => {
+const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
   const { register, resetField } = useForm();
   const [list, setList] = useState([]);
   const [ref, start, end, moving] = useXDrag();
@@ -36,40 +36,23 @@ const FindFriend = ({ toggle, selectTarget, setTargetData, friendList }) => {
   };
 
   // 친구 선택 및 저장
-  const selectNickname = (nickname) => {
-    if (_.find(friendList, { nickname })) {
+  const selectNickname = (user) => {
+    if (_.find(friendList, { userId: user.userId })) {
       const messge = "이미 등록되어있는 친구입니다.";
       sweetalert.timer(messge, "warning");
       return;
     }
 
-    let friendStr = "";
-
-    _.forEach(friendList, (v, i) => {
-      friendStr += v.nickname + ", ";
-      if (friendList.length - 1 === i) friendStr += nickname;
-    });
-
-    if (!friendList.length) friendStr += nickname;
-
-    setTargetData(friendStr);
+    selectTarget(null);
+    setFriendList([...friendList, user]);
   };
 
   // 친구 삭제
-  const deleteNickname = async (nickname) => {
-    const answer = await sweetalert.confirm(`${nickname}을 제외하시겠습니까?`, "warning");
+  const deleteNickname = async (user) => {
+    const answer = await sweetalert.confirm(`${user.nickname}을 제외하시겠습니까?`, "warning");
 
     if (answer.isConfirmed) {
-      const deleteList = _.filter(friendList, (v) => v.nickname !== nickname);
-
-      let friendStr = "";
-
-      _.forEach(deleteList, (v, i) => {
-        friendStr += v.nickname;
-        if (deleteList.length - 1 !== i) friendStr += ", ";
-      });
-
-      setTargetData(friendStr);
+      setFriendList(_.filter(friendList, (v) => v.userId !== user.userId));
     }
   };
 
@@ -93,18 +76,17 @@ const FindFriend = ({ toggle, selectTarget, setTargetData, friendList }) => {
             <input autoComplete="off" placeholder="닉네임을 검색해주세요" {...register("search", registerOpt)} />
           </TextField>
 
-          {friendList?.length ? (
+          {friendList.length !== 0 ? (
             <AttendList>
               <div className="attendTitle">참석자</div>
               <div className="attendList" ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
-                {friendList &&
-                  friendList.map((user) => {
-                    return (
-                      <div key={user.nickname} className="attend" onClick={() => deleteNickname(user.nickname)}>
-                        {user.nickname}
-                      </div>
-                    );
-                  })}
+                {friendList.map((user) => {
+                  return (
+                    <div key={user.userId} className="attend" onClick={() => deleteNickname(user)}>
+                      {user.nickname}
+                    </div>
+                  );
+                })}
               </div>
             </AttendList>
           ) : null}
@@ -115,11 +97,12 @@ const FindFriend = ({ toggle, selectTarget, setTargetData, friendList }) => {
                 <SearchResult
                   key={user.userId}
                   onClick={() => {
-                    selectNickname(user.nickname);
+                    selectNickname({ nickname: user.nickname, userId: user.userId });
                   }}
                 >
-                  <img src={user.img ? user.img : defaultImg} alt="유저 이미지" />
-                  {user.nickname}
+                  <img src={user.image ? user.image : defaultImg} alt="유저 이미지" />
+                  <span>{user.nickname}</span>
+                  <span className="id">#{user.userId}</span>
                 </SearchResult>
               );
             })}
@@ -199,5 +182,11 @@ const SearchResult = styled.div`
     margin-right: 1rem;
 
     border-radius: 1.2rem;
+  }
+
+  .id {
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    color: ${(props) => props.theme.color.black.light};
   }
 `;

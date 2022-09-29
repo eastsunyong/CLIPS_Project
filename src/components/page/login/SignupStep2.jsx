@@ -9,7 +9,7 @@ import { Camera } from "assets/icons";
 
 const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   const [emailCheck, setEmailCheck] = useState(false);
-  const [nickCheck, setNickCheck] = useState(false);
+  // const [nickCheck, setNickCheck] = useState(false);
   //이미지 미리보기 저장하는  곳
   const [attachment, setAttachment] = useState();
 
@@ -33,10 +33,12 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
 
     if (answer.result) {
       sweetalert.successAlert(answer.msg);
-      type === "email" ? setEmailCheck(true) : setNickCheck(true);
+      // type === "email" ? setEmailCheck(true) : setNickCheck(true);
+      setEmailCheck(true);
     } else {
       sweetalert.failAlert(answer.msg);
-      type === "email" ? setEmailCheck(false) : setNickCheck(false);
+      // type === "email" ? setEmailCheck(true) : setNickCheck(true);
+      setEmailCheck(false);
     }
   };
 
@@ -57,10 +59,10 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   const nicknameOpt = {
     required: "닉네임은 필수 입력입니다",
     maxLength: { value: 8, message: "8자 이하로 정해주세요" },
-    onChange: () => {
-      setNickCheck(false);
-    },
-    validate: () => nickCheck === true,
+    // onChange: () => {
+    //   setNickCheck(false);
+    // },
+    // validate: () => nickCheck === true,
   };
 
   const pwOpt = {
@@ -113,18 +115,6 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
             </ImgBtn>
           </div>
         </UserImage>
-        <div>
-          <p className="titie">닉네임</p>
-          <WithBtn>
-            <TextField bdColor={!!errors.nickname?.message}>
-              <input autoComplete="off" placeholder="닉네임을 입력해주세요" {...register("nickname", nicknameOpt)} />
-            </TextField>
-            <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
-              중복확인
-            </Btn>
-          </WithBtn>
-          <p className="error">{errors.nickname?.message}</p>
-        </div>
 
         <div>
           <p className="titie">아이디</p>
@@ -137,6 +127,19 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
             </Btn>
           </WithBtn>
           <p className="error">{errors.email?.message}</p>
+        </div>
+
+        <div>
+          <p className="titie">닉네임</p>
+          {/* <WithBtn> */}
+          <TextField bdColor={!!errors.nickname?.message}>
+            <input autoComplete="off" placeholder="닉네임을 입력해주세요" {...register("nickname", nicknameOpt)} />
+          </TextField>
+          {/* <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
+              중복확인
+            </Btn>
+          </WithBtn> */}
+          <p className="error">{errors.nickname?.message}</p>
         </div>
 
         <div>

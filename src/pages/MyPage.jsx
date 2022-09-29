@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import defaultImg from "assets/img/UserDefaultImg.png";
+import {UserDefaultImg, surveys} from "assets/img"
 import { RightArrow } from "assets/icons";
 import { download } from "utils";
 import { myPageAPI } from "apis";
@@ -30,7 +30,7 @@ const Mypage = () => {
       <UserInfo key={user && user[0].userId}>
         <Sort>
           <Profile>
-            <img src={user && user[0].image ? user[0].image : defaultImg} alt="유저 프로필" />
+            <img src={user && user[0].image ? user[0].image : UserDefaultImg} alt="유저 프로필" />
           </Profile>
           <Info>
             <NickName>
@@ -90,6 +90,7 @@ const Mypage = () => {
         </h4>
       </Notice>
       <Line />
+
       <Notice>
         <p
           style={{ color: "red" }}
@@ -101,6 +102,16 @@ const Mypage = () => {
           로그아웃
         </p>
       </Notice>
+
+      <Line />
+
+      <Survey > 
+        <a href="https://forms.gle/CEv86i3gEpHrNcgK6">
+          <img src={surveys} alt="설문조사"/>
+        </a>
+          
+      </Survey>
+  
       {toggle === true ? <Privacy toggle={toggle} setToggle={setToggle} /> : null}
     </Section>
   );
@@ -190,5 +201,22 @@ const Line = styled.div`
   flex-grow: 0;
   margin: 0.8rem 0;
 `;
+
+const Survey = styled.div`
+    cursor: pointer;
+    margin-top: 0.5rem;
+
+    a{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      }
+
+  img {
+      width: 80%;
+      border-radius: 1.2rem;
+      }
+
+`
 
 export default Mypage;

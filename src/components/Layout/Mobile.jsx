@@ -6,7 +6,7 @@ const Mobile = (props) => {
     // 모바일 화면에서 주소창 및 하단 nav바를 제외한 100vh구하기
     let vh = window.innerHeight * 0.01;
     // 넓이 따른 100%
-    let mw = window.innerWidth >= 500 ? "375px" : "100%";
+    let mw = window.innerWidth >= 640 ? "375px" : "100%";
     document.documentElement.style.setProperty("--vh", `${vh}px`);
     document.documentElement.style.setProperty("--mw", mw);
   };

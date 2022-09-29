@@ -34,11 +34,6 @@ const TypePage = ({ choice, setChoice }) => {
         sweetalert.timer(answer.msg, "success");
         setWelcome({ toggle: true, data: { email: data.email, password: data.password } });
       }
-      // 이미지 업로드 기능 추가시 활성화
-      // const formData = new FormData();
-      // Object.keys(data).forEach((key) => {
-      //   formData.append(key, data[key]);
-      // });
     } else {
       signin(data);
     }

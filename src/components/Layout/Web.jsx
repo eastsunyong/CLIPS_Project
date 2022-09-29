@@ -85,7 +85,7 @@ const Content = styled.div`
 
   width: 42.5rem;
   height: 85rem;
-  padding: 2.6rem 2.85rem 2.4rem 2.7rem;
+  padding: 2.6rem 2.85rem 2.4rem 2.6rem;
 `;
 
 const MobileFrame = styled.div`

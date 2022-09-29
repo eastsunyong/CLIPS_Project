@@ -109,6 +109,9 @@ const SelectBox = styled.div`
   p {
     margin-left: 1.5rem;
   }
+  input {
+    cursor: pointer;
+  }
 `;
 
 const AllSelcet = styled.div`

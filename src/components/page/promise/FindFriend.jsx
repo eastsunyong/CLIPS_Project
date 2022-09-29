@@ -127,6 +127,7 @@ const AttendList = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  cursor: pointer;
 
   padding-top: 1rem;
 
@@ -172,6 +173,7 @@ const SearchResult = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  cursor: pointer;
 
   font-size: 1.6rem;
   font-weight: bold;

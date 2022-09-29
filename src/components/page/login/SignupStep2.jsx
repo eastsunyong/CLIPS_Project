@@ -174,7 +174,7 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
           <p className="error">{errors.name?.message}</p>
         </div>
 
-        <input id="file" type="file" accept=".png, .jpg" {...register("image")} hidden />
+        <input id="file" type="file" accept="image/*" {...register("image")} hidden />
       </div>
       <Btn>가입 완료</Btn>
     </>

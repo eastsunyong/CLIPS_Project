@@ -118,6 +118,7 @@ export default SearchModal;
 
 const List = styled.div`
   margin-top: 2rem;
+  cursor: pointer;
 `;
 
 const LocationInfo = styled.div`

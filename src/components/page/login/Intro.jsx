@@ -150,4 +150,7 @@ const ChoiceBtns = styled.div`
     height: 1.2rem;
     border: 0.1rem solid ${(props) => props.theme.color.disable};
   }
+    P{
+      cursor: pointer;
+    }
 `;

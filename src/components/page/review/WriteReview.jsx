@@ -207,6 +207,7 @@ const ImgAddBtn = styled.label`
   border: 0.1rem solid ${(props) => props.theme.color.disable};
   background: ${(props) => props.theme.color.disable};
   color: ${(props) => props.theme.color.black.light};
+  cursor: pointer;
 
   & > svg {
     position: absolute;

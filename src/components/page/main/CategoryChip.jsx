@@ -16,7 +16,7 @@ const CategoryChip = ({ category }) => {
   };
 
   return (
-    <CustomChip size="sm" selected={selected} onClick={clickHandler}>
+    <CustomChip size="sm" selected={category === "음식점" ? !selected : selected} onClick={clickHandler}>
       {category}
     </CustomChip>
   );

@@ -4,7 +4,7 @@ import { axios } from "utils";
 const initialState = {
   // 카테고리
   categoryList: ["음식점", "카페", "술집", "헬스장", "운동장"],
-  selectedCg: [],
+  selectedCg: ["음식점"],
 
   // 선택 장소 상세 데이터
   placeInfo: null,

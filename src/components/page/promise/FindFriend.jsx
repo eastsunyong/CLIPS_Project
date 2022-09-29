@@ -181,7 +181,7 @@ const SearchResult = styled.div`
     height: 4.4rem;
     margin-right: 1rem;
 
-    border-radius: 1.2rem;
+    border-radius: 50%;
   }
 
   .id {

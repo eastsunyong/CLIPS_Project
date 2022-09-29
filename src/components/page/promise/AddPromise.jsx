@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import _ from "lodash";
 
 import dayjs from "dayjs";
 
@@ -22,13 +23,33 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const nav = useNavigate();
 
   const { register, handleSubmit, selectTarget, setTargetData, toggle, getValues, setValue, reset, errors } = useSearch();
+  const [friendList, setFriendList] = useState([]);
 
   // 데이트 픽커 날짜
   const [startDate, setStartDate] = useState(new Date());
 
+  // 임시저장 데이터 기입
   useEffect(() => {
     addData.date ? setStartDate(dayjs(addData.date).toDate()) : setStartDate(new Date());
-  }, [addData.date, setStartDate]);
+    if (addData.friendList) {
+      setFriendList(addData.friendList);
+    }
+  }, [addData.date, setStartDate, addData.friendList, setFriendList]);
+
+  // 친구목록 변환시 input에 보여주는 value 변경
+  useEffect(() => {
+    if (friendList.length > 0) {
+      let friendStr = "";
+
+      _.forEach(friendList, (v, i) => {
+        friendStr += v.nickname;
+        if (friendList.length - 1 !== i) friendStr += ", ";
+      });
+      setValue("friendList", friendStr);
+    } else {
+      setValue("friendList", "");
+    }
+  }, [friendList, setValue]);
 
   // 피커 날짜 바뀔때마다 시간 조정
   useEffect(() => {
@@ -49,29 +70,17 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
     if (!addData.place.name) {
       const data = getValues();
       Object.keys(data).forEach((key) => {
-        if (key === "day" || key === "time") delete data[key];
+        if (key === "day" || key === "time" || key === "friendList") delete data[key];
       });
       data.date = startDate.getTime();
+      data.friendList = friendList;
       dispatch(setAddData(data));
       nav("/");
     }
   };
 
-  // 문자열을 콜렉션으로 변환
-  const string2arr = (friendList) => {
-    let arr = [];
-    if (!friendList) return arr;
-
-    friendList.split(", ").forEach((nickname) => {
-      arr.push({ nickname });
-    });
-    return arr;
-  };
-
   // submit후 데이터 세팅
   const submitHandler = async (data) => {
-    let friendList = string2arr(data.friendList);
-
     const date = data.day + " " + data.time;
 
     const sendData = {
@@ -212,7 +221,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
         </FormField>
       </PageField>
 
-      <FindFriend toggle={toggle} selectTarget={selectTarget} setTargetData={setTargetData} friendList={string2arr(getValues("friendList"))} />
+      <FindFriend toggle={toggle} selectTarget={selectTarget} setTargetData={setTargetData} friendList={friendList} setFriendList={setFriendList} />
     </Modal>
   );
 };

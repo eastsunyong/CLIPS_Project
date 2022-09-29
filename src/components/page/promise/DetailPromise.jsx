@@ -68,6 +68,7 @@ const DetailPromise = () => {
         {item && (
           <Map
             draggable={false}
+            disableDoubleClickZoom={true}
             center={{
               lng: item.x,
               lat: item.y,

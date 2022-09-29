@@ -30,13 +30,13 @@ const Mypage = () => {
       <UserInfo key={user && user[0].userId}>
         <Sort>
           <Profile>
-            <img src={defaultImg} />
+            <img src={user && user[0].image ? user[0].image : defaultImg} alt="유저 프로필" />
           </Profile>
           <Info>
             <NickName>
               <span>{user && user[0].nickname}</span>님
             </NickName>
-            <Phone>{user && user[0].phone}</Phone>
+            <Phone>{user && `#${user[0].userId}`}</Phone>
           </Info>
         </Sort>
         {/* <div>
@@ -107,10 +107,10 @@ const Mypage = () => {
 };
 
 const Section = styled.div`
-  justify-content: flex-start !important;
-  padding: 3.2rem 1.6rem;
   display: flex;
+  justify-content: flex-start !important;
   flex-direction: column;
+  padding: 3.2rem 1.6rem;
 `;
 
 const UserInfo = styled.div`

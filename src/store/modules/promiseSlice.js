@@ -28,8 +28,6 @@ export const __getPromise = createAsyncThunk("__getPromise", async (payload, api
 export const __addPromise = createAsyncThunk("__addPromise", async (payload, api) => {
   const answer = await promiseAPI.addList(payload);
 
-  api.dispatch(resetAddData());
-
   if (answer.result) {
     api.dispatch(__getPromiseList());
     return api.fulfillWithValue();
@@ -97,6 +95,7 @@ export const promiseSlice = createSlice({
 
     [__addPromise.pending]: (state) => {
       state.isLoading = true;
+      state.addData = initialState.addData;
     },
     [__addPromise.fulfilled]: (state) => {
       state.isLoading = false;

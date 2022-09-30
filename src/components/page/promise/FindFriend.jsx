@@ -10,17 +10,18 @@ import { promiseAPI } from "apis";
 import { sweetalert } from "utils";
 import { useXDrag } from "hooks";
 
-const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
-  const { register, resetField } = useForm();
+const FindFriend = ({ toggle, setToggle, friendList, setFriendList }) => {
+  const { register, resetField, setFocus } = useForm();
   const [list, setList] = useState([]);
   const [ref, start, end, moving] = useXDrag();
 
   useEffect(() => {
     if (toggle) {
-      resetField("search");
       setList([]);
+      resetField("search");
+      // setFocus("search");
     }
-  }, [toggle, resetField, setList]);
+  }, [toggle, resetField, setList, setFocus]);
 
   // 검색 핸들러
   const searchHandler = async (e) => {
@@ -43,7 +44,6 @@ const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
       return;
     }
 
-    selectTarget(null);
     setFriendList([...friendList, user]);
   };
 
@@ -65,7 +65,7 @@ const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
     <Modal toggle={toggle}>
       <PageField
         icon={
-          <div className="btn" onClick={() => selectTarget(null)}>
+          <div className="btn" onClick={() => setToggle(null)}>
             <LeftArrow className="md" />
           </div>
         }
@@ -76,9 +76,9 @@ const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
             <input autoComplete="off" placeholder="닉네임을 검색해주세요" {...register("search", registerOpt)} />
           </TextField>
 
-          {friendList.length !== 0 ? (
-            <AttendList>
-              <div className="attendTitle">참석자</div>
+          <AttendList>
+            <div className="attendTitle">참석자</div>
+            {friendList.length !== 0 ? (
               <div className="attendList" ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
                 {friendList.map((user) => {
                   return (
@@ -88,8 +88,10 @@ const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
                   );
                 })}
               </div>
-            </AttendList>
-          ) : null}
+            ) : (
+              <div className="example">참석자가 없어요!</div>
+            )}
+          </AttendList>
 
           <List>
             {list.map((user) => {
@@ -127,7 +129,6 @@ const AttendList = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  cursor: pointer;
 
   padding-top: 1rem;
 
@@ -148,6 +149,7 @@ const AttendList = styled.div`
   }
 
   .attend {
+    cursor: pointer;
     min-width: max-content;
 
     margin-right: 0.4rem;
@@ -155,6 +157,17 @@ const AttendList = styled.div`
 
     border: 0.1rem solid ${(props) => props.theme.color.black.light};
     border-radius: 2rem;
+  }
+
+  .example {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.4rem;
+
+    font-size: 1.2rem;
+    color: ${(props) => props.theme.color.black.light};
   }
 `;
 

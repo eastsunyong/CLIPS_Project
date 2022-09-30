@@ -32,8 +32,9 @@ const ThreeDot = styled.div`
   justify-content: center !important;
   align-items: center;
 
-  width: 2rem;
-  height: 2rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 1rem;
 `;
 
 const MenuList = styled.ul`

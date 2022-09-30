@@ -73,7 +73,7 @@ const PromiseList = ({ setAddToggle }) => {
                               deleteHandler(promise.promiseId);
                             }}
                           >
-                            <Delete className="md" />
+                            <Delete className="lg" />
                           </DeleteBtn>
                         </DropDownMenu>
                       )}
@@ -132,4 +132,5 @@ const List = styled.div`
 
 const DeleteBtn = styled.div`
   color: ${(props) => props.theme.color.error.main};
+  padding: 1rem;
 `;

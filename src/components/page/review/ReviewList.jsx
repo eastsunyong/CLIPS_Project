@@ -43,7 +43,7 @@ const ReviewList = () => {
                       deleteHandler(review.reviewId);
                     }}
                   >
-                    <Delete className="md" />
+                    <Delete className="lg" />
                   </DeleteBtn>
                 </DropDownMenu>
               )}
@@ -93,6 +93,7 @@ export default memo(ReviewList);
 
 const DeleteBtn = styled.div`
   color: ${(props) => props.theme.color.error.main};
+  padding: 1rem;
 `;
 
 const BigImg = styled.div`

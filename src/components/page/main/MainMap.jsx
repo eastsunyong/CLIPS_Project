@@ -121,6 +121,8 @@ const MainMap = ({ location }) => {
   useEffect(() => {
     if (location.address) {
       mapRef.current.panTo(kakaoMap.xy2latlng(location.coord.x, location.coord.y));
+    } else if (mapRef.current) {
+      mapRef.current.panTo(kakaoMap.xy2latlng(127.044444694599, 37.5023270151927));
     }
   }, [isCenter]);
 

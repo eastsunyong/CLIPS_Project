@@ -6,7 +6,7 @@ import { typeToggle } from "store/modules/reviewSlice";
 
 const ToggleReview = ({ type }) => {
   const dispatch = useDispatch();
-  const titleList = ["내 약속", "작성한 후기"];
+  const titleList = ["리뷰 쓰기", "작성한 후기"];
 
   return (
     <ToggleNav>
@@ -14,7 +14,7 @@ const ToggleReview = ({ type }) => {
         return (
           <Toggle
             key={title}
-            selected={title === "내 약속" ? type : !type}
+            selected={title === "리뷰 쓰기" ? type : !type}
             onClick={() => {
               dispatch(typeToggle());
             }}

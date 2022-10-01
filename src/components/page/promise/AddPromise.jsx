@@ -138,7 +138,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
               <TextField>
                 <input
                   autoComplete="off"
-                  placeholder="홍길동, 우영우"
+                  placeholder="약속을 같이 할 친구를 입력해주세요"
                   {...register("friendList")}
                   onClick={() => {
                     selectTarget("friendList");

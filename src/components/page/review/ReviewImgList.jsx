@@ -4,25 +4,60 @@ import _ from "lodash";
 import React from "react";
 import styled from "styled-components";
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+// 슬릭 캐러셀에 슬릭 테마 css 125 번째 줄
+
 const ReviewImgList = ({ image, setImgToggle }) => {
   const [ref, start, end, moving, isDrag] = useXDrag();
 
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  };
+
   return (
-    <ImgArea ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
-      {image.map((url) => {
-        return (
-          <ImgBox key={url} bgUrl={url}>
-            <div
-              onClick={() => {
-                if (!isDrag) setImgToggle({ toggle: true, url });
-              }}
-            >
-              <Search className="lg" />
-            </div>
-          </ImgBox>
-        );
-      })}
-    </ImgArea>
+    <>
+      {
+        image.length === 1 ? <ImgArea ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
+          {image.map((url) => {
+            return (
+              <ImgBox key={url} bgUrl={url}>
+                <div
+                  onClick={() => {
+                    if (!isDrag) setImgToggle({ toggle: true, url });
+                  }}
+                >
+                  <Search className="lg" />
+                </div>
+              </ImgBox>
+            );
+          })}
+        </ImgArea> : null
+      }
+
+      {
+        image.length > 1 ? <Slider {...settings}>
+          {image?.map((url) => {
+            return (
+              <ImgBox key={url} bgUrl={url}>
+                <div
+                  onClick={() => {
+                    if (!isDrag) setImgToggle({ toggle: true, url });
+                  }}
+                >
+                  <Search className="lg" />
+                </div>
+              </ImgBox>
+            )
+          })}
+        </Slider> : null
+      }
+    </>
   );
 };
 
@@ -39,13 +74,12 @@ const ImgArea = styled.div`
 `;
 
 const ImgBox = styled.div`
+
   position: relative;
   min-width: 100%;
   height: 20rem;
-
   border: 0.1rem solid ${(props) => props.theme.color.disable};
   border-radius: 0.8rem;
-
   background: ${(props) => `url(${props.bgUrl})`};
   background-repeat: no-repeat;
   background-position: center;
@@ -58,4 +92,5 @@ const ImgBox = styled.div`
     padding: 1rem;
     color: ${(props) => props.theme.color.brand};
   }
-`;
+`
+  ;

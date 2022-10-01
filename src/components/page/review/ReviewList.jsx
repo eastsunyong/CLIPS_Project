@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Card, DropDownMenu, OpacityModal, PageField } from "components/common";
-import { CalendarI, Close, Delete, Location } from "assets/icons";
+import { CalendarI, Close, Delete, Location, Msg } from "assets/icons";
 import { sweetalert } from "utils";
 import { __deleteReview, __getReviewList } from "store/modules/reviewSlice";
 import ReviewImgList from "./ReviewImgList";
@@ -50,7 +50,10 @@ const ReviewList = () => {
             </div>
 
             <div className="cardBody">
-              <p>{review.content}</p>
+              <div className="contentIcon">
+                <Msg className="sm" />
+              </div>
+              {review.content}
             </div>
 
             <div>
@@ -95,14 +98,15 @@ const ReviewList = () => {
 
 export default memo(ReviewList);
 
-const NewCard =styled(Card)`
-   .cardBody  > p {
+const NewCard = styled(Card)`
+  .cardBody {
     font-size: ${(props) => props.theme.size.s};
     color: black;
   }
-`
+`;
 
 const DeleteBtn = styled.div`
+  cursor: pointer;
   color: ${(props) => props.theme.color.error.main};
   padding: 1rem;
 `;

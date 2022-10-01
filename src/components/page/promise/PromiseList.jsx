@@ -130,11 +130,12 @@ const List = styled.div`
   }
 `;
 
- const NewCard = styled(Card)`
+const NewCard = styled(Card)`
   cursor: pointer;
- `
+`;
 
 const DeleteBtn = styled.div`
+  cursor: pointer;
   color: ${(props) => props.theme.color.error.main};
   padding: 1rem;
 `;

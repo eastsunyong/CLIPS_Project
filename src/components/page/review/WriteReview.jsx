@@ -36,7 +36,7 @@ const WriteReview = () => {
     const dt = new DataTransfer();
     const remainCnt = maxCnt - fileList.length;
 
-    if (!fileList) {
+    if (!fileList.length) {
       if (files.length > maxCnt) alert(`사진은 최대 ${maxCnt}개 가능`);
       Array.from(files)
         .filter((file, i) => i < maxCnt)
@@ -232,6 +232,7 @@ const ImgPreview = styled.div`
   }
 
   .deleteBtn {
+    cursor: pointer;
     color: ${(props) => props.theme.color.black.dark};
     padding: 0.5rem;
 

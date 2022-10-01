@@ -21,15 +21,6 @@ const DetailPromise = () => {
             <LeftArrow className="md" />
           </div>
         }
-        // right={
-        //   <div
-        //     onClick={() => {
-        //       setToggle(!toggle);
-        //     }}
-        //   >
-        //     편집
-        //   </div>
-        // }
         title="약속 상세"
       >
         <Title>{item?.title}</Title>

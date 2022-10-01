@@ -36,8 +36,6 @@ export const failAlert = (messge) => {
   });
 };
 
-//----최신
-
 // 컨펌
 export const confirm = (msg, type) => {
   return Swal.fire({

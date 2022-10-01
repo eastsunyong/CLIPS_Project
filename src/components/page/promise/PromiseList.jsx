@@ -56,7 +56,7 @@ const PromiseList = ({ setAddToggle }) => {
             {list.map((promise) => {
               if (dayjs(selectDate).format("YYYY/MM/DD") === dayjs(new Date(promise.date)).format("YYYY/MM/DD")) {
                 return (
-                  <Card
+                  <NewCard
                     key={promise.promiseId}
                     onClick={() => {
                       dispatch(__getPromise(promise.promiseId));
@@ -73,7 +73,7 @@ const PromiseList = ({ setAddToggle }) => {
                               deleteHandler(promise.promiseId);
                             }}
                           >
-                            <Delete className="md" />
+                            <Delete className="lg" />
                           </DeleteBtn>
                         </DropDownMenu>
                       )}
@@ -99,7 +99,7 @@ const PromiseList = ({ setAddToggle }) => {
                       </div>
                       {promise.location ? promise.location : "장소를 불러올 수 없습니다."}
                     </div>
-                  </Card>
+                  </NewCard>
                 );
               }
             })}
@@ -130,6 +130,12 @@ const List = styled.div`
   }
 `;
 
+const NewCard = styled(Card)`
+  cursor: pointer;
+`;
+
 const DeleteBtn = styled.div`
+  cursor: pointer;
   color: ${(props) => props.theme.color.error.main};
+  padding: 1rem;
 `;

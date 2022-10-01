@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Card, DropDownMenu, OpacityModal, PageField } from "components/common";
-import { CalendarI, Close, Delete, Location } from "assets/icons";
+import { CalendarI, Close, Delete, Location, Msg } from "assets/icons";
 import { sweetalert } from "utils";
 import { __deleteReview, __getReviewList } from "store/modules/reviewSlice";
 import ReviewImgList from "./ReviewImgList";
@@ -29,11 +29,11 @@ const ReviewList = () => {
     <>
       {list.map((review) => {
         return (
-          <Card key={review.promiseUserId}>
+          <NewCard key={review.promiseUserId}>
             {review.image.length !== 0 && <ReviewImgList image={review.image} setImgToggle={setImgToggle} />}
 
             <div className="cardTitle">
-              {review.content}
+              {review.title}
 
               {review.reviewId && (
                 <DropDownMenu>
@@ -43,10 +43,17 @@ const ReviewList = () => {
                       deleteHandler(review.reviewId);
                     }}
                   >
-                    <Delete className="md" />
+                    <Delete className="lg" />
                   </DeleteBtn>
                 </DropDownMenu>
               )}
+            </div>
+
+            <div className="cardBody">
+              <div className="contentIcon">
+                <Msg className="sm" />
+              </div>
+              {review.content}
             </div>
 
             <div>
@@ -62,7 +69,7 @@ const ReviewList = () => {
               </div>
               {review.location ? review.location : "장소를 불러올 수 없습니다."}
             </div>
-          </Card>
+          </NewCard>
         );
       })}
 
@@ -91,8 +98,17 @@ const ReviewList = () => {
 
 export default memo(ReviewList);
 
+const NewCard = styled(Card)`
+  .cardBody {
+    font-size: ${(props) => props.theme.size.s};
+    color: black;
+  }
+`;
+
 const DeleteBtn = styled.div`
+  cursor: pointer;
   color: ${(props) => props.theme.color.error.main};
+  padding: 1rem;
 `;
 
 const BigImg = styled.div`

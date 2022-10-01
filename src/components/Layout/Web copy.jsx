@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { mobileFrame } from "assets/img";
@@ -7,22 +7,20 @@ const Web = ({ children }) => {
   return (
     <Section>
       <Logo>CLIPs</Logo>
+
       <Container>
         <Comment>
           <p>WE HATE</p>
-          <p>
-            Chronically
-            <br />
-            Late -
-            <br />
-            Insane
-            <br />
-            People !
-          </p>
+          <p>Chronically</p>
+          <p>Late - </p>
+          <p>Insane</p>
+          <p>People !</p>
         </Comment>
-        <Content url={mobileFrame} id="serviceItem">
+
+        <Content id="serviceItem">
+          <MobileFrame url={mobileFrame} />
           <FrameTop />
-          <Screen>{children}</Screen>
+          <Feature>{children}</Feature>
         </Content>
       </Container>
     </Section>
@@ -32,46 +30,43 @@ const Web = ({ children }) => {
 export default Web;
 
 const Section = styled.div`
+  position: absolute;
   display: flex;
   flex-flow: column;
-  overflow: hidden;
 
   width: 100vw;
   height: 100vh;
-  padding: 4rem 0;
+  padding: 4rem;
 
   background: black;
 `;
 
-const Logo = styled.header`
+const Logo = styled.div`
+  color: ${(props) => props.theme.color.brand};
   font-family: "Prompt", sans-serif;
   font-style: italic;
-
-  padding-left: 4rem;
-
-  color: ${(props) => props.theme.color.brand};
   font-size: 4rem;
   font-weight: 900;
 `;
 
 const Container = styled.div`
   position: relative;
+  flex: 1;
+
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
-  flex: 1;
-  width: 100%;
 `;
 
 const Comment = styled.div`
   position: absolute;
-  left: 8%;
+  left: 8rem;
+
   color: #dafd60;
   font-size: 10.4rem;
   font-weight: 800;
 
-  p {
+  & > * {
     font-family: "Prompt", sans-serif;
     font-style: italic;
   }
@@ -85,14 +80,25 @@ const Comment = styled.div`
 
 const Content = styled.div`
   position: relative;
-  right: 8%;
+  display: flex;
+  flex-flow: column;
 
-  width: 43.1rem;
-  height: 74.4rem;
+  width: 42.5rem;
+  height: 85rem;
+  padding: 2.6rem 2.85rem 2.4rem 2.6rem;
+`;
 
-  padding: 2.3rem 2.9rem 2.1rem 2.7rem;
+const MobileFrame = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-  background: ${(props) => `url(${props.url})`} 0% 0% / 100% 100% no-repeat;
+  background: ${(props) => `url(${props.url})`};
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 const FrameTop = styled.div`
@@ -102,14 +108,14 @@ const FrameTop = styled.div`
   background: white;
 `;
 
-const Screen = styled.div`
+const Feature = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
   overflow: hidden;
 
   width: 100%;
-  height: calc(100% - 4rem);
+  height: 100%;
 
   border: 0.1rem solid ${(props) => props.theme.color.disable};
   border-radius: 0 0 3.5rem 3.5rem;

@@ -21,15 +21,6 @@ const DetailPromise = () => {
             <LeftArrow className="md" />
           </div>
         }
-        // right={
-        //   <div
-        //     onClick={() => {
-        //       setToggle(!toggle);
-        //     }}
-        //   >
-        //     편집
-        //   </div>
-        // }
         title="약속 상세"
       >
         <Title>{item?.title}</Title>
@@ -37,6 +28,11 @@ const DetailPromise = () => {
         <Content>
           <div className="subTitle">약속날짜</div>
           <div>{item?.date}</div>
+        </Content>
+
+        <Content>
+          <div className="subTitle">약속 생성자</div>
+          <FriendDiv>{item?.nickname}</FriendDiv>
         </Content>
 
         {item?.countFriend > 0 ? (
@@ -68,6 +64,7 @@ const DetailPromise = () => {
         {item && (
           <Map
             draggable={false}
+            disableDoubleClickZoom={true}
             center={{
               lng: item.x,
               lat: item.y,

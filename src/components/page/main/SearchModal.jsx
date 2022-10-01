@@ -37,6 +37,8 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
     geocoder.addressSearch(address, (result, status) => {
       if (status === "OK") {
         setList(_.map(result, addressFilter));
+      } else if (status === "ZERO_RESULT") {
+        setList([{ notFound: "주소를 찾을 수 없습니다" }]);
       }
     });
   };
@@ -92,11 +94,15 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
         title="주소 검색"
       >
         <TextField>
-          <input autoComplete="off" placeholder="시/군/구로 검색" {...register("search", registerOpt)} />
+          <input autoComplete="off" placeholder="지번 / 도로명으로 검색" {...register("search", registerOpt)} />
         </TextField>
 
         <List>
           {list.map((location) => {
+            if (location.notFound) {
+              return <NotFound key={location.notFound}>{location.notFound}</NotFound>;
+            }
+
             return (
               <LocationInfo key={`${location.coord.x}-${location.coord.y}`} onClick={() => selectLocation(location)}>
                 <div>
@@ -107,7 +113,20 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
             );
           })}
 
-          {list.length === 0 && <Btn onClick={getMyLocation}>내 위치 찾기</Btn>}
+          {list.length === 0 && (
+            <>
+              <Example>
+                <p>
+                  1. 시 / 구 / 군 검색 : 서울 or 금천구
+                  <br />
+                  2. 지번 / 도로명 : 가산동 or 남부순환로
+                  <br />
+                  3. 주소 검색 : 서울 금천구 남부순환로 112길
+                </p>
+              </Example>
+              <Btn onClick={getMyLocation}>현재 내 위치</Btn>
+            </>
+          )}
         </List>
       </PageField>
     </OpacityModal>
@@ -139,5 +158,32 @@ const LocationInfo = styled.div`
 
     margin-right: 1rem;
     color: ${(props) => props.theme.color.black.light};
+  }
+`;
+
+const NotFound = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.black.light};
+`;
+
+const Example = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+
+  padding: 0 1rem 1rem 1rem;
+
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.disable};
+
+  p {
+    line-height: 1.3;
   }
 `;

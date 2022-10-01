@@ -93,6 +93,8 @@ const GetMiddleModal = () => {
         const middleAddress = data[0].road_address ? data[0].road_address : data[0].address;
         setLocationList({ middle: { address: middleAddress.address_name, coord: middleCoord }, list });
         setViewToggle(!viewToggle);
+      } else if (status === "ZERO_RESULT") {
+        sweetalert.timer("중간 장소를 찾을 수 없습니다!", "warning");
       }
     });
   };
@@ -117,7 +119,12 @@ const GetMiddleModal = () => {
             const name = `point.${id}`;
             return (
               <FormInner key={name} onClick={() => selectTarget(name)}>
-                <input readOnly autoComplete="off" placeholder={`${i + 1}. 출발지를 입력해주세요`} {...register(name, { required: true })} />
+                <input
+                  readOnly
+                  autoComplete="off"
+                  placeholder={`${i + 1}. 출발지를 입력해주세요`}
+                  {...register(name, { required: "주소를 입력해주세요!" })}
+                />
                 {source.length > 2 && (
                   <div
                     onClick={(e) => {
@@ -138,7 +145,7 @@ const GetMiddleModal = () => {
             <div>장소 추가</div>
           </AddBtn>
 
-          <Btn>중간 위치 찾기</Btn>
+          <Btn>중간 장소 확인</Btn>
         </FormArea>
       </PageField>
 
@@ -153,6 +160,8 @@ export default memo(GetMiddleModal);
 const FormArea = styled.form`
   & > * {
     margin-bottom: 0.8rem;
+  }
+  .error {
   }
 `;
 

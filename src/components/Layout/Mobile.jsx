@@ -19,7 +19,7 @@ const Mobile = (props) => {
     };
   }, []);
 
-  return <Section>{props.children}</Section>;
+  return <Section id="serviceItem">{props.children}</Section>;
 };
 
 export default Mobile;

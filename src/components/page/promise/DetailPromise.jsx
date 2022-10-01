@@ -39,6 +39,11 @@ const DetailPromise = () => {
           <div>{item?.date}</div>
         </Content>
 
+        <Content>
+          <div className="subTitle">약속 생성자</div>
+          <FriendDiv>{item?.nickname}</FriendDiv>
+        </Content>
+
         {item?.countFriend > 0 ? (
           <Content>
             <div className="subTitle">멤버</div>

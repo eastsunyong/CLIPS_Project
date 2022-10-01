@@ -29,11 +29,11 @@ const ReviewList = () => {
     <>
       {list.map((review) => {
         return (
-          <Card key={review.promiseUserId}>
+          <NewCard key={review.promiseUserId}>
             {review.image.length !== 0 && <ReviewImgList image={review.image} setImgToggle={setImgToggle} />}
 
             <div className="cardTitle">
-              {review.content}
+              {review.title}
 
               {review.reviewId && (
                 <DropDownMenu>
@@ -49,6 +49,10 @@ const ReviewList = () => {
               )}
             </div>
 
+            <div className="cardBody">
+              <p>{review.content}</p>
+            </div>
+
             <div>
               <div className="contentIcon">
                 <CalendarI className="sm" />
@@ -62,7 +66,7 @@ const ReviewList = () => {
               </div>
               {review.location ? review.location : "장소를 불러올 수 없습니다."}
             </div>
-          </Card>
+          </NewCard>
         );
       })}
 
@@ -90,6 +94,13 @@ const ReviewList = () => {
 };
 
 export default memo(ReviewList);
+
+const NewCard =styled(Card)`
+   .cardBody  > p {
+    font-size: ${(props) => props.theme.size.s};
+    color: black;
+  }
+`
 
 const DeleteBtn = styled.div`
   color: ${(props) => props.theme.color.error.main};

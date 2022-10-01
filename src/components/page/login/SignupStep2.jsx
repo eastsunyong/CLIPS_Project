@@ -87,6 +87,14 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   //사진 미리보기
   const previewImg = (file) => {
     const reader = new FileReader();
+    if (file[0]?.type !== "image/jpeg" &&
+      file[0]?.type !== "image/png" &&
+      file[0]?.type !== "image/bmp" &&
+      file[0]?.type !== "image/jpg") {
+      sweetalert.failAlert("이미지 파일이 아닙니다");
+      setAttachment(UserDefaultImg)
+      return;
+    }
     reader.readAsDataURL(file[0]);
     reader.onloadend = (finishiedEvent) => {
       const {
@@ -95,14 +103,18 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
       setAttachment(result);
     };
   };
-
   // 파일 업로드 감시
   const selectImg = watch("image");
+
+  const imgFilter = watch("image[0].type")
+  console.log(imgFilter)
   useEffect(() => {
+
     if (selectImg?.length) {
       previewImg(selectImg);
     }
-  }, [selectImg]);
+
+  }, [selectImg], [attachment]);
 
   return (
     <>

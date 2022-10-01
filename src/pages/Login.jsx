@@ -22,6 +22,9 @@ const Login = () => {
 export default Login;
 
 const Section = styled.section`
+  position: relative;
+  z-index: 100;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +33,8 @@ const Section = styled.section`
   width: 100%;
   height: 100%;
   padding: 1.6rem;
+
+  background: white;
 
   font-size: 2rem;
   font-weight: bold;

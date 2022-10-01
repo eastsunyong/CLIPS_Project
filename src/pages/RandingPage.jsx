@@ -25,7 +25,7 @@ const Container = styled.div`
 
   color: white;
   font-size: 3.2rem;
-  font-weight: bold;
+  font-weight: 600;
 
   p {
     margin-bottom: 0.6rem;
@@ -34,5 +34,6 @@ const Container = styled.div`
   .brand {
     color: ${(props) => props.theme.color.brand};
     font-size: 5.6rem;
+    font-weight: 800;
   }
 `;

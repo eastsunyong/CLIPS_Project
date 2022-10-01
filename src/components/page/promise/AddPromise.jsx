@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import _ from "lodash";
 
 import dayjs from "dayjs";
@@ -16,17 +17,24 @@ import { FindFriend } from ".";
 import { Btn, FormField, Modal, PageField, TextField } from "components/common";
 import { LeftArrow } from "assets/icons";
 import { resetAddData, setAddData, __addPromise } from "store/modules/promiseSlice";
-import { useSearch } from "hooks";
 
 const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
-  const { register, handleSubmit, selectTarget, setTargetData, toggle, getValues, setValue, reset, errors } = useSearch();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({ defaultValues: "" });
   const [friendList, setFriendList] = useState([]);
 
   // 데이트 픽커 날짜
   const [startDate, setStartDate] = useState(new Date());
+  const [friendToggle, setFriendToggle] = useState(false);
 
   // 임시저장 데이터 기입
   useEffect(() => {
@@ -61,6 +69,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
   const goBack = () => {
     dispatch(resetAddData());
     setStartDate(new Date());
+    setFriendList([]);
     setAddToggle(!addToggle);
     reset();
   };
@@ -140,10 +149,10 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
                   autoComplete="off"
                   placeholder="약속을 같이 할 친구를 입력해주세요"
                   {...register("friendList")}
-                  onClick={() => {
-                    selectTarget("friendList");
-                  }}
                   readOnly
+                  onClick={() => {
+                    setFriendToggle(!friendToggle);
+                  }}
                   defaultValue={addData.friendList ? addData.friendList : ""}
                 />
               </TextField>
@@ -221,7 +230,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
         </FormField>
       </PageField>
 
-      <FindFriend toggle={toggle} selectTarget={selectTarget} setTargetData={setTargetData} friendList={friendList} setFriendList={setFriendList} />
+      <FindFriend toggle={friendToggle} setToggle={setFriendToggle} friendList={friendList} setFriendList={setFriendList} />
     </Modal>
   );
 };

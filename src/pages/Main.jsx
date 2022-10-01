@@ -30,7 +30,7 @@ const Main = () => {
             selectTarget("center");
           }}
         >
-          <input readOnly autoComplete="off" placeholder="시/군/구로 검색" {...register("center")} />
+          <input readOnly autoComplete="off" placeholder="주소로 검색" {...register("center")} />
           <div>
             <Search className="md" />
           </div>

@@ -66,6 +66,15 @@ const GlobalStyle = createGlobalStyle`
     width: 1.4rem;
     height: 1.4rem;
   }
+
+  // swal 위치 조정용
+  #serviceItem {
+    position: relative;
+  }
+
+  .serviceAlert {
+    position: absolute;
+  }
 `;
 
 export default GlobalStyle;

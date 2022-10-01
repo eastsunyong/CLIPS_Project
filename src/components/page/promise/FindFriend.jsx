@@ -73,7 +73,7 @@ const FindFriend = ({ toggle, selectTarget, friendList, setFriendList }) => {
       >
         <Container>
           <TextField>
-            <input autoComplete="off" placeholder="닉네임을 검색해주세요" {...register("search", registerOpt)} />
+            <input autoComplete="off" placeholder="친구의 닉네임을 입력해주세요" {...register("search", registerOpt)} />
           </TextField>
 
           {friendList.length !== 0 ? (

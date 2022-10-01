@@ -121,16 +121,20 @@ const MainMap = ({ location }) => {
   useEffect(() => {
     if (location.address) {
       mapRef.current.panTo(kakaoMap.xy2latlng(location.coord.x, location.coord.y));
+    } else if (mapRef.current) {
+      mapRef.current.panTo(kakaoMap.xy2latlng(127.044444694599, 37.5023270151927));
     }
   }, [isCenter]);
 
   return (
     <Map ref={mapRef} id="mainMap">
-      {location.address && <MapMarker image={{ src: centerImg, size: markerSize }} position={{ lng: location.coord.x, lat: location.coord.y }} />}
+      {location.address && (
+        <MapMarker image={{ src: centerImg, size: markerSize }} position={{ lng: location.coord.x, lat: location.coord.y }} zIndex={5} />
+      )}
       <MarkerClusterer
         averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
         minLevel={5} // 클러스터 할 최소 지도 레벨
-        disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정
+        // disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정
         calculator={[5, 10, 15]}
         // calculator 각 사이 값 마다 적용될 스타일
         styles={[

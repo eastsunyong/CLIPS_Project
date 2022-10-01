@@ -43,7 +43,7 @@ const ReviewList = () => {
                       deleteHandler(review.reviewId);
                     }}
                   >
-                    <Delete className="md" />
+                    <Delete className="lg" />
                   </DeleteBtn>
                 </DropDownMenu>
               )}
@@ -104,6 +104,7 @@ const NewCard =styled(Card)`
 
 const DeleteBtn = styled.div`
   color: ${(props) => props.theme.color.error.main};
+  padding: 1rem;
 `;
 
 const BigImg = styled.div`

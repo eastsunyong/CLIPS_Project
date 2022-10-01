@@ -9,7 +9,6 @@ import { Camera } from "assets/icons";
 
 const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   const [emailCheck, setEmailCheck] = useState(false);
-  // const [nickCheck, setNickCheck] = useState(false);
   //이미지 미리보기 저장하는  곳
   const [attachment, setAttachment] = useState();
 
@@ -87,12 +86,9 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   //사진 미리보기
   const previewImg = (file) => {
     const reader = new FileReader();
-    if (file[0]?.type !== "image/jpeg" &&
-      file[0]?.type !== "image/png" &&
-      file[0]?.type !== "image/bmp" &&
-      file[0]?.type !== "image/jpg") {
+    if (file[0]?.type !== "image/jpeg" && file[0]?.type !== "image/png" && file[0]?.type !== "image/bmp" && file[0]?.type !== "image/jpg") {
       sweetalert.failAlert("이미지 파일이 아닙니다");
-      setAttachment(UserDefaultImg)
+      setAttachment(UserDefaultImg);
       return;
     }
     reader.readAsDataURL(file[0]);
@@ -105,16 +101,12 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
   };
   // 파일 업로드 감시
   const selectImg = watch("image");
-
-  const imgFilter = watch("image[0].type")
-  console.log(imgFilter)
+  // const imgFilter = watch("image[0].type");
   useEffect(() => {
-
     if (selectImg?.length) {
       previewImg(selectImg);
     }
-
-  }, [selectImg], [attachment]);
+  }, [selectImg, attachment]);
 
   return (
     <>
@@ -143,14 +135,9 @@ const SignupStep2 = ({ register, getValues, watch, setError, errors }) => {
 
         <div>
           <p className="titie">닉네임</p>
-          {/* <WithBtn> */}
           <TextField bdColor={!!errors.nickname?.message}>
             <input autoComplete="off" placeholder="닉네임을 입력해주세요" {...register("nickname", nicknameOpt)} />
           </TextField>
-          {/* <Btn outLine={true} onClick={(e) => onCheck(e, "nickname")} disabled={nickCheck}>
-              중복확인
-            </Btn>
-          </WithBtn> */}
           <p className="error">{errors.nickname?.message}</p>
         </div>
 

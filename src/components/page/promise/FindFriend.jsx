@@ -69,11 +69,11 @@ const FindFriend = ({ toggle, setToggle, friendList, setFriendList }) => {
             <LeftArrow className="md" />
           </div>
         }
-        title="친구 찾기"
+        title="닉네임 찾기"
       >
         <Container>
           <TextField>
-            <input autoComplete="off" placeholder="친구의 닉네임을 입력해주세요" {...register("search", registerOpt)} />
+            <input autoComplete="off" placeholder="닉네임을 입력해주세요" {...register("search", registerOpt)} />
           </TextField>
 
           <AttendList>

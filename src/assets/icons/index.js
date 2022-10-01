@@ -7,6 +7,7 @@ import Kakao from "./Kakao";
 import Heart from "./Heart";
 import Location from "./Location";
 import Map from "./Map";
+import Msg from "./Msg";
 import Menu from "./Menu";
 import Phone from "./Phone";
 import Pin from "./Pin";
@@ -30,6 +31,7 @@ export {
   Heart,
   Location,
   Map,
+  Msg,
   Menu,
   Phone,
   Pin,

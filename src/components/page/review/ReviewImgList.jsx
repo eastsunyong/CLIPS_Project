@@ -17,14 +17,30 @@ const ReviewImgList = ({ image, setImgToggle }) => {
     infinite: false,
     speed: 500,
     slidesToShow: 1,
-    slidesToScroll: 1
+    slidesToScroll: 1,
   };
 
   return (
     <>
-      {
-        image.length === 1 ? <ImgArea ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
-          {image.map((url) => {
+      <ImgArea length={image.length} ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
+        {image.map((url) => {
+          return (
+            <ImgBox key={url} bgUrl={url}>
+              <div
+                onClick={() => {
+                  if (!isDrag) setImgToggle({ toggle: true, url });
+                }}
+              >
+                <Search className="lg" />
+              </div>
+            </ImgBox>
+          );
+        })}
+      </ImgArea>
+
+      {/* {image.length > 1 ? (
+        <Slider {...settings}>
+          {image?.map((url) => {
             return (
               <ImgBox key={url} bgUrl={url}>
                 <div
@@ -37,26 +53,8 @@ const ReviewImgList = ({ image, setImgToggle }) => {
               </ImgBox>
             );
           })}
-        </ImgArea> : null
-      }
-
-      {
-        image.length > 1 ? <Slider {...settings}>
-          {image?.map((url) => {
-            return (
-              <ImgBox key={url} bgUrl={url}>
-                <div
-                  onClick={() => {
-                    if (!isDrag) setImgToggle({ toggle: true, url });
-                  }}
-                >
-                  <Search className="lg" />
-                </div>
-              </ImgBox>
-            )
-          })}
-        </Slider> : null
-      }
+        </Slider>
+      ) : null} */}
     </>
   );
 };
@@ -64,7 +62,7 @@ const ReviewImgList = ({ image, setImgToggle }) => {
 export default ReviewImgList;
 
 const ImgArea = styled.div`
-  cursor: pointer;
+  cursor: ${(props) => (props.length > 1 ? "grab" : "auto")};
   overflow: scroll;
   width: 100%;
 
@@ -74,7 +72,6 @@ const ImgArea = styled.div`
 `;
 
 const ImgBox = styled.div`
-
   position: relative;
   min-width: 100%;
   height: 20rem;
@@ -86,11 +83,11 @@ const ImgBox = styled.div`
   background-size: cover;
 
   div {
+    cursor: pointer;
     position: absolute;
     bottom: 0;
     right: 0;
     padding: 1rem;
     color: ${(props) => props.theme.color.brand};
   }
-`
-  ;
+`;

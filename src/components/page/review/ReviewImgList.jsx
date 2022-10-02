@@ -23,9 +23,9 @@ const ReviewImgList = ({ image, setImgToggle }) => {
   return (
     <>
       <ImgArea length={image.length} ref={ref} onMouseDown={start} onMouseMove={_.throttle(moving, 50)} onMouseUp={end} onMouseLeave={end}>
-        {image.map((url) => {
+        {image.map((url, i) => {
           return (
-            <ImgBox key={url} bgUrl={url}>
+            <ImgBox key={url + `${i}`} bgUrl={url}>
               <div
                 onClick={() => {
                   if (!isDrag) setImgToggle({ toggle: true, url });

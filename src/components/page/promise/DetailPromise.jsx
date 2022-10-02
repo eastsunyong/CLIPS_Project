@@ -6,12 +6,12 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Modal, PageField } from "components/common";
 import { LeftArrow, Location } from "assets/icons";
 import { detatilToggle } from "store/modules/promiseSlice";
+import { DetailFriendList } from ".";
 
 const DetailPromise = () => {
   const dispatch = useDispatch();
   const selectPromise = useSelector((state) => state.promise.selectPromise);
   const item = selectPromise.promise;
-  // const [toggle, setToggle] = useState(false);
 
   return (
     <Modal toggle={selectPromise.toggle}>
@@ -38,11 +38,7 @@ const DetailPromise = () => {
         {item?.countFriend > 0 ? (
           <Content>
             <div className="subTitle">멤버</div>
-            <div className="list">
-              {item.friendList.map((friend, i) => {
-                return <FriendDiv key={friend.nickname + i}>{friend.nickname}</FriendDiv>;
-              })}
-            </div>
+            <DetailFriendList fList={item.friendList} />
           </Content>
         ) : null}
 
@@ -109,10 +105,6 @@ const Content = styled.div`
       margin-right: 0.8rem;
     }
     padding-bottom: 0.8rem;
-  }
-
-  .list {
-    display: flex;
   }
 
   .subTitle {

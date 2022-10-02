@@ -149,7 +149,7 @@ const GetMiddleModal = () => {
         </FormArea>
       </PageField>
 
-      <SearchModal toggle={toggle} selectLocation={selectLocation} selectTarget={selectTarget} />
+      <SearchModal toggle={toggle} selectLocation={selectLocation} selectTarget={selectTarget} locationList={locationList} />
       <ViewMiddleModal locationList={locationList} viewToggle={viewToggle} setViewToggle={setViewToggle} />
     </Modal>
   );

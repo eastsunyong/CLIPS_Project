@@ -38,9 +38,9 @@ const PlaceInfo = ({ placeInfo }) => {
       >
         <div className="cardTitle">
           {placeInfo?.name}
-          <div>
+          {/* <div>
             <OutlineStar className="md" />
-          </div>
+          </div> */}
         </div>
         <div>{placeInfo?.detailCategory}</div>
       </CustomCard>

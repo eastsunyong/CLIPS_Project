@@ -12,7 +12,6 @@ const DetailPromise = () => {
   const dispatch = useDispatch();
   const selectPromise = useSelector((state) => state.promise.selectPromise);
   const item = selectPromise.promise;
-  // const [toggle, setToggle] = useState(false);
 
   return (
     <Modal toggle={selectPromise.toggle}>

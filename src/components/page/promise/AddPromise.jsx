@@ -217,7 +217,7 @@ const AddPromise = ({ addData, addToggle, setAddToggle }) => {
               <TextField bdColor={!!errors.penalty?.message}>
                 <textarea
                   autoComplete="off"
-                  placeholder="메모를 작성해보세요 ex) 늦게오면 5만원"
+                  placeholder="메모를 작성해보세요 ex) 늦게 오면 5만원"
                   {...register("penalty")}
                   defaultValue={addData.penalty ? addData.penalty : ""}
                 />

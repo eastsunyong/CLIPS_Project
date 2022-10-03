@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserView, MobileView } from "react-device-detect";
 
 import { Web, Mobile, Main, Footer } from "components/Layout";
-import { RandingPage } from "pages";
+import { LoadingPage } from "pages";
 import { setLogin } from "store/modules/loginSlice";
 
 function App() {
@@ -23,8 +23,8 @@ function App() {
     <>
       <BrowserView>
         <Web>
-          <Suspense fallback={<RandingPage />}>
-            {(promiseLoading || reviewLoading) && <RandingPage />}
+          <Suspense fallback={<LoadingPage />}>
+            {(promiseLoading || reviewLoading) && <LoadingPage />}
             <Main>
               <Router />
             </Main>
@@ -35,8 +35,8 @@ function App() {
 
       <MobileView>
         <Mobile>
-          <Suspense fallback={<RandingPage />}>
-            {(promiseLoading || reviewLoading) && <RandingPage />}
+          <Suspense fallback={<LoadingPage />}>
+            {(promiseLoading || reviewLoading) && <LoadingPage />}
             <Main>
               <Router />
             </Main>

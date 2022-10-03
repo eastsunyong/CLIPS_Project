@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+/**
+ * 1. ClassName (cardTitle) : 타이틀
+ * 2. ClassName (contentIcon) : content 아이콘
+ */
 const Card = styled.div`
   position: relative;
   padding: 1.6rem;
@@ -9,7 +13,6 @@ const Card = styled.div`
 
   font-size: 1.2rem;
   color: ${(props) => props.theme.color.black.light};
-
 
   div {
     display: flex;

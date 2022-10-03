@@ -5,9 +5,9 @@ import _ from "lodash";
 
 import { Btn, OpacityModal, PageField, TextField } from "components/common";
 import { LeftArrow, Location } from "assets/icons";
-import { kakaoMap } from "utils";
+import { kakaoMap, sweetalert } from "utils";
 
-const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
+const SearchModal = ({ toggle, selectLocation, selectTarget, locationList }) => {
   const geocoder = kakaoMap.createGeocoder();
   const { register, resetField, setFocus } = useForm();
   const [list, setList] = useState([]);
@@ -43,6 +43,16 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
     });
   };
 
+  // 리스트 선택
+  const selectItem = (location) => {
+    // 중복 주소 막기
+    if (locationList && _.findIndex(locationList.list, { address: location.address }) !== -1) {
+      sweetalert.timer("이미 등록된 주소입니다.");
+      return;
+    }
+    selectLocation(location);
+  };
+
   // geo옵션
   const geolocationOpt = {
     enableHighAccuracy: true, // 정밀도 활성화
@@ -57,6 +67,12 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
         geocoder.coord2Address(position.coords.longitude, position.coords.latitude, (result, status) => {
           if (status === "OK") {
             const address = result[0].road_address ? result[0].road_address : result[0].address;
+
+            // 중복 주소 막기
+            if (locationList && _.findIndex(locationList.list, { address: address.address_name }) !== -1) {
+              sweetalert.timer("이미 등록된 주소입니다.");
+              return;
+            }
 
             geocoder.addressSearch(address.address_name, (result, status) => {
               if (status === "OK") {
@@ -104,7 +120,7 @@ const SearchModal = ({ toggle, selectLocation, selectTarget }) => {
             }
 
             return (
-              <LocationInfo key={`${location.coord.x}-${location.coord.y}`} onClick={() => selectLocation(location)}>
+              <LocationInfo key={`${location.coord.x}-${location.coord.y}`} onClick={() => selectItem(location)}>
                 <div>
                   <Location className="sm" />
                 </div>

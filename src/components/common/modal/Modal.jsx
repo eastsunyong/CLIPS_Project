@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+/**
+ * 1. type : String => top, left 이동 제어
+ * 2. toggle : Boolean => visible 제어
+ */
 const Modal = styled.div`
   display: flex;
   flex-flow: column;

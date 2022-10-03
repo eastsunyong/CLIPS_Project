@@ -120,6 +120,7 @@ const WriteReview = () => {
 
           <FormField
             onSubmit={handleSubmit((data) => {
+              data.image = fileList;
               dispatch(__addReview({ promiseId: selected.promise.promiseId, data }));
             })}
           >
@@ -158,7 +159,7 @@ const WriteReview = () => {
               </div>
 
               <input
-                {...register("image", { onChange: (e) => selectMutiFile(e.target.files), value: fileList })}
+                {...register("image", { onChange: (e) => selectMutiFile(e.target.files) })}
                 hidden
                 id="file"
                 type="file"

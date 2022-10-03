@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+/**
+ * 1. selected : Boolean
+ * 2. size : Stirng => 사이즈 조절(sm)
+ */
 const Chip = styled.button`
   display: flex;
   justify-content: center;

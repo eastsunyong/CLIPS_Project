@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
+/**
+ * 1. title : String => 상단 페이지 타이틀
+ * 2. icons : React.Element => 상단 좌측 아이콘
+ * 3. right : React.Element => 상단 우측 아이콘
+ */
 const PageField = (props) => {
   return (
     <Section>

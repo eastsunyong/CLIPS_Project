@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+/**
+ * 1. toggle : Boolean => visible 제어
+ */
 const OpacityModal = styled.div`
   height: 100%;
   width: 100%;

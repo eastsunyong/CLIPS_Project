@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+/**
+ * 1. outLine : Boolean
+ */
 const Btn = styled.button`
   width: 100%;
   padding: 0.8rem;

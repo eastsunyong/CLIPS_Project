@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+/**
+ * 1. bgColor : Boolean
+ */
 const TextField = styled.div`
   display: flex;
   justify-content: flex-start;

@@ -32,6 +32,7 @@ const Section = styled.div`
 
   max-width: var(--mw);
   // 모바일 화면에서 주소창 및 하단 nav바를 제외한 높이를 1vh라고하고 * 100vh
-  height: calc(var(--vh, 1vh) * 100);
+  /* height: calc(var(--vh, 1vh) * 100); */
+  height: 100vh;
   margin: 0 auto;
 `;

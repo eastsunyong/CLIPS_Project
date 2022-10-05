@@ -38,9 +38,8 @@ const Container = styled.footer`
   justify-content: space-around;
   z-index: ${(props) => props.theme.level.front.middle};
 
-  // ios 100vh 수정
-  /* padding-bottom: calc(1.6rem + env(safe-area-inset-bottom)); */
-  padding-bottom: 1.6rem;
+  // ios11버전이상 100vh 수정
+  padding-bottom: calc(1.6rem + env(safe-area-inset-bottom));
 
   background: ${(props) => props.theme.color.black.dark};
   box-shadow: 0 -0.4rem 1rem rgba(17, 24, 39, 0.15);

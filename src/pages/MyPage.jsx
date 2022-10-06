@@ -102,16 +102,7 @@ const Mypage = () => {
           로그아웃
         </p>
       </Notice>
-
-      <Line />
-
-      <Survey > 
-        <a href="https://forms.gle/CEv86i3gEpHrNcgK6">
-          <img src={surveys} alt="설문조사"/>
-        </a>
-          
-      </Survey>
-  
+ 
       {toggle === true ? <Privacy toggle={toggle} setToggle={setToggle} /> : null}
     </Section>
   );
@@ -201,22 +192,5 @@ const Line = styled.div`
   flex-grow: 0;
   margin: 0.8rem 0;
 `;
-
-const Survey = styled.div`
-    cursor: pointer;
-    margin-top: 0.5rem;
-
-    a{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      }
-
-  img {
-      width: 80%;
-      border-radius: 1.2rem;
-      }
-
-`
 
 export default Mypage;

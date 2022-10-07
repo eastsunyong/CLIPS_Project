@@ -43,12 +43,13 @@
    
 * 협업 툴: git / notion / figma /
 
-* 프로젝트 취지: 친구와 어디서 만날지 모르겠고 만나는 주변 장소에 명소를 추천해주면 좋겠고 친구와 중간거리에서 만나고 약속을 안지키는 사람들이 너무 많아서 만들고자 함
+* 프로젝트 취지: 친구들끼리 약속을 정할 때 장소를 선택하기 어려운 경우가 많아 약속 장소를 추천해주고, 약속을 관리하고, 추억할 수 있는 서비스를 만들고자 함
+
 
 ## 🚩 Links
-* Project homepage : https://clipspromise.com/
-* 프론트엔드 깃허브 주소 : https://github.com/codeing999/CLIPs-backend
-* 백엔드 깃허브 주소 : https://github.com/eastsunyong/CLIPS_Project
+* [💖 Project homepage](https://clipspromise.com)
+* [👀 프론트엔드 깃허브 주소](https://github.com/codeing999/CLIPs-backend)
+* [👀 백엔드 깃허브 주소](https://github.com/eastsunyong/CLIPS_Project)
 
 ## 🖼 Service Architecture
    <img src="https://user-images.githubusercontent.com/108984141/190713132-6456348c-1017-4d99-b87c-b7c5953a7535.png" width="100%" />

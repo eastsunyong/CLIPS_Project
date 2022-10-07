@@ -59,12 +59,11 @@
 | :-: |:- |
 |axios |서버와의 통신 간에 동일한 내용으로 통신하기 위해(토큰 있을때 intercepter 등)|
 |styled-components|themeProvider를 사용하여 색상 관리 및 차후 유지 보수를 간편화|
-|react-hook-form|form 데이터를 관리를 위해|
+|react-hook-form|유효성 검사 등 코드의 가독성을 줄이고 form 데이터 관리를 위해 사용|
 |lodash|사용자 서칭 최적화를 위해 디바운싱 기법 적용 및 컬렉션 관리를 위해|
-|react-kakao-maps-sdk| kakaoDev에는 바닐라JS로 되어있어 React용으로 변환하면작업 속도가 너무 늦어져서 사용 (김재서 개발자님이 만들어주신 라이브러리)|
-|dayjs|Date 객체 관리를 위해|
-|react-calendar| 달력 사용 시 커스텀 용이|
-|react-datepicker|기본 형태가 Input이라 날짜를 입력받을때 용이|
-|browser-image-compression|이미지 압축|
-|react-device-detect|반응형 웹 구현을 위해|
+|react-kakao-maps-sdk|kakaoDev에는 바닐라JS로 되어있어 React용으로 변환하면작업 속도가 너무 늦어져서 사용 (김재서 개발자님이 만들어주신 라이브러리)|
+|dayjs|Date 객체 관리 편이를 위해 (Date 객체 문자열 포맷 등)|
+|react-calendar|달력을 구현할때 커스텀 용이하며 클릭 이벤트 발생시 해당 날짜값을 도출 가능해서|
+|browser-image-compression|후기 이미지 다중 업로드 시 이미지 크기가 크면 랜더링 속도가 느려서 일정하고 부담이 덜한 크기로 이미지를 압축하기 위해|
+|react-device-detect|모바일과 PC별 반응형 웹 구현간 디바이스 상태를 확인하기 위해|
 

@@ -52,19 +52,19 @@
 * [👀 백엔드 깃허브 주소](https://github.com/eastsunyong/CLIPS_Project)
 
 ## 🖼 Service Architecture
-   <img src="https://user-images.githubusercontent.com/108984141/190713132-6456348c-1017-4d99-b87c-b7c5953a7535.png" width="100%" />
+   <img src="https://user-images.githubusercontent.com/89966037/194450508-94423765-35c3-403e-b015-dc296223c88d.png" width="100%" />
 
 ## 📜 사용한 라이브러리 (패키지)
 |이름|사용 이유|
 | :-: |:- |
 |axios |서버와의 통신 간에 동일한 내용으로 통신하기 위해(토큰 있을때 intercepter 등)|
-|react-hook-form|form데이터를 관리할 때 복잡도를 줄이기 위해(유효성 검사 등)|
-|react-icons|CSS 관리할 때 복잡도를 줄이면서 색상 입히기 위해|
 |styled-components|themeProvider를 사용하여 색상 관리 및 차후 유지 보수를 간편화|
+|react-hook-form|form 데이터를 관리를 위해|
+|lodash|사용자 서칭 최적화를 위해 디바운싱 기법 적용 및 컬렉션 관리를 위해|
 |react-kakao-maps-sdk| kakaoDev에는 바닐라JS로 되어있어 React용으로 변환하면작업 속도가 너무 늦어져서 사용 (김재서 개발자님이 만들어주신 라이브러리)|
-|react-calendar| 일, 월, 연도 를 선택할 수 있고, 한국어를 지원해서 사용|
-|react-datepicker|- 기본 제공이 인풋으로 되어 있어 편리하고 커스텀 하기 쉬워서 사용|
-   
- 
-
+|dayjs|Date 객체 관리를 위해|
+|react-calendar| 달력 사용 시 커스텀 용이|
+|react-datepicker|기본 형태가 Input이라 날짜를 입력받을때 용이|
+|browser-image-compression|이미지 압축|
+|react-device-detect|반응형 웹 구현을 위해|
 

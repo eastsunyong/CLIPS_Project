@@ -72,7 +72,7 @@
 * React ,Redux, Styled-components, PWA, AWS S3, CloudFront
 
 <code> Back-end </code>
-* [👀 백엔드 깃허브](https://github.com/eastsunyong/CLIPS_Project)
+* [👀 백엔드 깃허브](https://github.com/codeing999/CLIPs-backend)
 
 <code>Tool</code>
 * GitHub, Notion, Figma

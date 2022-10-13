@@ -43,7 +43,6 @@ const FindFriend = ({ toggle, setToggle, friendList, setFriendList }) => {
       sweetalert.timer(messge, "warning");
       return;
     }
-
     setFriendList([...friendList, user]);
   };
 

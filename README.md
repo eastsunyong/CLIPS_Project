@@ -87,5 +87,6 @@
 ## 📖 프론트엔드간의 협업 간 룰 및 사용한 라이브러리
 
 * [👀 노션 전체보기](https://substantial-steel-4f7.notion.site/0f57bb63d0414498bf1f5663674cd4af)
+* [👍 기술적 의사 결정](https://substantial-steel-4f7.notion.site/c5ce5c6455fa44baae640901e7cedd41)
 * [📜 사용 라이브러리](https://substantial-steel-4f7.notion.site/5c67afb60cd4472897d35b5ed4f5e3f8)
 

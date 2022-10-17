@@ -1,7 +1,10 @@
 
 <h1 align="center" > CLIPs (Chronically Late Insane Person) </h1>
 
-<p align="center"><img width="300"  alt="로고" src="https://user-images.githubusercontent.com/89966037/194491956-c3573628-704f-436c-8435-965d45806f32.png"></p>
+<p align="center">
+<img width="300"  alt="로고" src="https://user-images.githubusercontent.com/89966037/194491956-c3573628-704f-436c-8435-965d45806f32.png">
+<img width="400"  alt="로고" src="https://user-images.githubusercontent.com/89966037/196068796-0c2f82c7-7064-435f-a38d-de410a736562.jpeg">
+</p>
 
 ### <div align="center">[🔗 CLIPs 사이트 보러 가기](https://clipspromise.com)</div>
 ### <div align="center">[🎥 시연영상 보러가기](https://www.youtube.com/watch?v=t-h1CQnguYs)</div>

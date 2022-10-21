@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
 
-import {UserDefaultImg, surveys} from "assets/img"
+import { UserDefaultImg, surveys } from "assets/img";
 import { RightArrow } from "assets/icons";
 import { download } from "utils";
 import { myPageAPI } from "apis";
-import { __signout } from "store/modules/loginSlice";
+// import { __signout } from "store/modules/loginSlice";
 import { Privacy } from "components/page/login";
+import { myPageAnswer, User } from "type/mypageType";
 
-const Mypage = () => {
-  const dispatch = useDispatch();
-  const nav = useNavigate();
-  const [user, setUser] = useState(null);
-  const [toggle, setToggle] = useState(false);
+const Mypage: FC = () => {
+  // const dispatch = useDispatch();
+  // const nav = useNavigate();
+  const [user, setUser] = useState<User | null | undefined>(null);
+  const [toggle, setToggle] = useState<boolean>(false);
 
   const getMypage = async () => {
-    const answer = await myPageAPI.getUser();
-    setUser([answer.user]);
+    const answer: myPageAnswer = await myPageAPI.getUser();
+    setUser(answer.user);
   };
 
   useEffect(() => {
@@ -27,16 +28,16 @@ const Mypage = () => {
 
   return (
     <Section>
-      <UserInfo key={user && user[0].userId}>
+      <UserInfo key={user && user.userId}>
         <Sort>
           <Profile>
-            <img src={user && user[0].image ? user[0].image : UserDefaultImg} alt="유저 프로필" />
+            <img src={user && user.image ? user.image : UserDefaultImg} alt="유저 프로필" />
           </Profile>
           <Info>
             <NickName>
-              <span>{user && user[0].nickname}</span>님
+              <span>{user && user.nickname}</span>님
             </NickName>
-            <Phone>{user && `#${user[0].userId}`}</Phone>
+            <Phone>{user && `#${user.userId}`}</Phone>
           </Info>
         </Sort>
         {/* <div>
@@ -95,8 +96,10 @@ const Mypage = () => {
         <p
           style={{ color: "red" }}
           onClick={() => {
-            dispatch(__signout());
-            nav("/");
+            // 리덕스 타입스크립트 좀더 알아보고 고치기
+            // dispatch(__signout());
+            // nav("/");
+            alert("수정중!");
           }}
         >
           로그아웃
@@ -105,13 +108,12 @@ const Mypage = () => {
 
       <Line />
 
-      <Survey > 
+      <Survey>
         <a href="https://forms.gle/CEv86i3gEpHrNcgK6">
-          <img src={surveys} alt="설문조사"/>
+          <img src={surveys} alt="설문조사" />
         </a>
-          
       </Survey>
-  
+
       {toggle === true ? <Privacy toggle={toggle} setToggle={setToggle} /> : null}
     </Section>
   );
@@ -203,20 +205,19 @@ const Line = styled.div`
 `;
 
 const Survey = styled.div`
-    cursor: pointer;
-    margin-top: 0.5rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
 
-    a{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      }
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   img {
-      width: 80%;
-      border-radius: 1.2rem;
-      }
-
-`
+    width: 80%;
+    border-radius: 1.2rem;
+  }
+`;
 
 export default Mypage;
